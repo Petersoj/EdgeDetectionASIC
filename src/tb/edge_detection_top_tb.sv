@@ -15,14 +15,16 @@
 
 module edge_detection_top_tb();
 
-  logic [2000:0]  vector_file_name = "../../vectors/rocks.ppm";
+  logic [2000:0]  in_vector_file_name =   "../../vectors/rocks.ppm";
+  logic [2000:0]  out_vector_file_name =  "../../vectors/rocks_out.ppm";
   logic [23:0]    pixel_input_data[`V_LINES][`H_PIXELS];
-  logic [100:0]   vid_x, vid_y;
+  logic [23:0]    pixel_output_data[`V_LINES][`H_PIXELS];
+  logic [100:0]   vid_x, vid_y, o_vid_x, o_vid_y;
   logic           reset;
-  logic           clk_100, clk_pix;
+  logic           clk_100, clk_pix, o_clk_pix;
   logic           istrb_clk_100, istrb_clk_pix;
-  logic           i_de, i_vs, i_hs;
-  logic [23:0]    i_pix_data;
+  logic           i_de, i_vs, i_hs, o_de, o_vs, o_hs;
+  logic [23:0]    i_pix_data, o_pix_data;
   // generate clock
   initial clk_100 = 1'b1;
   always
@@ -49,11 +51,11 @@ edge_detection_top DUT
   .I_HSYNC        (i_hs),     // Input Horizontal Sync
   .I_DE           (i_de),     // Input Data Enable (Data Valid)
   .I_PCLK         (clk_pix),     // Input Pixel Clock (25.175 MHz)
-  .O_PIX_DATA     (),     // Output RGB Pixel Data
-  .O_VSYNC        (),     // Output Vertical Sync
-  .O_HSYNC        (),     // Output Horizontal Sync
-  .O_DE           (),     // Output Data Enable (Data Valid)
-  .O_PCLK         ()      // Output Pixel Clock (25.175 MHz)
+  .O_PIX_DATA     (o_pix_data),     // Output RGB Pixel Data
+  .O_VSYNC        (o_vs),     // Output Vertical Sync
+  .O_HSYNC        (o_hs),     // Output Horizontal Sync
+  .O_DE           (o_de),     // Output Data Enable (Data Valid)
+  .O_PCLK         (o_clk_pix)      // Output Pixel Clock (25.175 MHz)
   );
 
   initial begin
@@ -65,7 +67,9 @@ edge_detection_top DUT
     fork
       // run tests
       video_input_stream;
+      video_output_stream;
     join
+    write_ppm_file(out_vector_file_name, pixel_output_data);
     $display("================================================================");
     $display("=========================== END SIM ============================");
     $display("================================================================");
@@ -73,7 +77,7 @@ edge_detection_top DUT
 
   task tb_init;
     begin
-      read_ppm_file(vector_file_name, pixel_input_data);
+      read_ppm_file(in_vector_file_name, pixel_input_data);
       reset = 1'b1;
       repeat(10) @(posedge clk_100);
       reset = 1'b0;
@@ -82,8 +86,9 @@ edge_detection_top DUT
   endtask
 
   task video_input_stream;
-    i_de = 1'b1; // TO BE REMOVED
     begin
+      @(posedge clk_pix);
+      i_de = 1'b1; // TO BE REMOVED
       $display ("+++ video_input_stream");
       vid_x = 0;
       vid_y = 0;
@@ -108,6 +113,32 @@ edge_detection_top DUT
     $display ("--- video_input_stream");
   endtask
 
+  task video_output_stream;
+    begin
+      $display ("+++ video_output_stream");
+      o_vid_x = 0;
+      o_vid_y = 0;
+      while(o_vid_y < `V_LINES) begin
+        @(posedge istrb_clk_pix);
+        if(o_de == 1'b1)
+        begin
+          pixel_output_data[o_vid_y][o_vid_x] = o_pix_data;
+          @(posedge clk_pix);
+          if(o_vid_x < `H_PIXELS - 1)
+            o_vid_x = o_vid_x + 1;
+          else
+          begin
+            o_vid_x = 0;
+            o_vid_y = o_vid_y + 1;
+          end
+        end
+        else
+          @(posedge o_clk_pix);
+      end
+    end
+    $display ("--- video_output_stream");
+  endtask
+
   task read_ppm_file
     (
       input   [2000:0]  file_name,
@@ -130,14 +161,9 @@ edge_detection_top DUT
       
       for(int i = 0; i < line_count; i++) begin
         for(int j = 0; j < pixel_count; j++) begin
-          for(int k = 0; k < 3; k++) begin
-            if (k == 0)
-              r = $fscanf(fd, "%d", pix_r);
-            if (k == 1)
-              r = $fscanf(fd, "%d", pix_g);
-            if (k == 2)
-              r = $fscanf(fd, "%d", pix_b);
-          end
+          r = $fscanf(fd, "%d", pix_r);
+          r = $fscanf(fd, "%d", pix_g);
+          r = $fscanf(fd, "%d", pix_b);
           pixel_data[i][j] = {pix_r, pix_g, pix_b};
         end
       end
@@ -146,4 +172,25 @@ edge_detection_top DUT
     end
   endtask
 
+  task write_ppm_file
+    (
+      input   [2000:0]  file_name,
+      input   [23:0]    pixel_data[`V_LINES][`H_PIXELS]
+    );
+    begin
+      integer fd;
+      $display("+++ write_ppm_file");
+      fd = $fopen(file_name, "w");
+      $fwrite(fd, "P3\n640 480\n255\n");
+      for(int i = 0; i < `V_LINES; i++) begin
+        for(int j = 0; j < `H_PIXELS; j++) begin
+          $fwrite(fd, "%d\n", pixel_data[i][j][23:16]);
+          $fwrite(fd, "%d\n", pixel_data[i][j][15:8]);
+          $fwrite(fd, "%d\n", pixel_data[i][j][7:0]);
+        end
+      end
+      $fclose(fd);
+      $display("--- write_ppm_file");
+    end
+  endtask
 endmodule

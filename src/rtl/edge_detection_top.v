@@ -27,6 +27,33 @@ module edge_detection_top
     output wire         O_PCLK       // Output Pixel Clock (25.175 MHz)
   );
 
+  reg [23:0]  pix_data_dly;
+  reg         pix_vsync_dly;
+  reg         pix_hsync_dly;
+  reg         pix_de_dly;
+
+  // output mapping (for testing)
+  assign O_PIX_DATA = pix_data_dly;
+  assign O_VSYNC = pix_vsync_dly;
+  assign O_HSYNC = pix_hsync_dly;
+  assign O_DE = pix_de_dly;
+  assign O_PCLK = I_PCLK;
+
+  always @(posedge O_PCLK) begin
+    if(I_RST == 1'b1) begin
+      pix_data_dly  <= 24'h0;
+      pix_vsync_dly <= 1'b0;
+      pix_hsync_dly <= 1'b0;
+      pix_de_dly    <= 1'b0;
+    end
+    else begin
+      pix_data_dly  <= I_PIX_DATA;
+      pix_vsync_dly <= I_VSYNC;
+      pix_hsync_dly <= I_HSYNC;
+      pix_de_dly    <= I_DE;
+    end
+  end
+
   // Colorspace Converter
   // Line Buffer
   // Edge Detection
