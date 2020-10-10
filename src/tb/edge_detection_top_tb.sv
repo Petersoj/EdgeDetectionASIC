@@ -15,8 +15,8 @@
 
 module edge_detection_top_tb();
 
-  logic [2000:0]  vector_file_name = "../vectors/rocks.ppm";
-  logic [23:0]    pixel_input_data[V_LINES][H_PIXELS];
+  logic [2000:0]  vector_file_name = "../../vectors/rocks.ppm";
+  logic [23:0]    pixel_input_data[`V_LINES][`H_PIXELS];
   logic [100:0]   vid_x, vid_y;
   logic           reset;
   logic           clk_100, clk_pix;
@@ -33,6 +33,7 @@ module edge_detection_top_tb();
   assign #300 istrb_clk_100 = clk_100;
 
   initial clk_pix = 1'b1; // 25.175 MHz Pixel Clock
+  always
   begin
     #19861 clk_pix = 1'b0;
     #19861 clk_pix = 1'b1;
@@ -86,13 +87,13 @@ edge_detection_top DUT
       $display ("+++ video_input_stream");
       vid_x = 0;
       vid_y = 0;
-      while(vid_y < V_LINES) begin
+      while(vid_y < `V_LINES) begin
         @(posedge istrb_clk_pix);
-        if(i_de == '1')
+        if(i_de == 1'b1)
         begin
           i_pix_data = pixel_input_data[vid_y][vid_x];
           @(posedge clk_pix);
-          if(vid_x < H_PIXELS - 1)
+          if(vid_x < `H_PIXELS - 1)
             vid_x = vid_x + 1;
           else
           begin
@@ -110,19 +111,19 @@ edge_detection_top DUT
   task read_ppm_file
     (
       input   [2000:0]  file_name,
-      output  [23:0]    pixel_data[V_LINES][H_PIXELS]
+      output  [23:0]    pixel_data[`V_LINES][`H_PIXELS]
     );
     begin
       string temp;
       integer fd, r;
-      reg [7:0] pix_r, pix_g, pix_b
+      reg [7:0] pix_r, pix_g, pix_b;
       reg [11:0] pixel_count, line_count, pixel_depth;
       $display("+++ read_ppm_file");
-      fd = $fopen(fname, "r");
+      fd = $fopen(file_name, "r");
       // Strip off the header from file
       $fgets(temp, fd); // Read the 'P3'
       // Read the number of pixels, number of lines, pixel depth
-      r = $fscanf(fd, "%d %d %d", pixel_count, line_count, pixel_depth)
+      r = $fscanf(fd, "%d %d %d", pixel_count, line_count, pixel_depth);
       $display("Number of Pixels - %0d", pixel_count);
       $display("Number of Lines  - %0d", line_count);
       $display("Color depth      - %0d", pixel_depth);
