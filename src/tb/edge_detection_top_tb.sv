@@ -25,6 +25,7 @@ module edge_detection_top_tb();
   logic           istrb_clk_100, istrb_clk_pix;
   logic           i_de, i_vs, i_hs, o_de, o_vs, o_hs;
   logic [23:0]    i_pix_data, o_pix_data;
+
   // generate clock
   initial clk_100 = 1'b1;
   always
@@ -44,18 +45,18 @@ module edge_detection_top_tb();
 
 edge_detection_top DUT
   (
-  .I_RST          (reset),     // Input Reset
-  .I_CLK_100      (clk_100),     // Input Core Clock (100 MHz?)
-  .I_PIX_DATA     (i_pix_data),     // Input RGB Pixel Data
-  .I_VSYNC        (i_vs),     // Input Vertical Sync
-  .I_HSYNC        (i_hs),     // Input Horizontal Sync
-  .I_DE           (i_de),     // Input Data Enable (Data Valid)
-  .I_PCLK         (clk_pix),     // Input Pixel Clock (25.175 MHz)
-  .O_PIX_DATA     (o_pix_data),     // Output RGB Pixel Data
-  .O_VSYNC        (o_vs),     // Output Vertical Sync
-  .O_HSYNC        (o_hs),     // Output Horizontal Sync
-  .O_DE           (o_de),     // Output Data Enable (Data Valid)
-  .O_PCLK         (o_clk_pix)      // Output Pixel Clock (25.175 MHz)
+    .I_RST          (reset),     // Input Reset
+    .I_CLK_100      (clk_100),     // Input Core Clock (100 MHz?)
+    .I_PIX_DATA     (i_pix_data),     // Input RGB Pixel Data
+    .I_VSYNC        (i_vs),     // Input Vertical Sync
+    .I_HSYNC        (i_hs),     // Input Horizontal Sync
+    .I_DE           (i_de),     // Input Data Enable (Data Valid)
+    .I_PCLK         (clk_pix),     // Input Pixel Clock (25.175 MHz)
+    .O_PIX_DATA     (o_pix_data),     // Output RGB Pixel Data
+    .O_VSYNC        (o_vs),     // Output Vertical Sync
+    .O_HSYNC        (o_hs),     // Output Horizontal Sync
+    .O_DE           (o_de),     // Output Data Enable (Data Valid)
+    .O_PCLK         (o_clk_pix)      // Output Pixel Clock (25.175 MHz)
   );
 
   initial begin
