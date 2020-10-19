@@ -68,7 +68,7 @@ module edge_detection_top_tb();
       .I_RST      (reset),
       .I_PCLK     (clk_pix),
       .I_PIX_DATA (i_pix_data),
-      .I_TP_EN    (1'b1),
+      .I_TP_EN    (1'b0),
       .I_HS_END   (VGA_HS_END),
       .I_HBP_END  (VGA_HBP_END),
       .I_HACT_END (VGA_HACT_END),
@@ -78,13 +78,15 @@ module edge_detection_top_tb();
       .I_VACT_END (VGA_VACT_END),
       .I_VFP_END  (VGA_VFP_END),
       .I_VRST     (1'b0),
-      .O_DE       (i_vs),
+      .O_DE       (i_de),
       .O_HS       (i_hs),
-      .O_VS       (i_de),
+      .O_VS       (i_vs),
       .O_HCNT     (),
       .O_VCNT     (),
       .O_PIX_DATA (o_pix_data)
     );
+
+  assign o_de = i_de;
 
   initial begin
     $display("================================================================");
@@ -161,7 +163,7 @@ module edge_detection_top_tb();
           end
         end
         else
-          @(posedge o_clk_pix);
+          @(posedge clk_pix);
       end
     end
     $display ("--- video_output_stream");
