@@ -16,7 +16,9 @@
 module edge_detection_top_tb();
 
   logic [2000:0]  in_vector_file_name =   "../../vectors/rocks.ppm";
-  logic [2000:0]  out_vector_file_name =  "../../vectors/rocks_out.ppm";
+  logic [2000:0]  out_vector_1_file_name =  "../../vectors/rocks_out_1.ppm";
+  logic [2000:0]  out_vector_2_file_name =  "../../vectors/tp_out_2.ppm";
+  logic [2000:0]  out_vector_3_file_name =  "../../vectors/out_3.ppm";
   logic [23:0]    pixel_input_data[`V_LINES][`H_PIXELS];
   logic [23:0]    pixel_output_data[`V_LINES][`H_PIXELS];
   logic [100:0]   vid_x, vid_y, o_vid_x, o_vid_y;
@@ -42,6 +44,48 @@ module edge_detection_top_tb();
     #19861 clk_pix = 1'b1;
   end
   assign #300 istrb_clk_pix = clk_pix;
+
+  parameter [11:0] VGA_HACT   = 640; // Horizontal Active (pixels)
+  parameter [11:0] VGA_HFP    = 16;  // Horizontal Front Porch (pixels)
+  parameter [11:0] VGA_HSW    = 96;  // Horizontal Sync Width (pixels)
+  parameter [11:0] VGA_HBP    = 48;  // Horizontal Back Porch (pixels)
+  parameter [11:0] VGA_VACT   = 480; // Vertical Active (lines)
+  parameter [11:0] VGA_VFP    = 10;  // Vertical Front Porch (lines)
+  parameter [11:0] VGA_VSW    = 2;   // Vertical Sync Width (lines)
+  parameter [11:0] VGA_VBP    = 33;  // Vertical Back Porch (lines)
+
+  parameter [11:0] VGA_HS_END   = VGA_HSW - 1;
+  parameter [11:0] VGA_HBP_END  = VGA_HSW + VGA_HBP - 1;
+  parameter [11:0] VGA_HACT_END = VGA_HSW + VGA_HBP + VGA_HACT - 1;
+  parameter [11:0] VGA_HFP_END  = VGA_HSW + VGA_HBP + VGA_HACT + VGA_HFP - 1;
+  parameter [11:0] VGA_VS_END   = VGA_VSW;
+  parameter [11:0] VGA_VBP_END  = VGA_VSW + VGA_VBP;
+  parameter [11:0] VGA_VACT_END = VGA_VSW + VGA_VBP + VGA_VACT;
+  parameter [11:0] VGA_VFP_END  = VGA_VSW + VGA_VBP + VGA_VACT + VGA_VFP;
+
+  // Generate input video signals (VS, HS, DE) according to VGA timing
+  video_timing_gen iVidGen
+    (
+      .I_RST      (reset),
+      .I_PCLK     (clk_pix),
+      .I_PIX_DATA (24'h0),
+      .I_TP_EN    (1'b1),
+      .I_HS_END   (VGA_HS_END),
+      .I_HBP_END  (VGA_HBP_END),
+      .I_HACT_END (VGA_HACT_END),
+      .I_HFP_END  (VGA_HFP_END),
+      .I_VS_END   (VGA_VS_END),
+      .I_VBP_END  (VGA_VBP_END),
+      .I_VACT_END (VGA_VACT_END),
+      .I_VFP_END  (VGA_VFP_END),
+      .I_VRST     (1'b0),
+      .O_DE       (i_vs),
+      .O_HS       (i_hs),
+      .O_VS       (i_de),
+      .O_HCNT     (),
+      .O_VCNT     (),
+      .O_PIX_DATA ()
+    );
 
 edge_detection_top DUT
   (
@@ -70,7 +114,7 @@ edge_detection_top DUT
       video_input_stream;
       video_output_stream;
     join
-    write_ppm_file(out_vector_file_name, pixel_output_data);
+    write_ppm_file(out_vector_3_file_name, pixel_output_data);
     $display("================================================================");
     $display("=========================== END SIM ============================");
     $display("================================================================");
@@ -89,7 +133,7 @@ edge_detection_top DUT
   task video_input_stream;
     begin
       @(posedge clk_pix);
-      i_de = 1'b1; // TO BE REMOVED
+      // i_de = 1'b1; // TO BE REMOVED
       $display ("+++ video_input_stream");
       vid_x = 0;
       vid_y = 0;
@@ -134,7 +178,7 @@ edge_detection_top DUT
           end
         end
         else
-          @(posedge o_clk_pix);
+          @(posedge clk_pix);
       end
     end
     $display ("--- video_output_stream");
