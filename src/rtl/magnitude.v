@@ -1,4 +1,14 @@
-//magnitude of two integers using Newton's Method.
+////
+//
+// University of Utah ECE 5710/6710 Edge Detection ASIC
+//
+// Create Date: 10/7/2020
+// Module Name: magnitude
+// Description: Calculates the magnitude of two integers using Newton's Method.
+// Authors: Aaron Pettit
+//
+////
+
 //sqrt(val)~=a1=a0-(a0^2-val)/2*a0
 //iterate 4 times
 //Uses integer division so there will be some error, but it shouldn't matter.
@@ -19,7 +29,7 @@ module magnitude(a,b,out);
 			seed=val/4; //could use case statement with different division factors to get closer to result.
 						//Larger seed values need to have higher division factors.
 						//possible division factor is 2^(n/2) where n is the msb thats a 1 (0010110 -> n=2)
-			//4 iterations 
+			//4 iterations
 			for(i=0;i<4;i=i+1)begin
 				seed=seed-(seed*seed-val)/(2*seed); //integer division
 			end

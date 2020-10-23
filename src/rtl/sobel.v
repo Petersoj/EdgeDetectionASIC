@@ -1,9 +1,19 @@
-//Compute the sobel filter at given pixel location
+////
+//
+// University of Utah ECE 5710/6710 Edge Detection ASIC
+//
+// Create Date: 10/7/2020
+// Module Name: Sobel
+// Description: Compute the sobel filter at given pixel location.
+// Authors: Aaron Pettit
+//
+////
+
 //This version tracks which edge the pixel is on and adjusts calculations accordingly
 //inputs: row - row number starting from the top at 0
 //	  col - column number starting from the left at 0
 //	  clk - input clock. Pixel computed on rising edge
-//output: out - filtered pixel at given [row,col]	  
+//output: out - filtered pixel at given [row,col]
 module Sobel(row,col,clk,out);
 	input [9:0] row, col;
 	input clk;
@@ -32,7 +42,7 @@ module Sobel(row,col,clk,out);
 
 		memoryReady=1;
 	end
-	
+
 	always @(posedge memoryReady) begin
 	//compute filter
 	//Note: could also be done with a case statement saying if pixel is on the edge/corner and which edge/corner
@@ -51,7 +61,7 @@ module Sobel(row,col,clk,out);
 				gx=gx-1*val;
 				gy=gy+1*val;
 			end
-		end 
+		end
 		else if(col<maxCol-1) begin //col 3 valid
 			if(row>0) begin //row 1 col 3
 				val=inputPixel[row-1][col+1];
@@ -65,10 +75,10 @@ module Sobel(row,col,clk,out);
 				gy=gy+1*val;
 			end
 		end
-		
+
 		if(row>0) gy=gy-2*inputPixel[row-1][col];//row 1 col 2
 		if(row<maxRow-1) gy=gy-2*inputPixel[row+1][col]; //row 3 col 2
-		
+
 		magnitude(gx,gy,magnitudeVal);
 	end
 
@@ -123,11 +133,11 @@ module sobel_blackBorder(row,col,clk,out);
 		else begin
 			memoryReady=0;
 			//TODO get inputPixels[] from memory
-		
+
 			memoryReady=1;
 		end
 	end
-	
+
 	always @(posedge memoryReady) begin
 			/* gx11 <= -1*inputPixels[0];	//row 1
 			gy11 <= -1*inputPixels[0];
@@ -148,8 +158,8 @@ module sobel_blackBorder(row,col,clk,out);
 			gx <= -inputPixels[0] + inputPixels[2] - 2*inputPixels[3] + 2*inputPixels[5] - inputPixels[6] + inputPixels[8];
 			gy <= -inputPixels[0] - 2*inputPixels[1] - inputPixels[2] + inputPixels[6] + 2*inputPixels[7] + inputPixels[8];
 			magnitude(gx,gy,magnitudeVal);
-	
-	end 
+
+	end
 
 	//magnitude has been computed.
 	always @(magnitudeVal) begin
