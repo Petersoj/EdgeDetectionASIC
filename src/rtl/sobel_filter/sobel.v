@@ -35,7 +35,7 @@ module sobel_blackBorder(row,col,inputPixels,clk,reset,out,sobelFinished);
 	
 	//variables
 	reg signed [10:0]	gx;				//output of horizontal filter range:[-1020:1020]
-	reg signed [10:0]	gy	;		 	//output of vertical filter range:[-1020 : 1020]
+	reg signed [10:0]	gy;		 	//output of vertical filter range:[-1020 : 1020]
 	wire [7:0]			magnitudeVal;	//value of the sqrt capped at 255
 	wire [7:0]			pixelArray [7:0]; //array used to separate input pixel values
 	
@@ -70,7 +70,7 @@ module sobel_blackBorder(row,col,inputPixels,clk,reset,out,sobelFinished);
 	//compute if center pixel is on the border
 	assign onEdge = (row==0) || (row==MAX_ROW-1) || (col==0) || (col==MAX_COL-1);
 	assign {pixelArray[7],pixelArray[6],pixelArray[5],pixelArray[4],pixelArray[3],pixelArray[2],pixelArray[1],pixelArray[0]} = inputPixels;
-	magnitdue Mag
+	magnitude Mag
 		(.a			(gx),
 		 .b			(gy),
 		 .start 	(startMag),
@@ -102,6 +102,7 @@ module sobel_blackBorder(row,col,inputPixels,clk,reset,out,sobelFinished);
 	//magnitude has been computed and output is updated
 	always @(posedge magFinished) begin
 		sobelFinished<=1;
+		//out<=magnitudeVal;		//use this instead of no threshold is used
 		//uses a threshold of 128. This helps to remove noise where the filter resulted in a low non-zero value.
 		if(magnitudeVal[7]==1) begin //result is greater than 127, set output to white.
 			out<=8'd255;

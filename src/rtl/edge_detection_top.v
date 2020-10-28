@@ -37,8 +37,8 @@ module edge_detection_top
     if(I_RST == 1'b1) begin
       pix_data_dly  <= 24'h0;
       pix_vsync_dly <= 1'b0;
-      pix_hsync_dly <= 1'b0;
-      pix_de_dly    <= 1'b0;
+      //pix_hsync_dly <= 1'b0;
+      //pix_de_dly    <= 1'b0;
     end
     else begin
       pix_data_dly  <= I_PIX_DATA; // Will be changed later

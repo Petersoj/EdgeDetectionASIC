@@ -17,7 +17,7 @@
 //	b - 10 bit signed integer input
 //	start - flag to begin magnitude computation
 //outputs:
-//	out - output magnitude 0-255
+//	out - output magnitude 8 bit 0-255
 //	outValid - flag when complete
 module magnitude(a,b,start,out,outValid);
 	input signed[10:0] 	a; 
@@ -30,7 +30,7 @@ module magnitude(a,b,start,out,outValid);
 	reg 				beginMSB; 	//1 to compute location of MSB
 	reg					resetMSB; 	//1 to reset MSB module. Required between each use
 	wire				validMSB; 	//1 when MSB is complete
-	reg [4:0] 			MSB_Index; 	//index of MSB
+	wire [4:0] 			MSB_Index; 	//index of MSB
 	reg [2:0] 			i; 			//used in for loop
 
 	assign val=a*a+b*b; //a^2+b^2, need to check if valid with signed bits
@@ -38,7 +38,7 @@ module magnitude(a,b,start,out,outValid);
 		(.data			(val),
 		 .start			(beginMSB),
 		 .reset			(resetMSB),
-		 .msbIndex	(MSB_Index),
+		 .msbIndex		(MSB_Index),
 		 .msbValid		(validMSB)
 		 );
 		 
@@ -57,8 +57,8 @@ module magnitude(a,b,start,out,outValid);
 		end
 		else begin
 			//Set initial seed to an estimated magnitude value. Divide original value by 2^(MSB_Index/2) where MSB_Index is highest bit that is a 1. This calculation will get the seed close enough for minimal interations
-			MSB_Index = MSB_Index / 2;
-			seed=val >> MSB_Index; 
+			//MSB_Index = MSB_Index / 2;
+			seed=val >> (MSB_Index >> 1); 
 			
 			//4 iterations needed to get within a few pixel values
 			for(i=0;i<4;i=i+1)begin
@@ -103,20 +103,22 @@ module positionOfMSB(data,start,reset,msbIndex,msbValid);
 	
 	always @(posedge start, posedge reset) begin
 		if (reset) begin
-			msbIndex <= 0;
-			msbValid <= 0;
+			msbIndex = 0;
+			msbValid = 0;
 		end
 		else if (start) begin
+			msbIndex = 0;
+			msbValid = 0;
 			//exit if data=0, otherwise compute MSB
 			if(data==20'b0) begin
-				msbValid <=1;
+				msbValid =1;
 			end
 			else begin
 				//start from the end of the array check if MSB bit is a 1
 				for (i = 20; i >= 0; i = i - 1) begin
-					if (data[i] == 1) begin
-						msbIndex <= i;
-						msbValid <= 1;
+					if (data[i] == 1 && msbValid!=1) begin
+						msbIndex = i;
+						msbValid = 1;
 					end
 				end
 			end
