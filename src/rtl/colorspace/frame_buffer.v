@@ -28,10 +28,7 @@ module frame_buffer
     output wire [P_PIXEL_DEPTH - 1:0] O_PIXEL // The pixel data output
     );
 
-    parameter integer P_TOTAL_PIXEL_COUNT = P_COLUMNS * P_ROWS; // The number of pixels in the frame
-
-    reg [P_PIXEL_DEPTH - 1:0] buffer_registers [0:P_TOTAL_PIXEL_COUNT - 1]; // The array of registers for the frame buffer
-    wire [$clog2(P_TOTAL_PIXEL_COUNT) - 1:0] buffer_registers_index; // The index of the desired pixel in the array of registers
+    reg [P_PIXEL_DEPTH - 1:0] buffer_registers [0:P_ROWS - 1][0:P_COLUMNS - 1]; // The 2D array of registers for the frame buffer
     reg [P_PIXEL_DEPTH - 1:0] q_o_pixel; // The current state of the output pixel
     wire [P_PIXEL_DEPTH - 1:0] n_o_pixel; // The next state of the output pixel
 
@@ -39,9 +36,8 @@ module frame_buffer
     assign O_PIXEL = q_o_pixel;
 
     // RTL logic
-    assign buffer_registers_index = (I_PIXEL_ROW * P_COLUMNS) + I_PIXEL_COL;
     assign n_o_pixel = (I_READ_ENABLE == 1'b1 && I_WRITE_ENABLE == 1'b0)
-                        ? buffer_registers[buffer_registers_index]
+                        ? buffer_registers[I_PIXEL_ROW][I_PIXEL_COL]
                         : q_o_pixel;
 
     // Clock block
@@ -62,16 +58,18 @@ module frame_buffer
 
     // Task to set all the buffer registers to 0
     task reset_buffer_registers;
-        integer i;
-        for (i = 0; i < P_TOTAL_PIXEL_COUNT; i = i + 1) begin
-            buffer_registers[i] <= {P_PIXEL_DEPTH{1'b0}};
+        integer row, column;
+        for (row = 0; row < P_ROWS; row = row + 1) begin
+            for (column = 0; column < P_COLUMNS; column = column + 1) begin
+                buffer_registers[row][column] <= {P_PIXEL_DEPTH{1'b0}};
+            end
         end
     endtask
 
     // Task to set registers in the buffer to the input pixel
     task set_buffer_registers;
         if (I_READ_ENABLE == 1'b0 && I_WRITE_ENABLE == 1'b1) begin
-            buffer_registers[buffer_registers_index] <= I_PIXEL;
+            buffer_registers[I_PIXEL_ROW][I_PIXEL_COL] <= I_PIXEL;
         end
     endtask
 
