@@ -16,7 +16,7 @@ module frame_buffer
     parameter integer P_PIXEL_DEPTH = 32'd24 // The color depth of the pixel
     )
     (
-    input wire I_CLK, // Clock input for FSM
+    input wire I_CLK, // Clock input
     input wire I_RESET, // Reset input
     input wire I_ENABLE, // Enable input
     input wire [$clog2(P_COLUMNS) - 1:0] I_PIXEL_COL, // The column of the desired pixel
