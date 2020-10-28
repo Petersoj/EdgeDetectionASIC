@@ -13,13 +13,13 @@ module edge_detection_top
   (
     input wire          I_RST,       // Input Reset
     input wire          I_CLK_100,   // Input Core Clock (100 MHz?)
-                                     
+
     input wire  [23:0]  I_PIX_DATA,  // Input RGB Pixel Data
     input wire	        I_VSYNC,     // Input Vertical Sync
     input wire          I_HSYNC,     // Input Horizontal Sync
     input wire          I_DE,        // Input Data Enable (Data Valid)
     input wire          I_PCLK,      // Input Pixel Clock (25.175 MHz)
-                                     
+
     output wire [23:0]  O_PIX_DATA,  // Output RGB Pixel Data
     output wire         O_VSYNC,     // Output Vertical Sync
     output wire         O_HSYNC,     // Output Horizontal Sync
@@ -30,7 +30,7 @@ module edge_detection_top
   reg [23:0]  pix_data_dly;
   reg         pix_vsync_dly;
 
-  // output mapping 
+  // output mapping
   assign O_PCLK     = I_PCLK; // May need a clock buffer
 
   always @(posedge O_PCLK) begin
@@ -39,6 +39,7 @@ module edge_detection_top
       pix_vsync_dly <= 1'b0;
       //pix_hsync_dly <= 1'b0;
       //pix_de_dly    <= 1'b0;
+
     end
     else begin
       pix_data_dly  <= I_PIX_DATA; // Will be changed later
@@ -91,6 +92,5 @@ module edge_detection_top
       .O_VCNT     (),
       .O_PIX_DATA (O_PIX_DATA)
     );
-    
 
 endmodule

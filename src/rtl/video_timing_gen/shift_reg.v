@@ -9,11 +9,11 @@
 //
 ////
 
-module shift_reg 
+module shift_reg
   #(
-    parameter G_INIT  = 1'b0;
-    parameter G_WIDTH = 1;
-    parameter G_DEPTH = 1;
+    parameter G_INIT  = 1'b0,
+    parameter G_WIDTH = 1,
+    parameter G_DEPTH = 1
   ) (
     input   wire                  I_CLK;   // Clock for Register
     input   wire                  I_RESET; // Reset

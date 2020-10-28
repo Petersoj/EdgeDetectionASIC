@@ -15,10 +15,8 @@
 
 module edge_detection_top_tb();
 
-  logic [2000:0]  in_vector_file_name =   "../../vectors/rocks.ppm";
-  logic [2000:0]  out_vector_1_file_name =  "../../vectors/rocks_out_1.ppm";
-  logic [2000:0]  out_vector_2_file_name =  "../../vectors/tp_out_2.ppm";
-  logic [2000:0]  out_vector_3_file_name =  "../../vectors/out_3.ppm";
+  logic [2000:0]  in_vector_file_name =   "vectors/rocks.ppm";
+  logic [2000:0]  out_vector_3_file_name =  "vectors/out_3.ppm";
   logic [23:0]    pixel_input_data[`V_LINES][`H_PIXELS];
   logic [23:0]    pixel_output_data[`V_LINES][`H_PIXELS];
   logic [100:0]   vid_x, vid_y, o_vid_x, o_vid_y;
@@ -107,7 +105,7 @@ edge_detection_top DUT
     $display("================================================================");
     $display("========================== BEGIN SIM ===========================");
     $display("================================================================");
-    
+
     tb_init;
     fork
       // run tests
@@ -115,9 +113,11 @@ edge_detection_top DUT
       video_output_stream;
     join
     write_ppm_file(out_vector_3_file_name, pixel_output_data);
+
     $display("================================================================");
     $display("=========================== END SIM ============================");
     $display("================================================================");
+    $stop;
   end
 
   task tb_init;
@@ -203,7 +203,7 @@ edge_detection_top DUT
       $display("Number of Pixels - %0d", pixel_count);
       $display("Number of Lines  - %0d", line_count);
       $display("Color depth      - %0d", pixel_depth);
-      
+
       for(int i = 0; i < line_count; i++) begin
         for(int j = 0; j < pixel_count; j++) begin
           r = $fscanf(fd, "%d", pix_r);
@@ -229,9 +229,12 @@ edge_detection_top DUT
       $fwrite(fd, "P3\n640 480\n255\n");
       for(int i = 0; i < `V_LINES; i++) begin
         for(int j = 0; j < `H_PIXELS; j++) begin
-          $fwrite(fd, "%d\n", pixel_data[i][j][23:16]);
-          $fwrite(fd, "%d\n", pixel_data[i][j][15:8]);
-          $fwrite(fd, "%d\n", pixel_data[i][j][7:0]);
+          if (pixel_data[i][j] === {24{1'bx}} || pixel_data[i][j] === {24{1'bz}}) begin
+            pixel_data[i][j] = {24{1'b0}};
+          end
+          $fwrite(fd, "%0d\n", pixel_data[i][j][23:16]);
+          $fwrite(fd, "%0d\n", pixel_data[i][j][15:8]);
+          $fwrite(fd, "%0d\n", pixel_data[i][j][7:0]);
         end
       end
       $fclose(fd);
