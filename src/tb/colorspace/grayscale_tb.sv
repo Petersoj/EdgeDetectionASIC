@@ -2,9 +2,9 @@
 //
 // University of Utah ECE 5710/6710 Edge Detection ASIC
 //
-// Create Date: 10/27/2020
+// Create Date: 10/28/2020
 // Module Name: grayscale_tb
-// Description: A memory buffer for a 2D matrix/frame testbench.
+// Description: grayscale module testbench
 // Authors: Jacob Peterson
 //
 ////
