@@ -73,55 +73,6 @@ module magnitude(a,b,start,out,outValid);
 	end
 endmodule
 
-//requires 16 clock cycles
-// module magnitude_new(a,b,start,clk,out,done);
-
-// assign val=a*a+b*b;
-
-// always @(posedge clk, posedge reset) begin
-	// if(reset) begin
-	
-	// end
-	// else if(start) begin
-		// if(active)begin
-			// q <= {q[14:0],!r[17]); //old r
-			// if(r[17]==1) //add if r is negative
-				// r <= left + right;	//uses old left and right values
-			// else
-				// r <= left - right;
-				
-			// right <={q,r[17],1'b1};
-			// left <= {r[15:0],a[31:30]};
-			// a <= {a[29:0],2'b00};	//left shift by 2 bits
-			
-			// if(cycle==0) begin
-				// active<=0;
-				// done<=1;
-			// end
-				
-			// cycle <= cycle - 5'd1;
-		// end
-		// else if(done) begin
-			// out<=q;
-		// end
-		// else begin
-			// //initialize variables
-			// a<=val;
-			// q<=0;
-			// i<=0;
-			// left<=0;
-			// right<=0;
-			// r<=0;
-			// active<=1;
-			// done<=0;
-			// cycle<= 5'd15;
-		// end
-	// end
-	
-// end
-
-// endmodule
-
 //Design and Implementation of Modified Non-Restoring Square Root Calculator Based on Verilog HDL
 //International Journal of Scientific Engineering and Technology Research
 //Volume.03, IssueNo.09, May-2014, Pages: 1694-1697
