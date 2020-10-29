@@ -22,27 +22,35 @@ module sobel_filter_tb();
 	logic [7:0]		sobel_output;
 	logic			sobel_reset;
 	logic			clk_pix;
+	logic			clk;
 	logic			pixel_finished;
+	logic			start;
 	logic [9:0]		row;
 	logic [9:0]		col;
 	
 	
 	//clock 25.175 MHz
-	initial #10 clk_pix=0'b1; //start with slight delay
+	initial clk_pix=1'b1; //start with slight delay
 	always begin
 		#19861 clk_pix=!clk_pix;
-	end	
+	end
+	//system clock 302.1 MHz
+	initial clk = 1'b1;
+	always begin
+		#3310 clk=!clk;
+	end
 	
 
 	sobel_blackBorder iSobel
 	(
 		.row			(row),
 		.col			(col),
-		.inputPixels	(sobel_input),
-		.clk			(clk_pix),
-		.reset			(sobel_reset),
+		.inputPixels		(sobel_input),
+		.clk_pix		(clk_pix),
+		.clk			(clk),
+		.start			(start),
 		.out			(sobel_output),
-		.sobelFinished	(pixel_finished)
+		.done			(pixel_finished)
 	);
 	
 	initial begin
@@ -59,20 +67,17 @@ module sobel_filter_tb();
 	end
 
 	task tb_init;
-    begin
-      read_ppm_file(in_vector_file_name, pixel_input_data);
-    end
-  endtask
+	    begin
+	      read_ppm_file(in_vector_file_name, pixel_input_data);
+	    end
+	endtask
 
 	task sobel_test; 
 	begin
 		$display("+++ sobel filter start");
-		sobel_reset=0;
-		#5 sobel_reset=1;
-		
+		start=1;
 		for(row=0; row < `V_LINES; row++) begin
 			for(col=0; col < `H_PIXELS; col++) begin
-				#5 sobel_reset=0;
 				sobel_input = {pixel_input_data[row-1][col-1],
 					pixel_input_data[row-1][col],
 					pixel_input_data[row-1][col+1],
@@ -83,8 +88,6 @@ module sobel_filter_tb();
 					pixel_input_data[row+1][col+1] };
 				@(posedge pixel_finished);
 				pixel_output_data[row][col]=sobel_output;
-				@(negedge clk_pix);
-				sobel_reset=1;
 				
 
 			end

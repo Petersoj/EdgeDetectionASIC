@@ -43,14 +43,14 @@ module magnitude(a,b,start,out,outValid);
 		 );
 		 
 	always @(posedge start) begin
-		resetMSB <= 0;
+		//resetMSB <= 0;
 		beginMSB <= 1;
 		outValid <= 0;
 	end
 	
 	always @(posedge validMSB) begin
 	
-		resetMSB = 1;
+		//resetMSB = 1;
 		beginMSB = 0;
 		if(val==0) begin
 			out = 8'b0;
@@ -73,6 +73,88 @@ module magnitude(a,b,start,out,outValid);
 	end
 endmodule
 
+//requires 16 clock cycles
+// module magnitude_new(a,b,start,clk,out,done);
+
+// assign val=a*a+b*b;
+
+// always @(posedge clk, posedge reset) begin
+	// if(reset) begin
+	
+	// end
+	// else if(start) begin
+		// if(active)begin
+			// q <= {q[14:0],!r[17]); //old r
+			// if(r[17]==1) //add if r is negative
+				// r <= left + right;	//uses old left and right values
+			// else
+				// r <= left - right;
+				
+			// right <={q,r[17],1'b1};
+			// left <= {r[15:0],a[31:30]};
+			// a <= {a[29:0],2'b00};	//left shift by 2 bits
+			
+			// if(cycle==0) begin
+				// active<=0;
+				// done<=1;
+			// end
+				
+			// cycle <= cycle - 5'd1;
+		// end
+		// else if(done) begin
+			// out<=q;
+		// end
+		// else begin
+			// //initialize variables
+			// a<=val;
+			// q<=0;
+			// i<=0;
+			// left<=0;
+			// right<=0;
+			// r<=0;
+			// active<=1;
+			// done<=0;
+			// cycle<= 5'd15;
+		// end
+	// end
+	
+// end
+
+// endmodule
+
+//Design and Implementation of Modified Non-Restoring Square Root Calculator Based on Verilog HDL
+//International Journal of Scientific Engineering and Technology Research
+//Volume.03, IssueNo.09, May-2014, Pages: 1694-1697
+
+module sqrt #(parameter DATA_WIDTH= 20,	ANSWER_WIDTH= 8,TRIAL_WIDTH = 8 )
+(clk,data,start,answer,done);
+	input clk;
+	input start;
+	input wire[DATA_WIDTH-1:0] data; 
+	output reg [ANSWER_WIDTH-1:0] answer; 
+	output done;
+	reg busy; 
+	reg [2:0] bit; 				//number of clock cycles
+	wire [TRIAL_WIDTH-1:0] trial;
+	
+	assign trial = answer | (1 << bit);
+	
+	always @ (posedge clk) begin
+		if (busy) begin
+			if (bit == 0) busy <= 0;
+			else bit <= bit - 1;
+			if (trial*trial <= data)
+				answer <= trial;
+		end
+		else if (start) begin
+			busy <= 1;
+			answer <= 0;
+			bit <= 7; 
+		end
+	end
+	
+	assign done = ~busy;
+endmodule
 
 ////
 //
@@ -121,7 +203,16 @@ module positionOfMSB(data,start,reset,msbIndex,msbValid);
 						msbValid = 1;
 					end
 				end
+				//could also just use lookup table 
+				/*case (data)
+					21b'1_xxxx_xxxx_xxxx_xxxx_xxxx: msbIndex <= 5'd20;
+					.
+					.
+					.
+				*/
 			end
+			
 		end
+		
 	end
 endmodule
