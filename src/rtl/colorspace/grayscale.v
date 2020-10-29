@@ -30,9 +30,9 @@ module grayscale
     // TODO make synthesizable
     // TODO implement ALU/multiplication module for '*' operator instead of leaving it up to the synthesizer
 
-    wire red = I_PIXEL[P_PIXEL_RGB_WIDTH * 3 - 1 : P_PIXEL_RGB_WIDTH * 3 - P_PIXEL_RGB_WIDTH];
-    wire green = I_PIXEL[P_PIXEL_RGB_WIDTH * 2 - 1 :P_PIXEL_RGB_WIDTH * 2 - P_PIXEL_RGB_WIDTH];
-    wire blue = I_PIXEL[P_PIXEL_RGB_WIDTH - 1 : 0];
+    wire [P_PIXEL_RGB_WIDTH:0] red = I_PIXEL[P_PIXEL_RGB_WIDTH * 3 - 1 : P_PIXEL_RGB_WIDTH * 3 - P_PIXEL_RGB_WIDTH];
+    wire [P_PIXEL_RGB_WIDTH:0] green = I_PIXEL[P_PIXEL_RGB_WIDTH * 2 - 1 :P_PIXEL_RGB_WIDTH * 2 - P_PIXEL_RGB_WIDTH];
+    wire [P_PIXEL_RGB_WIDTH:0] blue = I_PIXEL[P_PIXEL_RGB_WIDTH - 1 : 0];
 
     assign O_PIXEL = 0.299*red + 0.587*green + 0.114*blue;
 
