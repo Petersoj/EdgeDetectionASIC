@@ -14,8 +14,8 @@
 `define V_LINES   480
 
 module sobel_filter_tb();
-	logic [2000:0]  in_vector_file_name =   "D:/Workspace/EdgeDetectionASIC/vectors/metal.ppm";			//temporary, set to "../../vectors/rocks.ppm"
-	logic [2000:0]  out_vector_file_name =  "D:/Workspace/EdgeDetectionASIC/vectors/metal_edge_detection.pgm";	//temporary, set to "../../vectors/rocks_edge_detection.pgm"
+	logic [2000:0]  in_vector_file_name =   "D:/Workspace/EdgeDetectionASIC/vectors/rocks.ppm";			//temporary, set to "../../vectors/rocks.ppm"
+	logic [2000:0]  out_vector_file_name =  "D:/Workspace/EdgeDetectionASIC/vectors/rocks_edge_detection_abs.pgm";	//temporary, set to "../../vectors/rocks_edge_detection.pgm"
 	logic [7:0] 	pixel_input_data[`V_LINES][`H_PIXELS];
 	logic [7:0] 	pixel_output_data[`V_LINES][`H_PIXELS];
 	logic [63:0]	sobel_input;
@@ -86,7 +86,7 @@ module sobel_filter_tb();
 					pixel_input_data[row+1][col-1],
 					pixel_input_data[row+1][col],
 					pixel_input_data[row+1][col+1] };
-				@(posedge pixel_finished);
+				@(posedge clk_pix);
 				pixel_output_data[row][col]=sobel_output;
 				
 

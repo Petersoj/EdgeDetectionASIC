@@ -97,7 +97,7 @@ module edge_detection_top
   // Edge Detection
   wire [7:0] out;
 
-  sobel_blackBorder iSobelBlackBorder(
+  sobel iSobel(
       .row(colorspace_converter_pixel_row),
       .col(colorspace_converter_pixel_col),
       .inputPixels(), // TODO

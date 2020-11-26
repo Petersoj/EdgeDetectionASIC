@@ -47,6 +47,21 @@ module sobel_blackBorder(row,col,inputPixels,clk_pix,clk,start,out,done);
 	wire				magFinished;	//1 when magnitdue has been computed
 	reg					busy;			//1 when computing pixel
 	
+	//experimental
+	reg [9:0] gx1,gx2,gy1,gy2;
+	reg [9:0] gx_ex,gy_ex;
+	wire [10:0] g_mag;
+	
+	always @(gx1,gx2,gy1,gy2) begin
+		if(gx1>gx2) gx_ex=gx1-gx2;
+		else	gx_ex=gx2-gx1;
+		if(gy1>gy2)	gy_ex=gy1-gy2;
+		else	gy_ex=gy2-gy1;
+	end
+	assign 	g_mag=gy_ex+gx_ex;
+	
+	
+	
 	//parameters
 	parameter [8:0]		MAX_ROW = 480;	//horizontal image dimension
 	parameter [9:0]		MAX_COL = 640;	//vertical image dimension
@@ -73,7 +88,7 @@ module sobel_blackBorder(row,col,inputPixels,clk_pix,clk,start,out,done);
 	//compute if center pixel is on the border
 	assign onEdge = (row==0) || (row==MAX_ROW-1) || (col==0) || (col==MAX_COL-1);
 	assign {pixelArray[7],pixelArray[6],pixelArray[5],pixelArray[4],pixelArray[3],pixelArray[2],pixelArray[1],pixelArray[0]} = inputPixels;
-	assign gx2gy2 = gx*gx+gy*gy;
+	//assign gx2gy2 = gx*gx+gy*gy;
 	assign done = ~busy;
 
 //	magnitude Mag
@@ -83,13 +98,13 @@ module sobel_blackBorder(row,col,inputPixels,clk_pix,clk,start,out,done);
 //		 .out		(magnitudeVal),
 //		 .outValid	(magFinished)
 //		 );
-	sqrt root(
-		.clk	(clk),
-		.data	(gx2gy2),
-		.start	(startMag),
-		.answer	(magnitudeVal),
-		.done	(magFinished)
-		);
+	// sqrt root(
+		// .clk	(clk),
+		// .data	(gx2gy2),
+		// .start	(startMag),
+		// .answer	(magnitudeVal),
+		// .done	(magFinished)
+		// );
  
 	//calculate horizontal and vertical filters
 	always @(posedge clk_pix)begin
@@ -98,26 +113,38 @@ module sobel_blackBorder(row,col,inputPixels,clk_pix,clk,start,out,done);
 			if(onEdge) begin
 				// out <= 8'd0;
 				// done<=1;
-				gx<=0;
-				gy<=0;
+				//gx<=0;
+				//gy<=0;
+				gx1<=0;
+				gx2<=0;
+				gy1<=0;
+				gy2<=0;
 			end
 			else begin
-				gx <= HX_11*pixelArray[0] + HX_13*pixelArray[2] 
-					+ HX_21*pixelArray[3] + HX_23*pixelArray[4] 
-					+ HX_31*pixelArray[5] + HX_33*pixelArray[7];
-				gy <= HY_11*pixelArray[0] + HY_12*pixelArray[1] + HY_13*pixelArray[2] 
-					+ HY_31*pixelArray[5] + HY_32*pixelArray[6]	+ HY_33*pixelArray[7];
+				// gx <= HX_11*pixelArray[0] + HX_13*pixelArray[2] 
+					// + HX_21*pixelArray[3] + HX_23*pixelArray[4] 
+					// + HX_31*pixelArray[5] + HX_33*pixelArray[7];
+				// gy <= HY_11*pixelArray[0] + HY_12*pixelArray[1] + HY_13*pixelArray[2] 
+					// + HY_31*pixelArray[5] + HY_32*pixelArray[6]	+ HY_33*pixelArray[7];
+				gx1<=pixelArray[0]+(pixelArray[5]<<1)+pixelArray[3];
+				gx2<=pixelArray[2]+(pixelArray[4]<<1)+pixelArray[7];
+				gy1<=pixelArray[0]+(pixelArray[1]<<1)+pixelArray[2];
+				gy2<=pixelArray[5]+(pixelArray[6]<<1)+pixelArray[7];
 				// startMag<=1;
 			end
 			startMag <= 1;
+			if(g_mag[10:7]>0) out<=8'd255;
+			else	out<=8'd0;
+			
 		end
 	end
 
 	//magnitude has been computed and output is updated
-	always @(posedge magFinished) begin
+	/*always @(posedge magFinished) begin
 		busy<=0;
 		startMag<=0;
 		//out<=magnitudeVal;		//use this instead of no threshold is used
+		
 		//uses a threshold of 128. This helps to remove noise where the filter resulted in a low non-zero value.
 		if(magnitudeVal[7]==1) begin //result is greater than 127, set output to white.
 			out<=8'd255;
@@ -126,4 +153,5 @@ module sobel_blackBorder(row,col,inputPixels,clk_pix,clk,start,out,done);
 			out<=8'd0;
 		end
 	end
+	*/
 endmodule
