@@ -16,24 +16,70 @@ module grayscale
     parameter integer P_PIXEL_DEPTH = 32'd24 // The color depth of the pixel
     )
     (
-    //input wire I_CLK, // Clock input
-    //input wire I_RESET, // Reset input
-    //input wire I_ENABLE, // Enable input
+    input wire I_CLK, // Clock input
+    input wire I_RESET, // Reset input
+    input wire I_ENABLE, // Enable input
     input wire [P_PIXEL_DEPTH - 1:0] I_PIXEL, // The RGB pixel data input
 
     output wire [P_PIXEL_DEPTH - 1:0] O_PIXEL // The grayscale pixel data output
-    // output reg O_DONE // Asserted when the conversion has completed (unasserts on the next clock cycle)
     );
 
-    parameter P_PIXEL_RGB_WIDTH = P_PIXEL_DEPTH / 3;
+    parameter P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3;
+    parameter P_RED_MSB = P_SUBPIXEL_DEPTH * 3 - 1;
+    parameter P_RED_LSB = P_SUBPIXEL_DEPTH * 3 - P_SUBPIXEL_DEPTH;
+    parameter P_GREEN_MSB = P_SUBPIXEL_DEPTH * 2 - 1;
+    parameter P_GREEN_LSB = P_SUBPIXEL_DEPTH * 2 - P_SUBPIXEL_DEPTH;
+    parameter P_BLUE_MSB = P_SUBPIXEL_DEPTH - 1;
+    parameter P_BLUE_LSB = 0;
+    wire [P_SUBPIXEL_DEPTH:0] w_i_red = I_PIXEL[P_RED_MSB : P_RED_LSB];
+    wire [P_SUBPIXEL_DEPTH:0] w_i_green = I_PIXEL[P_GREEN_MSB : P_GREEN_LSB];
+    wire [P_SUBPIXEL_DEPTH:0] w_i_blue = I_PIXEL[P_BLUE_MSB : P_BLUE_LSB];
+    reg [P_PIXEL_DEPTH - 1:0] q_o_pixel; // The current state of the output pixel
+    wire [P_PIXEL_DEPTH - 1:0] n_o_pixel; // The next state of the output pixel
 
-    // TODO make synthesizable
-    // TODO implement ALU/multiplication module for '*' operator instead of leaving it up to the synthesizer
+    // Output mapping
+    assign O_PIXEL = q_o_pixel;
 
-    wire [P_PIXEL_RGB_WIDTH:0] red = I_PIXEL[P_PIXEL_RGB_WIDTH * 3 - 1 : P_PIXEL_RGB_WIDTH * 3 - P_PIXEL_RGB_WIDTH];
-    wire [P_PIXEL_RGB_WIDTH:0] green = I_PIXEL[P_PIXEL_RGB_WIDTH * 2 - 1 :P_PIXEL_RGB_WIDTH * 2 - P_PIXEL_RGB_WIDTH];
-    wire [P_PIXEL_RGB_WIDTH:0] blue = I_PIXEL[P_PIXEL_RGB_WIDTH - 1 : 0];
+    // START RTL logic
 
-    assign O_PIXEL = 0.299*red + 0.587*green + 0.114*blue;
+    // NOTE The Luma coefficients are 0.299, 0.587, and 0.114 for red, green, and blue respectively,
+    // but we are using approximations for this implementation to prevent the use
+    // of floating point (or fixed point) numbers and division. Multiplying by fractional
+    // cocoefficients is just division, but dividers generally take up multiple clock cycles and
+    // take up lots of area (https://stackoverflow.com/a/11726261/4352701).
+    // Addition is less expensive and can be done efficiently using various
+    // optimized implementations (e.g. carry-look-ahead).
+    // We'll instead use the same logic that used to implement floating point numbers,
+    // that is, we use a 'mantissa' which represents the fractional part of a decimal
+    // in binary to divide our number by a fraction.
+    // e.g. 0.299 is pretty close to 2^(-2) + 2^(-5) + 2^(-6) + 2^(-9) where 2^(-exponent)
+    // is simply right bit-shifting by that exponent integer. So we simply sum the bit-shifted
+    // results together to appromate division.
+    // The implementation of addition here is done by the synthesizer, but, if necessary,
+    // a fast and constant-coefficient multiplier algorithm can be done with
+    // this algorithm: http://www.aoki.ecei.tohoku.ac.jp/arith/mg/algorithm.html#cmult
+    // if multiplication is necessary for a different 'dividing' implementation.
 
+    // w_i_red * [2^(-2) + 2^(-5) + 2^(-6) + 2^(-9)]
+    assign n_o_pixel[P_RED_MSB : P_RED_LSB] = (w_i_red >> 2) + (w_i_red >> 5) + (w_i_red >> 6) + (w_i_red >> 9);
+    // w_i_green * [2^(-1) + 2^(-4) + 2^(-6) + 2^(-7)]
+    assign n_o_pixel[P_GREEN_MSB : P_GREEN_LSB] = (w_i_green >> 1) + (w_i_green >> 4) + (w_i_green >> 6) + (w_i_green >> 7);
+    // w_i_blue * [2^(-4) + 2^(-5) + 2^(-6) + 2^(-8)]
+    assign n_o_pixel[P_BLUE_MSB : P_BLUE_LSB] = (w_i_blue >> 4) + (w_i_blue >> 5) + (w_i_blue >> 6) + (w_i_blue >> 8);
+
+    // END RTL logic
+
+    // Clock block
+    always @(posedge I_CLK or posedge I_RESET) begin
+        if (I_ENABLE == 1'b1) begin
+            if(I_RESET == 1'b1) begin
+                q_o_pixel <= {P_PIXEL_DEPTH{1'b0}};
+            end
+            else begin
+                q_o_pixel <= n_o_pixel;
+            end
+        end else begin
+
+        end
+    end
 endmodule
