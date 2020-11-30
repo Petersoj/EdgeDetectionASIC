@@ -55,6 +55,9 @@ module grayscale
     // e.g. 0.299 is pretty close to 2^(-2) + 2^(-5) + 2^(-6) + 2^(-9) where 2^(-exponent)
     // is simply right bit-shifting by that exponent integer. So we simply sum the bit-shifted
     // results together to appromate division.
+    // You can use this easy-to-use floating point converter tool to see the mantissa
+    // of various decimals (along with the IEEE spec for floating point
+    // numbers): https://www.h-schmidt.net/FloatConverter/IEEE754.html
     // The implementation of addition here is done by the synthesizer, but, if necessary,
     // a fast and constant-coefficient multiplier algorithm can be done with
     // this algorithm: http://www.aoki.ecei.tohoku.ac.jp/arith/mg/algorithm.html#cmult
@@ -62,8 +65,10 @@ module grayscale
 
     // w_i_red * [2^(-2) + 2^(-5) + 2^(-6) + 2^(-9)]
     assign n_o_pixel[P_RED_MSB : P_RED_LSB] = (w_i_red >> 2) + (w_i_red >> 5) + (w_i_red >> 6) + (w_i_red >> 9);
+
     // w_i_green * [2^(-1) + 2^(-4) + 2^(-6) + 2^(-7)]
     assign n_o_pixel[P_GREEN_MSB : P_GREEN_LSB] = (w_i_green >> 1) + (w_i_green >> 4) + (w_i_green >> 6) + (w_i_green >> 7);
+    
     // w_i_blue * [2^(-4) + 2^(-5) + 2^(-6) + 2^(-8)]
     assign n_o_pixel[P_BLUE_MSB : P_BLUE_LSB] = (w_i_blue >> 4) + (w_i_blue >> 5) + (w_i_blue >> 6) + (w_i_blue >> 8);
 
@@ -79,7 +84,7 @@ module grayscale
                 q_o_pixel <= n_o_pixel;
             end
         end else begin
-
+            q_o_pixel <= q_o_pixel;
         end
     end
 endmodule
