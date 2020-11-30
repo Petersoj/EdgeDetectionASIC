@@ -13,11 +13,14 @@
 
 module frame_buffer_tb();
 
+    // START local parameters
     parameter integer P_COLUMNS = 640;
     parameter integer P_ROWS = 3;
     parameter integer P_PIXEL_DEPTH = 24;
     parameter integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3;
+    // END local parameters
 
+    // START registers and wires
     logic clock;
     logic reset;
     logic enable;
@@ -27,22 +30,9 @@ module frame_buffer_tb();
     logic write_enable;
     logic read_enable;
     logic [P_PIXEL_DEPTH - 1:0] output_pixel;
+    // END registers and wires
 
-    initial begin
-        clock = 1'b1;
-        reset = 1'b1;
-        enable = 1'b1;
-        column = {$clog2(P_COLUMNS){1'b0}};
-        row = {$clog2(P_ROWS){1'b0}};
-        pixel = {P_PIXEL_DEPTH{1'b0}};
-        write_enable = 1'b0;
-        read_enable = 1'b0;
-    end
-
-    initial begin
-        forever #5000 clock = ~clock; // 100MHz clock (period of 10ns)
-    end
-
+    // START module instantiations
     frame_buffer #(
         .P_P_COLUMNS(P_COLUMNS),
         .P_P_ROWS(P_ROWS),
@@ -61,6 +51,24 @@ module frame_buffer_tb();
 
         .O_PIXEL(output_pixel)
         );
+    // END module instantiations
+
+    // START initial blocks
+
+    initial begin
+        clock = 1'b1;
+        reset = 1'b1;
+        enable = 1'b1;
+        column = {$clog2(P_COLUMNS){1'b0}};
+        row = {$clog2(P_ROWS){1'b0}};
+        pixel = {P_PIXEL_DEPTH{1'b0}};
+        write_enable = 1'b0;
+        read_enable = 1'b0;
+    end
+
+    initial begin
+        forever #5000 clock = ~clock; // 100MHz clock (period of 10ns)
+    end
 
     initial begin
         $display("================================================================");
@@ -105,4 +113,5 @@ module frame_buffer_tb();
         $stop;
     end
 
+    // END initial blocks
 endmodule

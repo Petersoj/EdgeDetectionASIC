@@ -12,8 +12,8 @@
 module frame_buffer
     #(
     parameter integer P_COLUMNS = 32'd640, // The number of columns in the frame
-    parameter integer P_ROWS = 32'd3, // The number of rows in the frame
-    parameter integer P_PIXEL_DEPTH = 32'd24 // The color depth of the pixel
+    parameter integer P_ROWS = 32'd4, // The number of rows in the frame
+    parameter integer P_PIXEL_DEPTH = 32'd24 // The color depth of the pixel (MUST be a multiple of 3)
     )
     (
     input wire I_CLK, // Clock input
@@ -28,20 +28,24 @@ module frame_buffer
     output wire [P_PIXEL_DEPTH - 1:0] O_PIXEL // The pixel data output
     );
 
-    reg [P_PIXEL_DEPTH - 1:0] buffer_registers [0:P_ROWS - 1][0:P_COLUMNS - 1]; // The 2D array of registers for the frame buffer
-    reg [P_PIXEL_DEPTH - 1:0] q_o_pixel; // The current state of the output pixel
-    wire [P_PIXEL_DEPTH - 1:0] n_o_pixel; // The next state of the output pixel
+    // START registers and wires
+    reg [P_PIXEL_DEPTH - 1:0] buffer_registers [0 : P_ROWS - 1][0 : P_COLUMNS - 1]; // The 2D array of registers for the frame buffer
+    reg [P_PIXEL_DEPTH - 1 : 0] q_o_pixel; // The current state of the output pixel
+    wire [P_PIXEL_DEPTH - 1 : 0] n_o_pixel; // The next state of the output pixel
+    // END registers and wires
 
-    // Output mapping
+    // START output mapping
     assign O_PIXEL = q_o_pixel;
+    // END output mapping
 
-    // RTL logic
+    // START RTL logic
     assign n_o_pixel = (I_READ_ENABLE == 1'b1 && I_WRITE_ENABLE == 1'b0)
                         ? buffer_registers[I_PIXEL_ROW][I_PIXEL_COL]
                         : q_o_pixel;
+    // END RTL logic
 
     // Clock block
-    always @(posedge I_CLK or posedge I_RESET) begin
+    always @(posedge I_CLK) begin
         if (I_ENABLE == 1'b1) begin
             if(I_RESET == 1'b1) begin
                 q_o_pixel <= {P_PIXEL_DEPTH{1'b0}};
@@ -55,6 +59,8 @@ module frame_buffer
             q_o_pixel <= q_o_pixel;
         end
     end
+
+    // START tasks
 
     // Task to set all the buffer registers to 0
     task reset_buffer_registers;
@@ -73,4 +79,5 @@ module frame_buffer
         end
     endtask
 
+    // END tasks
 endmodule

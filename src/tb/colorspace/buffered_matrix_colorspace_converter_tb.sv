@@ -2,42 +2,35 @@
 //
 // University of Utah ECE 5710/6710 Edge Detection ASIC
 //
-// Create Date: 10/28/2020
-// Module Name: grayscale_tb
-// Description: grayscale module testbench
+// Create Date: 11/30/2020
+// Module Name: buffered_matrix_colorspace_converter_tb
+// Description: buffered_matrix_colorspace_converter module testbench
 // Authors: Jacob Peterson
 //
 ////
 
 `timescale 1 ps / 1 ps
 
-module grayscale_tb();
+module buffered_matrix_colorspace_converter_tb();
 
     // START local parameters
-    parameter integer P_PIXEL_DEPTH = 24;
-    parameter integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3;
+    // TODO
     // END local parameters
 
     // START registers and wires
     logic clock;
     logic reset;
     logic enable;
-    logic [P_PIXEL_DEPTH - 1 : 0] pixel;
-    logic [P_SUBPIXEL_DEPTH - 1 : 0] output_pixel;
     // END registers and wires
 
     // START module instantiations
-    grayscale #(
-        .P_PIXEL_DEPTH(P_PIXEL_DEPTH)
+    // TODO
+    DUT #(
+
         )
         DUT
         (
-        .I_CLK(clock),
-        .I_RESET(reset),
-        .I_ENABLE(enable),
-        .I_PIXEL(pixel),
 
-        .O_PIXEL(output_pixel)
         );
     // END module instantiations
 
@@ -47,11 +40,11 @@ module grayscale_tb();
         clock = 1'b1;
         reset = 1'b1;
         enable = 1'b1;
-        pixel = {P_PIXEL_DEPTH{1'b0}};
     end
 
     initial begin
         forever #5000 clock = ~clock; // 100MHz clock (period of 10ns)
+        // TODO create pixel clock
     end
 
     initial begin
@@ -64,9 +57,7 @@ module grayscale_tb();
         reset = 1'b0;
         enable = 1'b1;
 
-        $display("Grayscale of (255, 127, 0)");
-        pixel = {8'hff, 8'h7F, 8'h00};
-        #10000;
+        // TODO
 
         $display("================================================================");
         $display("=========================== END SIM ============================");

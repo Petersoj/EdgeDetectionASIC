@@ -13,32 +13,48 @@
 
 module grayscale
     #(
-    parameter integer P_PIXEL_DEPTH = 32'd24 // The color depth of the pixel
+    parameter integer P_PIXEL_DEPTH = 32'd24 // The color depth of the pixel (MUST be a multiple of 3)
     )
     (
-    input wire I_CLK, // Clock input
-    input wire I_RESET, // Reset input
-    input wire I_ENABLE, // Enable input
-    input wire [P_PIXEL_DEPTH - 1:0] I_PIXEL, // The RGB pixel data input
+    I_CLK, // Clock input
+    I_RESET, // Reset input
+    I_ENABLE, // Enable input
+    I_PIXEL, // The RGB pixel data input
 
-    output wire [P_PIXEL_DEPTH - 1:0] O_PIXEL // The grayscale pixel data output
+    O_PIXEL // The grayscale pixel data output
     );
 
-    parameter P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3;
-    parameter P_RED_MSB = P_SUBPIXEL_DEPTH * 3 - 1;
-    parameter P_RED_LSB = P_SUBPIXEL_DEPTH * 3 - P_SUBPIXEL_DEPTH;
-    parameter P_GREEN_MSB = P_SUBPIXEL_DEPTH * 2 - 1;
-    parameter P_GREEN_LSB = P_SUBPIXEL_DEPTH * 2 - P_SUBPIXEL_DEPTH;
-    parameter P_BLUE_MSB = P_SUBPIXEL_DEPTH - 1;
-    parameter P_BLUE_LSB = 0;
-    wire [P_SUBPIXEL_DEPTH:0] w_i_red = I_PIXEL[P_RED_MSB : P_RED_LSB];
-    wire [P_SUBPIXEL_DEPTH:0] w_i_green = I_PIXEL[P_GREEN_MSB : P_GREEN_LSB];
-    wire [P_SUBPIXEL_DEPTH:0] w_i_blue = I_PIXEL[P_BLUE_MSB : P_BLUE_LSB];
-    reg [P_PIXEL_DEPTH - 1:0] q_o_pixel; // The current state of the output pixel
-    wire [P_PIXEL_DEPTH - 1:0] n_o_pixel; // The next state of the output pixel
+    // START local parameters
+    parameter integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3;
+    parameter integer P_RED_MSB = P_SUBPIXEL_DEPTH * 3 - 1;
+    parameter integer P_RED_LSB = P_SUBPIXEL_DEPTH * 3 - P_SUBPIXEL_DEPTH;
+    parameter integer P_GREEN_MSB = P_SUBPIXEL_DEPTH * 2 - 1;
+    parameter integer P_GREEN_LSB = P_SUBPIXEL_DEPTH * 2 - P_SUBPIXEL_DEPTH;
+    parameter integer P_BLUE_MSB = P_SUBPIXEL_DEPTH - 1;
+    parameter integer P_BLUE_LSB = 0;
+    // END local parameters
 
-    // Output mapping
+    // START port declarations
+    input wire I_CLK;
+    input wire I_RESET;
+    input wire I_ENABLE;
+    input wire [P_PIXEL_DEPTH - 1 : 0] I_PIXEL;
+
+    output wire [P_SUBPIXEL_DEPTH - 1 : 0] O_PIXEL;
+    // END port declarations
+
+    // START registers and wires
+    wire [P_SUBPIXEL_DEPTH - 1 : 0] w_i_red = I_PIXEL[P_RED_MSB : P_RED_LSB];
+    wire [P_SUBPIXEL_DEPTH - 1 : 0] w_i_green = I_PIXEL[P_GREEN_MSB : P_GREEN_LSB];
+    wire [P_SUBPIXEL_DEPTH - 1: 0] w_i_blue = I_PIXEL[P_BLUE_MSB : P_BLUE_LSB];
+
+    reg [P_PIXEL_DEPTH - 1 : 0] q_o_pixel; // The current state of the output pixel
+    wire [P_PIXEL_DEPTH - 1 : 0] n_o_pixel; // The next state of the output pixel
+    // END registers and wires
+
+    // START output mapping
     assign O_PIXEL = q_o_pixel;
+    // END output mapping
 
     // START RTL logic
 
@@ -62,20 +78,21 @@ module grayscale
     // a fast and constant-coefficient multiplier algorithm can be done with
     // this algorithm: http://www.aoki.ecei.tohoku.ac.jp/arith/mg/algorithm.html#cmult
     // if multiplication is necessary for a different 'dividing' implementation.
+    // Add all these calculated Luma coefficients together to produce
+    // final grayscale pixel:
+    assign n_o_pixel =
+        // w_i_red * [2^(-2) + 2^(-5) + 2^(-6)]
+        (w_i_red >> 2) + (w_i_red >> 5) + (w_i_red >> 6) +
 
-    // w_i_red * [2^(-2) + 2^(-5) + 2^(-6) + 2^(-9)]
-    assign n_o_pixel[P_RED_MSB : P_RED_LSB] = (w_i_red >> 2) + (w_i_red >> 5) + (w_i_red >> 6) + (w_i_red >> 9);
+        // w_i_green * [2^(-1) + 2^(-4) + 2^(-6) + 2^(-7)]
+        (w_i_green >> 1) + (w_i_green >> 4) + (w_i_green >> 6) + (w_i_green >> 7) +
 
-    // w_i_green * [2^(-1) + 2^(-4) + 2^(-6) + 2^(-7)]
-    assign n_o_pixel[P_GREEN_MSB : P_GREEN_LSB] = (w_i_green >> 1) + (w_i_green >> 4) + (w_i_green >> 6) + (w_i_green >> 7);
-    
-    // w_i_blue * [2^(-4) + 2^(-5) + 2^(-6) + 2^(-8)]
-    assign n_o_pixel[P_BLUE_MSB : P_BLUE_LSB] = (w_i_blue >> 4) + (w_i_blue >> 5) + (w_i_blue >> 6) + (w_i_blue >> 8);
-
+        // w_i_blue * [2^(-4) + 2^(-5) + 2^(-6)]
+        (w_i_blue >> 4) + (w_i_blue >> 5) + (w_i_blue >> 6);
     // END RTL logic
 
     // Clock block
-    always @(posedge I_CLK or posedge I_RESET) begin
+    always @(posedge I_CLK) begin
         if (I_ENABLE == 1'b1) begin
             if(I_RESET == 1'b1) begin
                 q_o_pixel <= {P_PIXEL_DEPTH{1'b0}};
