@@ -1,0 +1,52 @@
+Information: Propagating switching activity (low effort zero delay simulation). (PWR-6)
+Warning: Design has unannotated primary inputs. (PWR-414)
+Warning: Design has unannotated sequential cell outputs. (PWR-415)
+ 
+****************************************
+Report : power
+        -analysis_effort low
+Design : sobel
+Version: K-2015.06-SP5-6
+Date   : Mon Nov 30 11:51:31 2020
+****************************************
+
+
+Library(s) Used:
+
+    sclib_tsmc180_ss (File: /research/ece/lnis-teaching/Designkits/tsmc180nm/full_custom_lib/lib/sclib_tsmc180_ss_nldm.db)
+
+
+Operating Conditions: PVT_1P8V_25C   Library: sclib_tsmc180_ss
+Wire Load Model Mode: top
+
+
+Global Operating Voltage = 1.8  
+Power-specific unit information :
+    Voltage Units = 1V
+    Capacitance Units = 1.000000pf
+    Time Units = 1ns
+    Dynamic Power Units = 1mW    (derived from V,C,T units)
+    Leakage Power Units = 1nW
+
+
+  Cell Internal Power  = 495.2285 uW   (68%)
+  Net Switching Power  = 230.7363 uW   (32%)
+                         ---------
+Total Dynamic Power    = 725.9648 uW  (100%)
+
+Cell Leakage Power     =  24.9290 nW
+
+
+                 Internal         Switching           Leakage            Total
+Power Group      Power            Power               Power              Power   (   %    )  Attrs
+--------------------------------------------------------------------------------------------------
+io_pad             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+memory             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+black_box          0.0000            0.0000            0.0000            0.0000  (   0.00%)
+clock_network  5.7861e-03        4.8577e-03            0.3181        1.0644e-02  (   1.47%)
+register           0.2214        6.6342e-03            3.8087            0.2280  (  31.41%)
+sequential         0.0000            0.0000            0.0000            0.0000  (   0.00%)
+combinational      0.2681            0.2192           20.8022            0.4873  (  67.13%)
+--------------------------------------------------------------------------------------------------
+Total              0.4952 mW         0.2307 mW        24.9290 nW         0.7260 mW
+1
