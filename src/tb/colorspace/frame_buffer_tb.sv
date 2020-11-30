@@ -13,40 +13,40 @@
 
 module frame_buffer_tb();
 
-    parameter integer COLUMNS = 640;
-    parameter integer ROWS = 3;
-    parameter integer PIXEL_DEPTH = 24;
-    parameter integer PIXEL_RGB_WIDTH = PIXEL_DEPTH/3;
+    parameter integer P_COLUMNS = 640;
+    parameter integer P_ROWS = 3;
+    parameter integer P_PIXEL_DEPTH = 24;
+    parameter integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3;
 
     logic clock;
     logic reset;
     logic enable;
-    logic [$clog2(COLUMNS) - 1:0] column;
-    logic [$clog2(ROWS) - 1:0] row;
-    logic [PIXEL_DEPTH - 1:0] pixel;
+    logic [$clog2(P_COLUMNS) - 1:0] column;
+    logic [$clog2(P_ROWS) - 1:0] row;
+    logic [P_PIXEL_DEPTH - 1:0] pixel;
     logic write_enable;
     logic read_enable;
-    logic [PIXEL_DEPTH - 1:0] output_pixel;
+    logic [P_PIXEL_DEPTH - 1:0] output_pixel;
 
     initial begin
         clock = 1'b1;
         reset = 1'b1;
         enable = 1'b1;
-        column = {$clog2(COLUMNS){1'b0}};
-        row = {$clog2(ROWS){1'b0}};
-        pixel = {PIXEL_DEPTH{1'b0}};
+        column = {$clog2(P_COLUMNS){1'b0}};
+        row = {$clog2(P_ROWS){1'b0}};
+        pixel = {P_PIXEL_DEPTH{1'b0}};
         write_enable = 1'b0;
         read_enable = 1'b0;
     end
 
     initial begin
-        forever #5000 clock = ~clock; // 5ns or 200MHz clock
+        forever #5000 clock = ~clock; // 100MHz clock (period of 10ns)
     end
 
     frame_buffer #(
-        .P_COLUMNS(COLUMNS),
-        .P_ROWS(ROWS),
-        .P_PIXEL_DEPTH(PIXEL_DEPTH)
+        .P_P_COLUMNS(P_COLUMNS),
+        .P_P_ROWS(P_ROWS),
+        .P_P_PIXEL_DEPTH(P_PIXEL_DEPTH)
         )
         DUT
         (
@@ -73,9 +73,9 @@ module frame_buffer_tb();
 
         $display("Setting (0, 0) to white");
         #10000;
-        column = {$clog2(COLUMNS){1'b0}};
-        row = {$clog2(ROWS){1'b0}};
-        pixel = {PIXEL_DEPTH{1'b1}}; // Color of white
+        column = {$clog2(P_COLUMNS){1'b0}};
+        row = {$clog2(P_ROWS){1'b0}};
+        pixel = {P_PIXEL_DEPTH{1'b1}}; // Color of white
         read_enable = 1'b0;
         write_enable = 1'b1;
 
@@ -84,15 +84,15 @@ module frame_buffer_tb();
         read_enable = 1'b1;
         write_enable = 1'b0;
 
-        $display("Setting (%0d, %0d) to red", COLUMNS - 1, ROWS - 1);
+        $display("Setting (%0d, %0d) to red", P_COLUMNS - 1, P_ROWS - 1);
         #10000;
-        column = COLUMNS - 1;
-        row = ROWS - 1;
-        pixel = {{PIXEL_RGB_WIDTH{1'b1}}, {PIXEL_RGB_WIDTH{1'b0}}, {PIXEL_RGB_WIDTH{1'b0}}}; // Color of red
+        column = P_COLUMNS - 1;
+        row = P_ROWS - 1;
+        pixel = {{P_SUBPIXEL_DEPTH{1'b1}}, {P_SUBPIXEL_DEPTH{1'b0}}, {P_SUBPIXEL_DEPTH{1'b0}}}; // Color of red
         read_enable = 1'b0;
         write_enable = 1'b1;
 
-        $display("Reading (%0d, %0d)", COLUMNS - 1, ROWS - 1);
+        $display("Reading (%0d, %0d)", P_COLUMNS - 1, P_ROWS - 1);
         #10000;
         read_enable = 1'b1;
         write_enable = 1'b0;
