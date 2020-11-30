@@ -14,8 +14,8 @@
 `define V_LINES   480
 
 module sobel_filter_tb();
-	logic [2000:0]  in_vector_file_name =   "D:/Workspace/EdgeDetectionASIC/vectors/rocks.ppm";			//temporary, set to "../../vectors/rocks.ppm"
-	logic [2000:0]  out_vector_file_name =  "D:/Workspace/EdgeDetectionASIC/vectors/rocks_edge_detection_abs.pgm";	//temporary, set to "../../vectors/rocks_edge_detection.pgm"
+	logic [2000:0]  in_vector_file_name =   "metal.ppm";			//temporary, set to "../../vectors/rocks.ppm"
+	logic [2000:0]  out_vector_file_name =  "metal_edge_detection_abs.pgm";	//temporary, set to "../../vectors/rocks_edge_detection.pgm"
 	logic [7:0] 	pixel_input_data[`V_LINES][`H_PIXELS];
 	logic [7:0] 	pixel_output_data[`V_LINES][`H_PIXELS];
 	logic [63:0]	sobel_input;
@@ -25,6 +25,7 @@ module sobel_filter_tb();
 	logic			clk;
 	logic			pixel_finished;
 	logic			start;
+	logic			reset;
 	logic [9:0]		row;
 	logic [9:0]		col;
 	
@@ -37,11 +38,11 @@ module sobel_filter_tb();
 	//system clock 302.1 MHz
 	initial clk = 1'b1;
 	always begin
-		#3310 clk=!clk;
+		#3400 clk=!clk;
 	end
 	
 
-	sobel_blackBorder iSobel
+	sobel iSobel
 	(
 		.row			(row),
 		.col			(col),
@@ -49,6 +50,7 @@ module sobel_filter_tb();
 		.clk_pix		(clk_pix),
 		.clk			(clk),
 		.start			(start),
+		.reset			(reset),
 		.out			(sobel_output),
 		.done			(pixel_finished)
 	);
@@ -68,7 +70,10 @@ module sobel_filter_tb();
 
 	task tb_init;
 	    begin
+		reset=0;
+		#10 reset=1;
 	      read_ppm_file(in_vector_file_name, pixel_input_data);
+		#10 reset=0;
 	    end
 	endtask
 

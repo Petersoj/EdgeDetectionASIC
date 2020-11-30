@@ -20,7 +20,7 @@
 //outputs:
 //	out - filtered pixel at given [row,col]
 //	done - set to 1 when the output is ready to be read
-module sobel_blackBorder(row,col,inputPixels,clk_pix,clk,start,out,done);
+module sobel(row,col,inputPixels,clk_pix,clk,start,reset,out,done);
 	input 	wire [9:0] 	row;			//row number of output pixel
 	input	wire [9:0]	col;			//column number of output pixel
 	input 	wire [63:0] inputPixels;	//Surrounding 8 bit pixel values combined. 
@@ -31,6 +31,7 @@ module sobel_blackBorder(row,col,inputPixels,clk_pix,clk,start,out,done);
 	input 	wire		clk_pix;		//pixel clock (25.175 MHz)
 	input	wire		clk;			//system clock (302.1 MHz)
 	input	wire		start;			//start when buffer is ready
+	input	wire		reset;
 	output 	reg	[7:0]	out;		 	//0,255 sobel pixel value
 	output	wire			done;			//1 when pixel is complete
 	
@@ -51,6 +52,9 @@ module sobel_blackBorder(row,col,inputPixels,clk_pix,clk,start,out,done);
 	reg [9:0] gx1,gx2,gy1,gy2;
 	reg [9:0] gx_ex,gy_ex;
 	wire [10:0] g_mag;
+	reg [9:0] shiftedVal;
+	reg [2:0] filter_step;
+	reg setup;
 	
 	always @(gx1,gx2,gy1,gy2) begin
 		if(gx1>gx2) gx_ex=gx1-gx2;
@@ -106,52 +110,160 @@ module sobel_blackBorder(row,col,inputPixels,clk_pix,clk,start,out,done);
 		// .done	(magFinished)
 		// );
  
-	//calculate horizontal and vertical filters
-	always @(posedge clk_pix)begin
-		if(start) begin
-			busy <= 1;
-			if(onEdge) begin
-				// out <= 8'd0;
-				// done<=1;
-				//gx<=0;
-				//gy<=0;
-				gx1<=0;
-				gx2<=0;
-				gy1<=0;
-				gy2<=0;
-			end
-			else begin
-				// gx <= HX_11*pixelArray[0] + HX_13*pixelArray[2] 
-					// + HX_21*pixelArray[3] + HX_23*pixelArray[4] 
-					// + HX_31*pixelArray[5] + HX_33*pixelArray[7];
-				// gy <= HY_11*pixelArray[0] + HY_12*pixelArray[1] + HY_13*pixelArray[2] 
-					// + HY_31*pixelArray[5] + HY_32*pixelArray[6]	+ HY_33*pixelArray[7];
-				gx1<=pixelArray[0]+(pixelArray[5]<<1)+pixelArray[3];
-				gx2<=pixelArray[2]+(pixelArray[4]<<1)+pixelArray[7];
-				gy1<=pixelArray[0]+(pixelArray[1]<<1)+pixelArray[2];
-				gy2<=pixelArray[5]+(pixelArray[6]<<1)+pixelArray[7];
-				// startMag<=1;
-			end
-			startMag <= 1;
-			if(g_mag[10:7]>0) out<=8'd255;
-			else	out<=8'd0;
-			
-		end
-	end
+	// reg [10:0] alu_a,alu_b,alu_result;
+	// reg [1:0] alu_mode;
+	
+	// ALU iALU
+	// 	(.a (alu_a),
+	// 	 .b	(alu_b),
+	// 	 .alu_sel	(alu_mode),
+	// 	 .result	(alu_result)
+	// 	)
 
-	//magnitude has been computed and output is updated
-	/*always @(posedge magFinished) begin
-		busy<=0;
-		startMag<=0;
-		//out<=magnitudeVal;		//use this instead of no threshold is used
-		
-		//uses a threshold of 128. This helps to remove noise where the filter resulted in a low non-zero value.
-		if(magnitudeVal[7]==1) begin //result is greater than 127, set output to white.
-			out<=8'd255;
-		end
-		else begin
-			out<=8'd0;
-		end
+	//calculate horizontal and vertical filters
+	 /*always @(posedge clk_pix)begin
+	 	if(start) begin
+	 		 if(onEdge) begin
+	 		 	// out <= 8'd0;
+	 		 	// done<=1;
+	 		 	//gx<=0;
+	 		 	//gy<=0;
+	 		 	 gx1<=0;
+	 		 	 gx2<=0;
+	 		 	 gy1<=0;
+	 		 	 gy2<=0;
+	 		 end
+	 		 else begin
+//	 			 gx <= HX_11*pixelArray[0] + HX_13*pixelArray[2] 
+//	 				 + HX_21*pixelArray[3] + HX_23*pixelArray[4] 
+//	 				 + HX_31*pixelArray[5] + HX_33*pixelArray[7];
+//	 			 gy <= HY_11*pixelArray[0] + HY_12*pixelArray[1] + HY_13*pixelArray[2] 
+//	 				 + HY_31*pixelArray[5] + HY_32*pixelArray[6]	+ HY_33*pixelArray[7];
+	 			 gx1<=pixelArray[0]+(pixelArray[5]<<1)+pixelArray[3];
+	 			 gx2<=pixelArray[2]+(pixelArray[4]<<1)+pixelArray[7];
+	 			 gy1<=pixelArray[0]+(pixelArray[1]<<1)+pixelArray[2];
+	 			 gy2<=pixelArray[5]+(pixelArray[6]<<1)+pixelArray[7];
+	 			 startMag<=1;
+	 		 end
+	 		startMag <= 1;
+	 		if(g_mag[10:7]>0) out<=8'd255;
+	 		else	out<=8'd0;
+			
+	 	end
+	 end*/
+
+	// reg [10:0] filter0,filter1,filter2;
+	// wire [10:0] filter_result;
+
+
+	// filter_line ifilter_line(
+	// 	.a(filter0),
+	// 	.b(filter1),
+	// 	.c(filter2),
+	// 	.result(filter_result)
+	// );
+
+	//compute filter
+	always @(posedge clk) begin
+			if(reset) begin
+					busy<=0;
+					setup<=0;
+					filter_step<=0;
+			end
+			else if(busy)begin
+				if(onEdge) begin
+					gx1<=0;
+					gx2<=0;
+					gy1<=0;
+					gy2<=0;	
+					busy<=0;
+				end 
+				else begin
+					//uncomment the ALU code and comment the direct g computation for a slight area improvement (18k->17k)
+					//however the ALU requires 1 additional clock cycle making the timing tighter (slack: 1.74->0.01)
+					case(filter_step)
+					0: begin
+						// filter0<=pixelArray[0];
+						// filter1<=pixelArray[5];	//ALU
+						// filter2<=pixelArray[3];
+						
+						gx1<=pixelArray[0]+(pixelArray[5]<<1)+pixelArray[3];
+						filter_step<=1;
+						busy<=busy;
+					end
+					1: begin
+						// gx1<=filter_result; 
+						// filter0<=pixelArray[2];
+						// filter1<=pixelArray[4];	//ALU
+						// filter2<=pixelArray[7];
+						
+						gx2<=pixelArray[2]+(pixelArray[4]<<1)+pixelArray[7];
+						filter_step<=2;
+						busy<=busy;
+					end
+					2: begin 
+						// gx2<=filter_result;
+						// filter0<=pixelArray[0];
+						// filter1<=pixelArray[1];	//ALU
+						// filter2<=pixelArray[2];
+						
+						gy1<=pixelArray[0]+(pixelArray[1]<<1)+pixelArray[2];
+						filter_step<=3;
+						busy<=busy;
+					end
+					3: begin 
+						// gy1<=filter_result;
+						// filter0<=pixelArray[5];
+						// filter1<=pixelArray[6];	//ALU
+						// filter2<=pixelArray[7];
+						//filter_step<=4;
+						//busy<=busy;
+
+
+						gy2<=pixelArray[5]+(pixelArray[6]<<1)+pixelArray[7];
+						
+						filter_step<=0;
+						busy<=~busy;
+					end
+					// 4: begin
+					// 	gy2<=filter_result;
+					// 	filter_step<=0;			//ALU
+					// 	busy<=~busy;
+					// end	
+					default: begin
+						filter_step<=0;
+						busy<=busy;
+					end		
+					endcase
+				end
+			end	
+			else if(clk_pix) begin //pixel clock, setup filter computation 
+				if(start&~setup)begin //initial setup to start the filter
+					busy<=1;
+					setup<=1;
+					filter_step<=0;			
+				end
+			end
+			else setup<=0;	//if not busy and clk_pix is low, then the filter will reset on next posedge clk_pix
 	end
-	*/
+	
+	//output pixel value
+	always @(posedge clk_pix) begin
+		if(g_mag[10:7]>0) out<=8'd255;
+		else	out<=8'd0;
+	end
 endmodule
+
+
+
+//specific ALU for computing one row of the filter
+// module filter_line(a, b, c, result);
+// 	input [10:0] a,b,c;
+// 	output [10:0] result;
+// 	//reg [10:0] ALU_result;
+
+// 	//assign result=ALU_result;
+// 	//always @(a,b,c)
+// 		assign result=a+(b<<1)+c;
+
+// endmodule
