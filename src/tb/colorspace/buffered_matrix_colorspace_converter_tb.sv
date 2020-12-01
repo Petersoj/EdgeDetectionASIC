@@ -56,6 +56,7 @@ module buffered_matrix_colorspace_converter_tb();
         #10000;
         reset = 1'b0;
         enable = 1'b1;
+        #10000;
 
         // TODO
 

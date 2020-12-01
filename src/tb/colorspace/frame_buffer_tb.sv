@@ -75,6 +75,7 @@ module frame_buffer_tb();
         $display("Resetting DUT");
         #10000;
         reset = 1'b0;
+        #10000;
 
         $display("Setting (0, 0) to white");
         #10000;
@@ -83,11 +84,13 @@ module frame_buffer_tb();
         pixel = {P_PIXEL_DEPTH{1'b1}}; // Color of white
         read_enable = 1'b0;
         write_enable = 1'b1;
+        #10000;
 
         $display("Reading (0, 0)");
         #10000;
         read_enable = 1'b1;
         write_enable = 1'b0;
+        #10000;
 
         $display("Setting (%0d, %0d) to red", P_COLUMNS - 1, P_ROWS - 1);
         #10000;
@@ -96,12 +99,12 @@ module frame_buffer_tb();
         pixel = {{P_SUBPIXEL_DEPTH{1'b1}}, {P_SUBPIXEL_DEPTH{1'b0}}, {P_SUBPIXEL_DEPTH{1'b0}}}; // Color of red
         read_enable = 1'b0;
         write_enable = 1'b1;
+        #10000;
 
         $display("Reading (%0d, %0d)", P_COLUMNS - 1, P_ROWS - 1);
         #10000;
         read_enable = 1'b1;
         write_enable = 1'b0;
-
         #10000;
 
         $display("================================================================");

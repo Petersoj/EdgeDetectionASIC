@@ -59,8 +59,10 @@ module grayscale_tb();
         $display("Resetting DUT");
         #10000;
         reset = 1'b0;
+        #10000;
 
         $display("Grayscale of (255, 127, 0)");
+        #10000;
         pixel = {8'hff, 8'h7F, 8'h00};
         #10000;
 

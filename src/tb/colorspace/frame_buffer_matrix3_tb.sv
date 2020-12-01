@@ -3,21 +3,21 @@
 // University of Utah ECE 5710/6710 Edge Detection ASIC
 //
 // Create Date: 12/01/2020
-// Module Name: frame_buffer_o_matrix3_tb
-// Description: frame_buffer_o_matrix3_tb module testbench
+// Module Name: frame_buffer_matrix3
+// Description: frame_buffer_matrix3 module testbench
 // Authors: Jacob Peterson
 //
 ////
 
 `timescale 1 ps / 1 ps
 
-module frame_buffer_o_matrix3_tb();
+module frame_buffer_matrix3_tb();
 
     // START local parameters
     parameter integer P_COLUMNS = 640;
     parameter integer P_ROWS = 3;
     parameter integer P_PIXEL_DEPTH = 8;
-    parameter integer P_O_PIXEL_MATRIX_BIT_COUNT = P_PIXEL_DEPTH * 8;
+    parameter integer P_O_PIXEL_MATRIX_BITS = P_PIXEL_DEPTH * 8;
     // END local parameters
 
     // START registers and wires
@@ -28,7 +28,7 @@ module frame_buffer_o_matrix3_tb();
     logic [P_PIXEL_DEPTH - 1 : 0] pixel;
     logic write_enable;
     logic read_enable;
-    logic [P_O_PIXEL_MATRIX_BIT_COUNT - 1 : 0] output_pixel_matrix;
+    logic [P_O_PIXEL_MATRIX_BITS - 1 : 0] output_pixel_matrix;
     logic [P_PIXEL_DEPTH - 1 : 0] top_left_pixel;
     logic [P_PIXEL_DEPTH - 1 : 0] top_pixel;
     logic [P_PIXEL_DEPTH - 1 : 0] top_right_pixel;
@@ -40,22 +40,22 @@ module frame_buffer_o_matrix3_tb();
     // END registers and wires
 
     // START Output mapping
-    assign top_left_pixel = output_pixel_matrix[P_O_PIXEL_MATRIX_BIT_COUNT * 8/8 - 1 :
-                                                P_O_PIXEL_MATRIX_BIT_COUNT * 7/8];
-    assign top_pixel = output_pixel_matrix[P_O_PIXEL_MATRIX_BIT_COUNT * 7/8 - 1 :
-                                                P_O_PIXEL_MATRIX_BIT_COUNT * 6/8];
-    assign top_right_pixel = output_pixel_matrix[P_O_PIXEL_MATRIX_BIT_COUNT * 6/8 - 1 :
-                                                P_O_PIXEL_MATRIX_BIT_COUNT * 5/8];
-    assign middle_left_pixel = output_pixel_matrix[P_O_PIXEL_MATRIX_BIT_COUNT * 5/8 - 1 :
-                                                P_O_PIXEL_MATRIX_BIT_COUNT * 4/8];
-    assign middle_right_pixel = output_pixel_matrix[P_O_PIXEL_MATRIX_BIT_COUNT * 4/8 - 1 :
-                                                P_O_PIXEL_MATRIX_BIT_COUNT * 3/8];
-    assign bottom_left_pixel = output_pixel_matrix[P_O_PIXEL_MATRIX_BIT_COUNT * 3/8 - 1 :
-                                                P_O_PIXEL_MATRIX_BIT_COUNT * 2/8];
-    assign bottom_pixel = output_pixel_matrix[P_O_PIXEL_MATRIX_BIT_COUNT * 2/8 - 1 :
-                                                P_O_PIXEL_MATRIX_BIT_COUNT * 1/8];
-    assign bottom_right_pixel = output_pixel_matrix[P_O_PIXEL_MATRIX_BIT_COUNT * 1/8 - 1 :
-                                                P_O_PIXEL_MATRIX_BIT_COUNT * 0/8];
+    assign top_left_pixel = output_pixel_matrix[P_O_PIXEL_MATRIX_BITS * 8/8 - 1 :
+                                                P_O_PIXEL_MATRIX_BITS * 7/8];
+    assign top_pixel = output_pixel_matrix[P_O_PIXEL_MATRIX_BITS * 7/8 - 1 :
+                                                P_O_PIXEL_MATRIX_BITS * 6/8];
+    assign top_right_pixel = output_pixel_matrix[P_O_PIXEL_MATRIX_BITS * 6/8 - 1 :
+                                                P_O_PIXEL_MATRIX_BITS * 5/8];
+    assign middle_left_pixel = output_pixel_matrix[P_O_PIXEL_MATRIX_BITS * 5/8 - 1 :
+                                                P_O_PIXEL_MATRIX_BITS * 4/8];
+    assign middle_right_pixel = output_pixel_matrix[P_O_PIXEL_MATRIX_BITS * 4/8 - 1 :
+                                                P_O_PIXEL_MATRIX_BITS * 3/8];
+    assign bottom_left_pixel = output_pixel_matrix[P_O_PIXEL_MATRIX_BITS * 3/8 - 1 :
+                                                P_O_PIXEL_MATRIX_BITS * 2/8];
+    assign bottom_pixel = output_pixel_matrix[P_O_PIXEL_MATRIX_BITS * 2/8 - 1 :
+                                                P_O_PIXEL_MATRIX_BITS * 1/8];
+    assign bottom_right_pixel = output_pixel_matrix[P_O_PIXEL_MATRIX_BITS * 1/8 - 1 :
+                                                P_O_PIXEL_MATRIX_BITS * 0/8];
     // END Output mapping
 
     // START module instantiations
