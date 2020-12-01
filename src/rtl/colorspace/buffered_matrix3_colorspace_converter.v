@@ -31,6 +31,9 @@ module buffered_matrix3_colorspace_converter
     parameter integer P_FRAME_ROW_BITS = $clog2(P_FRAME_ROWS),
     parameter integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3,
 
+    // This is the dimension size of the square 2D pixel matrix output.
+    parameter integer P_OUTPUT_MATRIX_SIZE = 32'd3,
+
     // The output matrix excludes the center grayscaled pixel so we subtract one P_SUBPIXEL_DEPTH.
     parameter integer P_MATRIX_BITS = (P_SUBPIXEL_DEPTH * P_OUTPUT_MATRIX_SIZE * P_OUTPUT_MATRIX_SIZE) - P_SUBPIXEL_DEPTH
 
@@ -63,6 +66,9 @@ module buffered_matrix3_colorspace_converter
     // END local parameters
 
     // START registers and wires
+    reg frame_buffer_write_enable;
+    reg frame_buffer_read_enable;
+
     reg [P_FRAME_COLUMN_BITS - 1 : 0] q_o_pixel_column; // The current state of the output pixel column
     reg [P_FRAME_COLUMN_BITS - 1 : 0] n_o_pixel_column; // The next state of the output pixel column
     reg [P_FRAME_COLUMN_BITS - 1 : 0] q_o_pixel_row; // The current state of the output pixel row
@@ -105,8 +111,8 @@ module buffered_matrix3_colorspace_converter
         .I_COLUMN(),
         .I_ROW(),
         .I_PIXEL(),
-        .I_WRITE_ENABLE(),
-        .I_READ_ENABLE(),
+        .I_WRITE_ENABLE(frame_buffer_write_enable),
+        .I_READ_ENABLE(frame_buffer_read_enable),
 
         .O_PIXEL_MATRIX()
         );
@@ -119,7 +125,18 @@ module buffered_matrix3_colorspace_converter
 
     // Task to enable frame buffer reading and disable writing.
     task enable_frame_buffer_reading;
+        begin
+            frame_buffer_write_enable <= 1'b0;
+            frame_buffer_read_enable <= 1'b1;
+        end
+    endtask
 
+    // Task to enable frame buffer writing and disable reading.
+    task enable_frame_buffer_writing;
+        begin
+            frame_buffer_write_enable <= 1'b1;
+            frame_buffer_read_enable <= 1'b0;
+        end
     endtask
 
     /*
