@@ -18,7 +18,6 @@ module grayscale
     (
     I_CLK, // Clock input
     I_RESET, // Reset input
-    I_ENABLE, // Enable input
     I_PIXEL, // The RGB pixel data input
 
     O_PIXEL // The grayscale pixel data output
@@ -37,7 +36,6 @@ module grayscale
     // START port declarations
     input wire I_CLK;
     input wire I_RESET;
-    input wire I_ENABLE;
     input wire [P_PIXEL_DEPTH - 1 : 0] I_PIXEL;
 
     output wire [P_SUBPIXEL_DEPTH - 1 : 0] O_PIXEL;
@@ -89,21 +87,16 @@ module grayscale
 
         // w_i_blue * [2^(-4) + 2^(-5) + 2^(-6)]
         (w_i_blue >> 4) + (w_i_blue >> 5) + (w_i_blue >> 6);
-    // NOTE we don't have to check for overflow/carry of the above addition because
+    // NOTE We don't have to check for overflow/carry of the above addition because
     // the max possible value is 255.
     // END RTL logic
 
     // Clock block
     always @(posedge I_CLK) begin
-        if (I_ENABLE == 1'b1) begin
-            if(I_RESET == 1'b1) begin
-                q_o_pixel <= {P_PIXEL_DEPTH{1'b0}};
-            end
-            else begin
-                q_o_pixel <= n_o_pixel;
-            end
+        if(I_RESET == 1'b1) begin
+            q_o_pixel <= {P_PIXEL_DEPTH{1'b0}};
         end else begin
-            q_o_pixel <= q_o_pixel;
+            q_o_pixel <= n_o_pixel;
         end
     end
 endmodule

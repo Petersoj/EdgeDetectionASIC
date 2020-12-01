@@ -18,14 +18,13 @@ module frame_buffer
     (
     input wire I_CLK, // Clock input
     input wire I_RESET, // Reset input
-    input wire I_ENABLE, // Enable input
     input wire [$clog2(P_COLUMNS) - 1:0] I_PIXEL_COL, // The column of the desired pixel
     input wire [$clog2(P_ROWS) - 1:0] I_PIXEL_ROW, // The row of the desired pixel
     input wire [P_PIXEL_DEPTH - 1:0] I_PIXEL, // The pixel data input
     input wire I_WRITE_ENABLE, // Enable writing of the pixel data at the associated row and column input
     input wire I_READ_ENABLE, // Enable reading of the pixel data at the associated row and column input
 
-    output wire [P_PIXEL_DEPTH - 1:0] O_PIXEL // The pixel data output
+    output wire [P_PIXEL_DEPTH - 1 : 0] O_PIXEL // The pixel data output
     );
 
     // START registers and wires
@@ -46,17 +45,12 @@ module frame_buffer
 
     // Clock block
     always @(posedge I_CLK) begin
-        if (I_ENABLE == 1'b1) begin
-            if(I_RESET == 1'b1) begin
-                q_o_pixel <= {P_PIXEL_DEPTH{1'b0}};
-                reset_buffer_registers;
-            end
-            else begin
-                q_o_pixel <= n_o_pixel;
-                set_buffer_registers;
-            end
+        if(I_RESET == 1'b1) begin
+            q_o_pixel <= {P_PIXEL_DEPTH{1'b0}};
+            reset_buffer_registers;
         end else begin
-            q_o_pixel <= q_o_pixel;
+            q_o_pixel <= n_o_pixel;
+            set_buffer_registers;
         end
     end
 

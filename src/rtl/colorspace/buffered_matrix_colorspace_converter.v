@@ -5,7 +5,6 @@
 // Create Date: 10/28/2020
 // Module Name: buffered_matrix_colorspace_converter
 // Description: Converts an RGB colorspace VGA input to a grayscaled pixel matrix output.
-//              NOTE that the
 // Authors: Jacob Peterson
 //
 ////
@@ -42,7 +41,11 @@ module buffered_matrix_colorspace_converter
 
     O_PIXEL_COLUMN, // The start column of the output matrix relative to the start column of the frame
     O_PIXEL_ROW, // The start row of the output matrix relative to the start row of the frame
-    O_PIXEL_MATRIX, // The grayscaled pixel matrix output
+    O_PIXEL_MATRIX, // The grayscaled pixel matrix output (excludes the center pixel for Sobel filter specification)
+                    // Format:
+                    // {top_left, top, top_right,
+                    //  mid_left, 	   mid_right,
+                    //	bot_left, bot, bot_right}
     O_PIXEL_MATRIX_READY // Asserted if outputs are ready/valid
     );
 
@@ -50,6 +53,9 @@ module buffered_matrix_colorspace_converter
     parameter integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3;
     parameter integer P_FRAME_COLUMN_BITS = $clog2(P_FRAME_COLUMNS);
     parameter integer P_FRAME_ROW_BITS = $clog2(P_FRAME_ROWS);
+
+    // The output matrix excludes the center grayscaled pixel so we subtract one P_SUBPIXEL_DEPTH.
+    parameter integer P_MATRIX_BITS = (P_SUBPIXEL_DEPTH * P_OUTPUT_MATRIX_SIZE * P_OUTPUT_MATRIX_SIZE) - P_SUBPIXEL_DEPTH;
     // END local parameters
 
     // START port declarations
@@ -63,25 +69,67 @@ module buffered_matrix_colorspace_converter
     input wire I_DATA_ENABLE;
     input wire I_PIXEL_CLK;
 
-    output reg [P_FRAME_COLUMN_BITS - 1 : 0] O_PIXEL_COLUMN;
-    output reg [P_FRAME_ROW_BITS - 1 : 0] O_PIXEL_ROW;
-    output reg [P_SUBPIXEL_DEPTH - 1 : 0] O_PIXEL_MATRIX [P_OUTPUT_MATRIX_SIZE - 1 : 0][P_OUTPUT_MATRIX_SIZE - 1 : 0];
-    output reg O_PIXEL_MATRIX_READY;
+    output wire [P_FRAME_COLUMN_BITS - 1 : 0] O_PIXEL_COLUMN;
+    output wire [P_FRAME_ROW_BITS - 1 : 0] O_PIXEL_ROW;
+    output wire [P_MATRIX_BITS - 1 : 0] O_PIXEL_MATRIX;
+    output wire O_PIXEL_MATRIX_READY;
     // END port declarations
 
     // START registers and wires
-    reg [P_FRAME_COLUMN_BITS - 1 : 0] current_column;
-    reg [P_FRAME_ROW_BITS - 1 : 0] current_row;
-    // TODO
+    reg [P_FRAME_COLUMN_BITS - 1 : 0] q_o_pixel_column; // The current state of the output pixel column
+    reg [P_FRAME_COLUMN_BITS - 1 : 0] n_o_pixel_column; // The next state of the output pixel column
+    reg [P_FRAME_COLUMN_BITS - 1 : 0] q_o_pixel_row; // The current state of the output pixel row
+    reg [P_FRAME_COLUMN_BITS - 1 : 0] n_o_pixel_row; // The next state of the output pixel row
+    reg [P_MATRIX_BITS - 1 : 0] q_o_pixel_matrix; // The current state of the output pixel matrix
+    reg [P_MATRIX_BITS - 1 : 0] n_o_pixel_matrix; // The next state of the output pixel matrix
+    reg q_o_pixel_matrix_ready; // The current state of the output pixel matrix ready signal
+    reg n_o_pixel_matrix_ready; // The next state of the output pixel matrix ready signal
     // END registers and wires
 
+    // START output mapping
+    assign O_PIXEL_COLUMN = q_o_pixel_column;
+    assign O_PIXEL_ROW = q_o_pixel_row;
+    assign O_PIXEL_MATRIX = q_o_pixel_matrix;
+    assign O_PIXEL_MATRIX_READY = q_o_pixel_matrix_ready;
+    // END output mapping
+
     // START module instantiations
-    // TODO
+    grayscale #(
+        .P_PIXEL_DEPTH(P_PIXEL_DEPTH)
+        )
+        iGrayscale
+        (
+        .I_CLK(I_CLK),
+        .I_RESET(I_RESET),
+        .I_ENABLE(I_ENABLE),
+        .I_PIXEL(),
+
+        .O_PIXEL()
+        );
+
+    frame_buffer #(
+        .P_COLUMNS(P_FRAME_COLUMNS),
+        .P_ROWS(),
+        .P_PIXEL_DEPTH(P_PIXEL_DEPTH)
+        )
+        iGrayscaledFrameBuffer
+        (
+        .I_CLK(I_CLK),
+        .I_RESET(I_RESET),
+        .I_ENABLE(I_ENABLE),
+        .I_PIXEL_COL(),
+        .I_PIXEL_ROW(),
+        .I_PIXEL(),
+        .I_WRITE_ENABLE(),
+        .I_READ_ENABLE(),
+
+        .O_PIXEL()
+        );
     // END module instantiations
 
     // Clock block
     always @(posedge I_CLK) begin
-        // TODO
+
     end
 
     /*

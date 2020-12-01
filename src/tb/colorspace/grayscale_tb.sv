@@ -21,7 +21,6 @@ module grayscale_tb();
     // START registers and wires
     logic clock;
     logic reset;
-    logic enable;
     logic [P_PIXEL_DEPTH - 1 : 0] pixel;
     logic [P_SUBPIXEL_DEPTH - 1 : 0] output_pixel;
     // END registers and wires
@@ -34,7 +33,6 @@ module grayscale_tb();
         (
         .I_CLK(clock),
         .I_RESET(reset),
-        .I_ENABLE(enable),
         .I_PIXEL(pixel),
 
         .O_PIXEL(output_pixel)
@@ -46,7 +44,6 @@ module grayscale_tb();
     initial begin
         clock = 1'b1;
         reset = 1'b1;
-        enable = 1'b1;
         pixel = {P_PIXEL_DEPTH{1'b0}};
     end
 
@@ -62,7 +59,6 @@ module grayscale_tb();
         $display("Resetting DUT");
         #10000;
         reset = 1'b0;
-        enable = 1'b1;
 
         $display("Grayscale of (255, 127, 0)");
         pixel = {8'hff, 8'h7F, 8'h00};

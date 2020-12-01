@@ -23,7 +23,6 @@ module frame_buffer_tb();
     // START registers and wires
     logic clock;
     logic reset;
-    logic enable;
     logic [$clog2(P_COLUMNS) - 1:0] column;
     logic [$clog2(P_ROWS) - 1:0] row;
     logic [P_PIXEL_DEPTH - 1:0] pixel;
@@ -42,7 +41,6 @@ module frame_buffer_tb();
         (
         .I_CLK(clock),
         .I_RESET(reset),
-        .I_ENABLE(enable),
         .I_PIXEL_COL(column),
         .I_PIXEL_ROW(row),
         .I_PIXEL(pixel),
@@ -58,7 +56,6 @@ module frame_buffer_tb();
     initial begin
         clock = 1'b1;
         reset = 1'b1;
-        enable = 1'b1;
         column = {$clog2(P_COLUMNS){1'b0}};
         row = {$clog2(P_ROWS){1'b0}};
         pixel = {P_PIXEL_DEPTH{1'b0}};
