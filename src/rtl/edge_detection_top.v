@@ -78,11 +78,12 @@ module edge_detection_top
   sobel iSobel(
       .row(colorspace_converter_pixel_row),
       .col(colorspace_converter_pixel_col),
-      .inputPixels(), // TODO
+      .inputPixels(colorspace_converter_pixel_matrix),
       .clk_pix(I_PCLK),
       .clk(I_CORE_CLK),
-      .start(), // TODO
+      .start(colorspace_converter_pixel_matrix_ready), // TODO
       .out(out),
+      .reset(I_RST),
       .done() // TODO
       );
 
@@ -96,13 +97,16 @@ module edge_detection_top
   parameter [11:0] VGA_VBP_END  = VGA_VSW + VGA_VBP;
   parameter [11:0] VGA_VACT_END = VGA_VSW + VGA_VBP + VGA_VACT;
   parameter [11:0] VGA_VFP_END  = VGA_VSW + VGA_VBP + VGA_VACT + VGA_VFP;
+    
+  always @(posedge I_CORE_CLK)begin
+    if(I_RST) begin
+      i_tp_en <= 1'b0;
+    end
+  end
 
-  video_timing_gen iVidGen
-    (
-      .I_RST      (I_RST),
-      .I_PCLK     (I_PCLK),
-      .I_PIX_DATA ({out, out, out}),
-      .I_TP_EN    (1'b0),
+  //need to change inputs to be wires assigned to the parameters during reset
+  //many synthesis warnings about connecting constants to nets
+  video_timing_gen #(
       .I_HS_END   (VGA_HS_END),
       .I_HBP_END  (VGA_HBP_END),
       .I_HACT_END (VGA_HACT_END),
@@ -110,7 +114,14 @@ module edge_detection_top
       .I_VS_END   (VGA_VS_END),
       .I_VBP_END  (VGA_VBP_END),
       .I_VACT_END (VGA_VACT_END),
-      .I_VFP_END  (VGA_VFP_END),
+      .I_VFP_END  (VGA_VFP_END)
+    )
+    iVidGen
+    (
+      .I_RST      (I_RST),
+      .I_PCLK     (I_PCLK),
+      .I_PIX_DATA ({out, out, out}),
+      .I_TP_EN    (i_tp_en),
       .I_VRST     (pix_vsync_dly), // Will need to be delayed to line up with incoming data
       .O_DE       (O_DE),
       .O_HS       (O_HSYNC),

@@ -12,9 +12,9 @@
 ////
 
 module grayscale
-    #(
-    parameter integer P_PIXEL_DEPTH = 32'd24 // The color depth of the pixel (MUST be a multiple of 3)
-    )
+    // #(
+    // parameter integer P_PIXEL_DEPTH = 32'd24 // The color depth of the pixel (MUST be a multiple of 3)
+    // )
     (
     I_CLK, // Clock input
     I_RESET, // Reset input
@@ -24,13 +24,16 @@ module grayscale
     );
 
     // START local parameters
-    parameter integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3;
-    parameter integer P_RED_MSB = P_SUBPIXEL_DEPTH * 3 - 1;
-    parameter integer P_RED_LSB = P_SUBPIXEL_DEPTH * 3 - P_SUBPIXEL_DEPTH;
-    parameter integer P_GREEN_MSB = P_SUBPIXEL_DEPTH * 2 - 1;
-    parameter integer P_GREEN_LSB = P_SUBPIXEL_DEPTH * 2 - P_SUBPIXEL_DEPTH;
-    parameter integer P_BLUE_MSB = P_SUBPIXEL_DEPTH - 1;
-    parameter integer P_BLUE_LSB = 0;
+    //put input parameter here due to synthesis warnings
+    localparam integer P_PIXEL_DEPTH = 32'd24; // The color depth of the pixel (MUST be a multiple of 3)
+
+    localparam integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3;
+    localparam integer P_RED_MSB = P_SUBPIXEL_DEPTH * 3 - 1;
+    localparam integer P_RED_LSB = P_SUBPIXEL_DEPTH * 3 - P_SUBPIXEL_DEPTH;
+    localparam integer P_GREEN_MSB = P_SUBPIXEL_DEPTH * 2 - 1;
+    localparam integer P_GREEN_LSB = P_SUBPIXEL_DEPTH * 2 - P_SUBPIXEL_DEPTH;
+    localparam integer P_BLUE_MSB = P_SUBPIXEL_DEPTH - 1;
+    localparam integer P_BLUE_LSB = 0;
     // END local parameters
 
     // START port declarations

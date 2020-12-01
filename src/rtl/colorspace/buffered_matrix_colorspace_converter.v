@@ -11,9 +11,9 @@
 
 module buffered_matrix_colorspace_converter
     #(
-    parameter integer P_FRAME_COLUMNS = 32'd640, // The number of columns in the frame
-    parameter integer P_FRAME_ROWS = 32'd480, // The number of rows in the frame
-    parameter integer P_PIXEL_DEPTH = 32'd24, // The color depth of the pixel (MUST be a multiple of 3)
+    // parameter integer P_FRAME_COLUMNS = 32'd640, // The number of columns in the frame
+    // parameter integer P_FRAME_ROWS = 32'd480, // The number of rows in the frame
+    //parameter integer P_PIXEL_DEPTH = 32'd24, // The color depth of the pixel (MUST be a multiple of 3)
 
     parameter integer P_HACT = 32'd640, // The constant used for Horizontal Active (pixels)
     parameter integer P_HFP = 32'd16, // The constant used for Horizontal Front Porch (pixels)
@@ -23,10 +23,10 @@ module buffered_matrix_colorspace_converter
     parameter integer P_VACT = 32'd480, // The constant used for Vertical Active (lines)
     parameter integer P_VFP = 32'd10, // The constant used for Vertical Front Porch (lines)
     parameter integer P_VSH = 32'd2, // The constant used for Vertical Sync Height (lines)
-    parameter integer P_VBP = 32'd33, // The constant used for Vertical Back Porch (lines)
+    parameter integer P_VBP = 32'd33//, // The constant used for Vertical Back Porch (lines)
 
     // This is the dimension size of the square 2D pixel matrix output (this is also the number of rows for the internal buffer)
-    parameter integer P_OUTPUT_MATRIX_SIZE = 32'd3
+    // parameter integer P_OUTPUT_MATRIX_SIZE = 32'd3
     )
     (
     I_CLK, // Clock input
@@ -50,12 +50,19 @@ module buffered_matrix_colorspace_converter
     );
 
     // START local parameters
-    parameter integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3;
-    parameter integer P_FRAME_COLUMN_BITS = $clog2(P_FRAME_COLUMNS);
-    parameter integer P_FRAME_ROW_BITS = $clog2(P_FRAME_ROWS);
+    //put input parameter here due to synthesis warnings 
+    //cannot use input parameters when defining local parameters
+    localparam integer P_PIXEL_DEPTH = 32'd24;
+    localparam integer P_FRAME_COLUMNS = 32'd640; // The number of columns in the frame
+    localparam integer P_FRAME_ROWS = 32'd480; // The number of rows in the frame
+    localparam integer P_OUTPUT_MATRIX_SIZE = 32'd3;
+
+    localparam integer P_SUBPIXEL_DEPTH = 32'd24 / 3;
+    localparam integer P_FRAME_COLUMN_BITS = $clog2(P_FRAME_COLUMNS);
+    localparam integer P_FRAME_ROW_BITS = $clog2(P_FRAME_ROWS);
 
     // The output matrix excludes the center grayscaled pixel so we subtract one P_SUBPIXEL_DEPTH.
-    parameter integer P_MATRIX_BITS = (P_SUBPIXEL_DEPTH * P_OUTPUT_MATRIX_SIZE * P_OUTPUT_MATRIX_SIZE) - P_SUBPIXEL_DEPTH;
+    localparam integer P_MATRIX_BITS = (P_SUBPIXEL_DEPTH * P_OUTPUT_MATRIX_SIZE * P_OUTPUT_MATRIX_SIZE) - P_SUBPIXEL_DEPTH;
     // END local parameters
 
     // START port declarations
@@ -95,7 +102,7 @@ module buffered_matrix_colorspace_converter
 
     // START module instantiations
     grayscale #(
-        .P_PIXEL_DEPTH(P_PIXEL_DEPTH)
+        // .P_PIXEL_DEPTH(P_PIXEL_DEPTH)
         )
         iGrayscale
         (

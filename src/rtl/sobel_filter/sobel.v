@@ -21,7 +21,7 @@
 //	out - filtered pixel at given [row,col]
 //	done - set to 1 when the output is ready to be read
 module sobel(row,col,inputPixels,clk_pix,clk,start,reset,out,done);
-	input 	wire [9:0] 	row;			//row number of output pixel
+	input 	wire [8:0] 	row;			//row number of output pixel
 	input	wire [9:0]	col;			//column number of output pixel
 	input 	wire [63:0] inputPixels;	//Surrounding 8 bit pixel values combined. 
 										//format:
