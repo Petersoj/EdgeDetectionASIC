@@ -15,16 +15,6 @@ module buffered_matrix3_colorspace_converter
     parameter integer P_FRAME_ROWS = 480, // The number of rows in the frame
     parameter integer P_PIXEL_DEPTH = 24, // The color depth of the pixel (MUST be a multiple of 3)
 
-    parameter integer P_HACT = 640, // The constant used for Horizontal Active (pixels)
-    parameter integer P_HFP = 16, // The constant used for Horizontal Front Porch (pixels)
-    parameter integer P_HSW = 96, // The constant used for Horizontal Sync Width (pixels)
-    parameter integer P_HBP = 48, // The constant used for Horizontal Back Porch (pixels)
-
-    parameter integer P_VACT = 480, // The constant used for Vertical Active (lines)
-    parameter integer P_VFP = 10, // The constant used for Vertical Front Porch (lines)
-    parameter integer P_VSH = 2, // The constant used for Vertical Sync Height (lines)
-    parameter integer P_VBP = 33, // The constant used for Vertical Back Porch (lines)
-
     // START port list local parameters
 
     parameter integer P_FRAME_COLUMN_BITS = $clog2(P_FRAME_COLUMNS),
@@ -35,7 +25,7 @@ module buffered_matrix3_colorspace_converter
     parameter integer P_OUTPUT_MATRIX_SIZE = 3,
 
     // The output matrix excludes the center grayscaled pixel so we subtract one P_SUBPIXEL_DEPTH.
-    parameter integer P_MATRIX_BITS = (P_SUBPIXEL_DEPTH * P_OUTPUT_MATRIX_SIZE * P_OUTPUT_MATRIX_SIZE) - P_SUBPIXEL_DEPTH
+    parameter integer P_PIXEL_MATRIX_BITS = (P_SUBPIXEL_DEPTH * P_OUTPUT_MATRIX_SIZE * P_OUTPUT_MATRIX_SIZE) - P_SUBPIXEL_DEPTH
 
     // END port list local parameters
     )
@@ -45,12 +35,12 @@ module buffered_matrix3_colorspace_converter
 
     input wire I_PIXEL_CLK, // Pixel clock input
     input wire I_DATA_VALID, // The data valid input (should be asserted when in the active region of the frame)
-    input wire [P_PIXEL_DEPTH - 1 : 0] I_PIXEL,  // RGB pixel input
     input wire I_VSYNC, // The Vertical Sync input
+    input wire [P_PIXEL_DEPTH - 1 : 0] I_PIXEL,  // RGB pixel input
 
     output wire [P_FRAME_COLUMN_BITS - 1 : 0] O_PIXEL_COLUMN, // The start column of the output matrix relative to the start column of the frame output
     output wire [P_FRAME_ROW_BITS - 1 : 0] O_PIXEL_ROW, // The start row of the output matrix relative to the start row of the frame output
-    output wire [P_MATRIX_BITS - 1 : 0] O_PIXEL_MATRIX, // The grayscaled pixel matrix output (excludes the center pixel for Sobel filter specification)
+    output wire [P_PIXEL_MATRIX_BITS - 1 : 0] O_PIXEL_MATRIX, // The grayscaled pixel matrix output (excludes the center pixel for Sobel filter specification)
                     // Format:
                     // {top_left,    top,    top_right,
                     //  middle_left, 	      middle_right,
@@ -59,14 +49,12 @@ module buffered_matrix3_colorspace_converter
     );
 
     // START local parameters
-    localparam P_FRAME_BUFFER_ROWS = 4; // The number of rows to use for the internal grayscaled pixel buffer
+    localparam P_FRAME_BUFFER_ROWS = 3; // The number of rows to use for the internal grayscaled pixel buffer
     // END local parameters
 
     // START registers and wires
-    wire [P_SUBPIXEL_DEPTH - 1 : 0] grayscaled_pixel; // Output of the directly-inputted pixel
 
-    reg frame_buffer_write_enable; // Write enable input for the frame buffer
-    reg frame_buffer_read_enable; // Read enable input for the frame buffer
+    // States for input frame (synchronized with pixel clock)
     reg q_frame_pixel_column_reset; // The current state of if current pixel column should be reset to zero
     wire n_frame_pixel_column_reset; // The next state of if current pixel column should be reset to zero
     reg q_frame_pixel_row_reset; // The current state of if current pixel row should be reset to zero
@@ -78,14 +66,31 @@ module buffered_matrix3_colorspace_converter
     reg [P_FRAME_ROW_BITS - 1 : 0] q_frame_pixel_row; // The current state of the current frame pixel row
     wire [P_FRAME_ROW_BITS - 1 : 0] n_frame_pixel_row; // The next state of the current frame pixel row
 
+    // States for iGrayscale
+    wire [P_SUBPIXEL_DEPTH - 1 : 0] grayscaled_pixel; // Grayscale output of the directly-inputted pixel
+
+    // States for iGrayscaledFrameBufferMatrix3
+    reg [P_FRAME_COLUMN_BITS - 1 : 0] q_frame_buffer_column; // The current state of the frame buffer column index
+    wire [P_FRAME_COLUMN_BITS - 1 : 0] n_frame_buffer_column; // The next state of the frame buffer column index
+    reg [P_FRAME_ROW_BITS - 1 : 0] q_frame_buffer_row; // The current state of the frame buffer row index
+    wire [P_FRAME_ROW_BITS - 1 : 0] n_frame_buffer_row; // The next state of the frame buffer row index
+    reg [P_SUBPIXEL_DEPTH - 1 : 0] q_frame_buffer_pixel; // The current state of the frame buffer pixel
+    wire [P_SUBPIXEL_DEPTH - 1 : 0] q_frame_buffer_pixel; // The next state of the frame buffer pixel
+    reg q_frame_buffer_write_enable; // The current state of if the frame buffer should enable writing
+    wire n_frame_buffer_write_enable; // The next state of if the frame buffer should enable writing
+    reg q_frame_buffer_read_enable; // The current state of if the frame buffer should enable reading
+    wire n_frame_buffer_read_enable; // The next state of if the frame buffer should enable reading
+
+    // States for output
     reg [P_FRAME_COLUMN_BITS - 1 : 0] q_o_pixel_column; // The current state of the output pixel column
-    reg [P_FRAME_COLUMN_BITS - 1 : 0] n_o_pixel_column; // The next state of the output pixel column
+    wire [P_FRAME_COLUMN_BITS - 1 : 0] n_o_pixel_column; // The next state of the output pixel column
     reg [P_FRAME_ROW_BITS - 1 : 0] q_o_pixel_row; // The current state of the output pixel row
-    reg [P_FRAME_ROW_BITS - 1 : 0] n_o_pixel_row; // The next state of the output pixel row
-    reg [P_MATRIX_BITS - 1 : 0] q_o_pixel_matrix; // The current state of the output pixel matrix
-    wire [P_MATRIX_BITS - 1 : 0] n_o_pixel_matrix; // The next state of the output pixel matrix
+    wire [P_FRAME_ROW_BITS - 1 : 0] n_o_pixel_row; // The next state of the output pixel row
+    reg [P_PIXEL_MATRIX_BITS - 1 : 0] q_o_pixel_matrix; // The current state of the output pixel matrix
+    wire [P_PIXEL_MATRIX_BITS - 1 : 0] n_o_pixel_matrix; // The next state of the output pixel matrix
     reg q_o_pixel_matrix_ready; // The current state of the output pixel matrix ready signal
-    reg n_o_pixel_matrix_ready; // The next state of the output pixel matrix ready signal
+    wire n_o_pixel_matrix_ready; // The next state of the output pixel matrix ready signal
+
     // END registers and wires
 
     // START output mapping
@@ -126,11 +131,11 @@ module buffered_matrix3_colorspace_converter
         (
         .I_CLK(I_CLK),
         .I_RESET(I_RESET),
-        .I_COLUMN(),
-        .I_ROW(),
-        .I_PIXEL(),
-        .I_WRITE_ENABLE(frame_buffer_write_enable),
-        .I_READ_ENABLE(frame_buffer_read_enable),
+        .I_COLUMN(q_frame_buffer_column),
+        .I_ROW(q_frame_buffer_row),
+        .I_PIXEL(q_frame_buffer_pixel),
+        .I_WRITE_ENABLE(q_frame_buffer_write_enable),
+        .I_READ_ENABLE(q_frame_buffer_read_enable),
 
         .O_PIXEL_MATRIX(n_o_pixel_matrix)
         );
@@ -138,7 +143,30 @@ module buffered_matrix3_colorspace_converter
 
     // Clock block
     always @(posedge I_CLK) begin
+        if (I_RESET) begin
+            q_frame_buffer_column <= {P_FRAME_COLUMN_BITS{1'b0}};
+            q_frame_buffer_row <= {P_FRAME_ROW_BITS{1'b0}};
+            q_frame_buffer_pixel <= {P_PIXEL_MATRIX_BITS{1'b0}};
+            q_frame_buffer_write_enable <= 1'b0;
+            q_frame_buffer_read_enable <= 1'b0;
 
+            q_o_pixel_column <= {P_FRAME_COLUMN_BITS{1'b0}};
+            q_o_pixel_row <= {P_FRAME_ROW_BITS{1'b0}};
+            q_o_pixel_matrix <= {P_PIXEL_MATRIX_BITS{1'b0}};
+            q_o_pixel_matrix_ready <= 1'b0;
+        end else begin
+            q_frame_buffer_column <= n_frame_buffer_column;
+            q_frame_buffer_row <= n_frame_buffer_row;
+            q_frame_buffer_pixel <= n_frame_buffer_pixel;
+            q_frame_buffer_pixel <= n_frame_buffer_pixel;
+            q_frame_buffer_write_enable <= n_frame_buffer_write_enable;
+            q_frame_buffer_read_enable <= n_frame_buffer_read_enable;
+
+            q_o_pixel_column <= n_o_pixel_column;
+            q_o_pixel_row <= n_o_pixel_row;
+            q_o_pixel_matrix <= n_o_pixel_matrix;
+            q_o_pixel_matrix_ready <= n_o_pixel_matrix_ready;
+        end
     end
 
     // Pixel clock block
@@ -157,57 +185,4 @@ module buffered_matrix3_colorspace_converter
             q_frame_pixel_row <= n_frame_pixel_row;
         end
     end
-
-    // Task to write to the frame buffer matrix from the input pixel.
-    task write_i_pixel_to_frame_buffer;
-        begin
-            // Enable frame buffer writing
-            frame_buffer_write_enable <= 1'b1;
-            frame_buffer_read_enable <= 1'b0;
-
-        end
-    endtask
-
-    // Task to read from the frame buffer matrix and set it to the output pixel matrix.
-    task read_frame_buffer_matrix_to_o_pixel_matrix;
-        begin
-            // Enable frame buffer reading
-            frame_buffer_write_enable <= 1'b0;
-            frame_buffer_read_enable <= 1'b1;
-
-        end
-    endtask
-
-    /*
-    always @(posedge I_PCLK) begin
-        if (I_ENABLE == 1'b1 && I_DE == 1'b1) begin
-            if (I_HSYNC == 1'b1) begin
-                if (current_column >= P_HFP + P_HACT + P_HBP) begin
-                    current_column = 32'd0;
-                    current_row = current_row + 32'd1;
-                end else begin
-                    current_column = current_column + 32'd1;
-                end
-
-                if (current_column >= P_HFP && current_column < P_HFP + P_HACT + P_HBP) begin
-                    O_PIXEL_COL = current_column;
-                    O_PIXEL_ROW = current_row;
-                    O_PIXEL_WRITE_ENABLE = 1'b1;
-                end else begin
-                    O_PIXEL_COL = 32'd0;
-                    O_PIXEL_ROW = 32'd0;
-                    O_PIXEL_WRITE_ENABLE = 1'b0;
-                end
-            end
-
-            if (I_VSYNC == 1'b1) begin
-                if (current_row >= P_VFP + P_VACT + P_VBP) begin
-                    current_row = 32'd0;
-                end else begin
-                    current_row = current_row + 32'd1;
-                end
-            end
-        end
-    end
-    */
 endmodule
