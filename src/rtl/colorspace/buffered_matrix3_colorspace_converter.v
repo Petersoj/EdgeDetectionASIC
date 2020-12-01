@@ -32,7 +32,7 @@ module buffered_matrix3_colorspace_converter
     parameter integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3,
 
     // This is the dimension size of the square 2D pixel matrix output.
-    parameter integer P_OUTPUT_MATRIX_SIZE = 32'd3,
+    parameter integer P_OUTPUT_MATRIX_SIZE = 3,
 
     // The output matrix excludes the center grayscaled pixel so we subtract one P_SUBPIXEL_DEPTH.
     parameter integer P_MATRIX_BITS = (P_SUBPIXEL_DEPTH * P_OUTPUT_MATRIX_SIZE * P_OUTPUT_MATRIX_SIZE) - P_SUBPIXEL_DEPTH
@@ -43,11 +43,10 @@ module buffered_matrix3_colorspace_converter
     input wire I_CLK, // Clock input
     input wire I_RESET, // Reset input
 
-    input wire [P_PIXEL_DEPTH - 1 : 0] I_PIXEL,  // RGB pixel input
-    input wire I_VSYNC, // Vertical Sync input
-    input wire I_HSYNC, // Horizontal Sync input
-    input wire I_DATA_ENABLE, // Data enable (data valid) input
     input wire I_PIXEL_CLK, // Pixel clock input
+    input wire I_DATA_VALID, // The data valid input (should be asserted when in the active region of the frame)
+    input wire [P_PIXEL_DEPTH - 1 : 0] I_PIXEL,  // RGB pixel input
+    input wire I_VSYNC, // The Vertical Sync input
 
     output wire [P_FRAME_COLUMN_BITS - 1 : 0] O_PIXEL_COLUMN, // The start column of the output matrix relative to the start column of the frame output
     output wire [P_FRAME_ROW_BITS - 1 : 0] O_PIXEL_ROW, // The start row of the output matrix relative to the start row of the frame output
@@ -60,21 +59,29 @@ module buffered_matrix3_colorspace_converter
     );
 
     // START local parameters
-
-    localparam P_FRAME_BUFFER_ROWS = 3; // The number of rows to use for the internal grayscaled pixel buffer
-
+    localparam P_FRAME_BUFFER_ROWS = 4; // The number of rows to use for the internal grayscaled pixel buffer
     // END local parameters
 
     // START registers and wires
-    reg frame_buffer_write_enable;
-    reg frame_buffer_read_enable;
+    wire [P_SUBPIXEL_DEPTH - 1 : 0] grayscaled_pixel; // Output of the directly-inputted pixel
+
+    reg frame_buffer_write_enable; // Write enable input for the frame buffer
+    reg frame_buffer_read_enable; // Read enable input for the frame buffer
+    reg q_frame_pixel_column_reset; // The current state of if current pixel column should be reset to zero
+    wire n_frame_pixel_column_reset; // The next state of if current pixel column should be reset to zero
+    reg q_frame_pixel_row_reset; // The current state of if current pixel row should be reset to zero
+    wire n_frame_pixel_row_reset; // The next state of if current pixel row should be reset to zero
+    reg [P_FRAME_COLUMN_BITS - 1 : 0] q_frame_pixel_column; // The current state of the current frame pixel column
+    wire [P_FRAME_COLUMN_BITS - 1 : 0] n_frame_pixel_column; // The next state of the current frame pixel column
+    reg [P_FRAME_ROW_BITS - 1 : 0] q_frame_pixel_row; // The current state of the current frame pixel row
+    wire [P_FRAME_ROW_BITS - 1 : 0] n_frame_pixel_row; // The next state of the current frame pixel row
 
     reg [P_FRAME_COLUMN_BITS - 1 : 0] q_o_pixel_column; // The current state of the output pixel column
     reg [P_FRAME_COLUMN_BITS - 1 : 0] n_o_pixel_column; // The next state of the output pixel column
-    reg [P_FRAME_COLUMN_BITS - 1 : 0] q_o_pixel_row; // The current state of the output pixel row
-    reg [P_FRAME_COLUMN_BITS - 1 : 0] n_o_pixel_row; // The next state of the output pixel row
+    reg [P_FRAME_ROW_BITS - 1 : 0] q_o_pixel_row; // The current state of the output pixel row
+    reg [P_FRAME_ROW_BITS - 1 : 0] n_o_pixel_row; // The next state of the output pixel row
     reg [P_MATRIX_BITS - 1 : 0] q_o_pixel_matrix; // The current state of the output pixel matrix
-    reg [P_MATRIX_BITS - 1 : 0] n_o_pixel_matrix; // The next state of the output pixel matrix
+    wire [P_MATRIX_BITS - 1 : 0] n_o_pixel_matrix; // The next state of the output pixel matrix
     reg q_o_pixel_matrix_ready; // The current state of the output pixel matrix ready signal
     reg n_o_pixel_matrix_ready; // The next state of the output pixel matrix ready signal
     // END registers and wires
@@ -86,6 +93,13 @@ module buffered_matrix3_colorspace_converter
     assign O_PIXEL_MATRIX_READY = q_o_pixel_matrix_ready;
     // END output mapping
 
+    // START RTL logic
+    assign n_frame_pixel_column_reset = ~I_DATA_VALID;
+    assign n_frame_pixel_row_reset = ~I_VSYNC;
+    assign n_frame_pixel_column = n_frame_pixel_column_reset ? {P_FRAME_COLUMN_BITS{1'b0}} : q_frame_pixel_column + 1'b1;
+    assign n_frame_pixel_row = n_frame_pixel_row_reset ? {P_FRAME_ROW_BITS{1'b0}} : q_frame_pixel_row + 1'b1;
+    // END RTL logic
+
     // START module instantiations
     grayscale #(
         .P_PIXEL_DEPTH(P_PIXEL_DEPTH)
@@ -94,9 +108,9 @@ module buffered_matrix3_colorspace_converter
         (
         .I_CLK(I_CLK),
         .I_RESET(I_RESET),
-        .I_PIXEL(),
+        .I_PIXEL(I_PIXEL),
 
-        .O_PIXEL()
+        .O_PIXEL(grayscaled_pixel)
         );
 
     frame_buffer_matrix3 #(
@@ -114,7 +128,7 @@ module buffered_matrix3_colorspace_converter
         .I_WRITE_ENABLE(frame_buffer_write_enable),
         .I_READ_ENABLE(frame_buffer_read_enable),
 
-        .O_PIXEL_MATRIX()
+        .O_PIXEL_MATRIX(n_o_pixel_matrix)
         );
     // END module instantiations
 
@@ -123,19 +137,38 @@ module buffered_matrix3_colorspace_converter
 
     end
 
-    // Task to enable frame buffer reading and disable writing.
-    task enable_frame_buffer_reading;
+    // Pixel clock block
+    always @(posedge I_PIXEL_CLK) begin
+        if (I_RESET) begin
+            q_frame_pixel_column_reset <= 1'b0;
+            q_frame_pixel_row_reset <= 1'b0;
+            q_frame_pixel_column <= {P_FRAME_COLUMN_BITS{1'b0}};
+            q_frame_pixel_row <= {P_FRAME_ROW_BITS{1'b0}};
+        end else begin
+            q_frame_pixel_column_reset <= n_frame_pixel_column_reset;
+            q_frame_pixel_row_reset <= n_frame_pixel_row_reset;
+            q_frame_pixel_column <= n_frame_pixel_column;
+            q_frame_pixel_row <= n_frame_pixel_row;
+        end
+    end
+
+    // Task to write to the frame buffer matrix from the input pixel.
+    task write_i_pixel_to_frame_buffer;
         begin
-            frame_buffer_write_enable <= 1'b0;
-            frame_buffer_read_enable <= 1'b1;
+            // Enable frame buffer writing
+            frame_buffer_write_enable <= 1'b1;
+            frame_buffer_read_enable <= 1'b0;
+
         end
     endtask
 
-    // Task to enable frame buffer writing and disable reading.
-    task enable_frame_buffer_writing;
+    // Task to read from the frame buffer matrix and set it to the output pixel matrix.
+    task read_frame_buffer_matrix_to_o_pixel_matrix;
         begin
-            frame_buffer_write_enable <= 1'b1;
-            frame_buffer_read_enable <= 1'b0;
+            // Enable frame buffer reading
+            frame_buffer_write_enable <= 1'b0;
+            frame_buffer_read_enable <= 1'b1;
+
         end
     endtask
 
