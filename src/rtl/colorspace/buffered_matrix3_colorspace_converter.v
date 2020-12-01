@@ -71,8 +71,8 @@ module buffered_matrix3_colorspace_converter
     wire n_frame_pixel_column_reset; // The next state of if current pixel column should be reset to zero
     reg q_frame_pixel_row_reset; // The current state of if current pixel row should be reset to zero
     wire n_frame_pixel_row_reset; // The next state of if current pixel row should be reset to zero
-    reg q_found_data_invalid_pulse; // The current state of the assertion pulse if the data valid input went low
-    wire n_found_data_invalid_pulse; // The next state of the assertion pulse if the data valid input went low
+    reg q_pixel_row_increment_pulse; // The current state of the assertion pulse if row should be incremented
+    wire n_pixel_row_increment_pulse; // The next state of the assertion pulse if row should be incremented
     reg [P_FRAME_COLUMN_BITS - 1 : 0] q_frame_pixel_column; // The current state of the current frame pixel column
     wire [P_FRAME_COLUMN_BITS - 1 : 0] n_frame_pixel_column; // The next state of the current frame pixel column
     reg [P_FRAME_ROW_BITS - 1 : 0] q_frame_pixel_row; // The current state of the current frame pixel row
@@ -98,10 +98,10 @@ module buffered_matrix3_colorspace_converter
     // START RTL logic
     assign n_frame_pixel_column_reset = ~I_DATA_VALID;
     assign n_frame_pixel_row_reset = ~I_VSYNC;
-    assign n_found_data_invalid_pulse = I_DATA_VALID ? 1'b0 : (q_found_data_invalid_pulse ? 1'b0 : 1'b1);
+    assign n_pixel_row_increment_pulse = I_DATA_VALID ? 1'b0 : (q_pixel_row_increment_pulse ? 1'b0 : 1'b1);
     assign n_frame_pixel_column = n_frame_pixel_column_reset ? {P_FRAME_COLUMN_BITS{1'b0}} : q_frame_pixel_column + 1'b1;
     assign n_frame_pixel_row = n_frame_pixel_row_reset ? {P_FRAME_ROW_BITS{1'b0}} :
-                (n_found_data_invalid ? q_frame_pixel_row + 1'b1 : q_frame_pixel_row);
+                (n_pixel_row_increment_pulse ? q_frame_pixel_row + 1'b1 : q_frame_pixel_row);
     // END RTL logic
 
     // START module instantiations
@@ -146,13 +146,13 @@ module buffered_matrix3_colorspace_converter
         if (I_RESET) begin
             q_frame_pixel_column_reset <= 1'b0;
             q_frame_pixel_row_reset <= 1'b0;
-            q_found_data_invalid_pulse <= 1'b0;
+            q_pixel_row_increment_pulse <= 1'b0;
             q_frame_pixel_column <= {P_FRAME_COLUMN_BITS{1'b0}};
             q_frame_pixel_row <= {P_FRAME_ROW_BITS{1'b0}};
         end else begin
             q_frame_pixel_column_reset <= n_frame_pixel_column_reset;
             q_frame_pixel_row_reset <= n_frame_pixel_row_reset;
-            q_found_data_invalid_pulse <= n_found_data_invalid_pulse;
+            q_pixel_row_increment_pulse <= n_pixel_row_increment_pulse;
             q_frame_pixel_column <= n_frame_pixel_column;
             q_frame_pixel_row <= n_frame_pixel_row;
         end
