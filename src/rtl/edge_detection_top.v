@@ -69,7 +69,7 @@ module edge_detection_top
     .O_PIXEL_COLUMN(colorspace_converter_pixel_col),
     .O_PIXEL_ROW(colorspace_converter_pixel_row),
     .O_PIXEL_MATRIX(colorspace_converter_pixel_matrix),
-    .O_PIXEL_MATRIX_READY(colorspace_converter_pixel_matrix_ready),
+    .O_PIXEL_MATRIX_READY(colorspace_converter_pixel_matrix_ready)
   );
 
   // Edge Detection

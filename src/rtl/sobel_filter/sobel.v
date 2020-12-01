@@ -163,7 +163,8 @@ module sobel(row,col,inputPixels,clk_pix,clk,start,reset,out,done);
 				filter_step<=0;			
 			end
 		end
-		else setup<=0;	//if not busy and the clk_pix is low, then the filter will reset on next posedge clk_pix
+		//if(~clk_pix) setup<=0;	//if not busy and the clk_pix is low, then the filter will reset on next posedge clk_pix
+		else setup<=0;
 	end
 	
 	//output pixel value
