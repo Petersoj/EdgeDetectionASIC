@@ -13,13 +13,13 @@ module frame_buffer
     #(
     parameter integer P_COLUMNS = 32'd640, // The number of columns in the frame
     parameter integer P_ROWS = 32'd4, // The number of rows in the frame
-    parameter integer P_PIXEL_DEPTH = 32'd24 // The color depth of the pixel (MUST be a multiple of 3)
+    parameter integer P_PIXEL_DEPTH = 32'd8 // The color depth of the pixel
     )
     (
     input wire I_CLK, // Clock input
     input wire I_RESET, // Reset input
-    input wire [$clog2(P_COLUMNS) - 1:0] I_PIXEL_COL, // The column of the desired pixel
-    input wire [$clog2(P_ROWS) - 1:0] I_PIXEL_ROW, // The row of the desired pixel
+    input wire [$clog2(P_COLUMNS) - 1:0] I_COLUMN, // The column of the desired pixel
+    input wire [$clog2(P_ROWS) - 1:0] I_ROW, // The row of the desired pixel
     input wire [P_PIXEL_DEPTH - 1:0] I_PIXEL, // The pixel data input
     input wire I_WRITE_ENABLE, // Enable writing of the pixel data at the associated row and column input
     input wire I_READ_ENABLE, // Enable reading of the pixel data at the associated row and column input
@@ -39,7 +39,7 @@ module frame_buffer
 
     // START RTL logic
     assign n_o_pixel = (I_READ_ENABLE == 1'b1 && I_WRITE_ENABLE == 1'b0)
-                        ? buffer_registers[I_PIXEL_ROW][I_PIXEL_COL]
+                        ? buffer_registers[I_ROW][I_COLUMN]
                         : q_o_pixel;
     // END RTL logic
 
@@ -71,7 +71,7 @@ module frame_buffer
     // Task to set registers in the buffer to the input pixel
     task set_buffer_registers;
         if (I_READ_ENABLE == 1'b0 && I_WRITE_ENABLE == 1'b1) begin
-            buffer_registers[I_PIXEL_ROW][I_PIXEL_COL] <= I_PIXEL;
+            buffer_registers[I_ROW][I_COLUMN] <= I_PIXEL;
         end
     endtask
 

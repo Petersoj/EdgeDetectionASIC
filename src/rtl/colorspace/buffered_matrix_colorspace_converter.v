@@ -43,9 +43,9 @@ module buffered_matrix_colorspace_converter
     O_PIXEL_ROW, // The start row of the output matrix relative to the start row of the frame
     O_PIXEL_MATRIX, // The grayscaled pixel matrix output (excludes the center pixel for Sobel filter specification)
                     // Format:
-                    // {top_left, top, top_right,
-                    //  mid_left, 	   mid_right,
-                    //	bot_left, bot, bot_right}
+                    // {top_left,    top,    top_right,
+                    //  middle_left, 	      middle_right,
+                    //  bottom_left, bottom, bottom_right}
     O_PIXEL_MATRIX_READY // Asserted if outputs are ready/valid
     );
 
