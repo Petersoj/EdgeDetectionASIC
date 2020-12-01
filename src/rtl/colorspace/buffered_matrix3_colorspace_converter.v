@@ -75,7 +75,7 @@ module buffered_matrix3_colorspace_converter
     reg [P_FRAME_ROW_BITS - 1 : 0] q_frame_buffer_row; // The current state of the frame buffer row index
     wire [P_FRAME_ROW_BITS - 1 : 0] n_frame_buffer_row; // The next state of the frame buffer row index
     reg [P_SUBPIXEL_DEPTH - 1 : 0] q_frame_buffer_pixel; // The current state of the frame buffer pixel
-    wire [P_SUBPIXEL_DEPTH - 1 : 0] q_frame_buffer_pixel; // The next state of the frame buffer pixel
+    wire [P_SUBPIXEL_DEPTH - 1 : 0] n_frame_buffer_pixel; // The next state of the frame buffer pixel
     reg q_frame_buffer_write_enable; // The current state of if the frame buffer should enable writing
     wire n_frame_buffer_write_enable; // The next state of if the frame buffer should enable writing
     reg q_frame_buffer_read_enable; // The current state of if the frame buffer should enable reading
@@ -157,7 +157,6 @@ module buffered_matrix3_colorspace_converter
         end else begin
             q_frame_buffer_column <= n_frame_buffer_column;
             q_frame_buffer_row <= n_frame_buffer_row;
-            q_frame_buffer_pixel <= n_frame_buffer_pixel;
             q_frame_buffer_pixel <= n_frame_buffer_pixel;
             q_frame_buffer_write_enable <= n_frame_buffer_write_enable;
             q_frame_buffer_read_enable <= n_frame_buffer_read_enable;
