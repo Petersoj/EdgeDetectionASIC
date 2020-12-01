@@ -129,7 +129,7 @@ module frame_buffer_o_matrix3_tb();
         read_enable = 1'b1;
         write_enable = 1'b0;
 
-        $display("Setting (%0d, %0d) to 7F", P_COLUMNS - 2, P_ROWS - 2);
+        $display("Setting (%0d, %0d) to 0x7F", P_COLUMNS - 2, P_ROWS - 2);
         #10000;
         column = P_COLUMNS - 2;
         row = P_ROWS - 2;

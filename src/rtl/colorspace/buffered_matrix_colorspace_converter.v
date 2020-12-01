@@ -26,54 +26,37 @@ module buffered_matrix_colorspace_converter
     parameter integer P_VBP = 32'd33, // The constant used for Vertical Back Porch (lines)
 
     // This is the dimension size of the square 2D pixel matrix output (this is also the number of rows for the internal buffer)
-    parameter integer P_OUTPUT_MATRIX_SIZE = 32'd3
+    parameter integer P_OUTPUT_MATRIX_SIZE = 32'd3,
+
+    // START local parameters
+    parameter integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3,
+    parameter integer P_FRAME_COLUMN_BITS = $clog2(P_FRAME_COLUMNS),
+    parameter integer P_FRAME_ROW_BITS = $clog2(P_FRAME_ROWS),
+
+    // The output matrix excludes the center grayscaled pixel so we subtract one P_SUBPIXEL_DEPTH.
+    parameter integer P_MATRIX_BITS = (P_SUBPIXEL_DEPTH * P_OUTPUT_MATRIX_SIZE * P_OUTPUT_MATRIX_SIZE) - P_SUBPIXEL_DEPTH
+    // END local parameters
     )
     (
-    I_CLK, // Clock input
-    I_RESET, // Reset input
-    I_ENABLE, // Enable input
+    input wire I_CLK, // Clock input
+    input wire I_RESET, // Reset input
+    input wire I_ENABLE, // Enable input
 
-    I_PIXEL,  // RGB pixel input
-    I_VSYNC, // Vertical Sync input
-    I_HSYNC, // Horizontal Sync input
-    I_DATA_ENABLE, // Data enable (data valid) input
-    I_PIXEL_CLK, // Pixel clock input
+    input wire [P_PIXEL_DEPTH - 1 : 0] I_PIXEL,  // RGB pixel input
+    input wire I_VSYNC, // Vertical Sync input
+    input wire I_HSYNC, // Horizontal Sync input
+    input wire I_DATA_ENABLE, // Data enable (data valid) input
+    input wire I_PIXEL_CLK, // Pixel clock input
 
-    O_PIXEL_COLUMN, // The start column of the output matrix relative to the start column of the frame
-    O_PIXEL_ROW, // The start row of the output matrix relative to the start row of the frame
-    O_PIXEL_MATRIX, // The grayscaled pixel matrix output (excludes the center pixel for Sobel filter specification)
+    output wire [P_FRAME_COLUMN_BITS - 1 : 0] O_PIXEL_COLUMN, // The start column of the output matrix relative to the start column of the frame
+    output wire [P_FRAME_ROW_BITS - 1 : 0] O_PIXEL_ROW, // The start row of the output matrix relative to the start row of the frame
+    output wire [P_MATRIX_BITS - 1 : 0] O_PIXEL_MATRIX, // The grayscaled pixel matrix output (excludes the center pixel for Sobel filter specification)
                     // Format:
                     // {top_left,    top,    top_right,
                     //  middle_left, 	      middle_right,
                     //  bottom_left, bottom, bottom_right}
-    O_PIXEL_MATRIX_READY // Asserted if outputs are ready/valid
+    output wire O_PIXEL_MATRIX_READY // Asserted if outputs are ready/valid
     );
-
-    // START local parameters
-    parameter integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3;
-    parameter integer P_FRAME_COLUMN_BITS = $clog2(P_FRAME_COLUMNS);
-    parameter integer P_FRAME_ROW_BITS = $clog2(P_FRAME_ROWS);
-
-    // The output matrix excludes the center grayscaled pixel so we subtract one P_SUBPIXEL_DEPTH.
-    parameter integer P_MATRIX_BITS = (P_SUBPIXEL_DEPTH * P_OUTPUT_MATRIX_SIZE * P_OUTPUT_MATRIX_SIZE) - P_SUBPIXEL_DEPTH;
-    // END local parameters
-
-    // START port declarations
-    input wire I_CLK;
-    input wire I_RESET;
-    input wire I_ENABLE;
-
-    input wire [P_PIXEL_DEPTH - 1 : 0] I_PIXEL;
-    input wire I_VSYNC;
-    input wire I_HSYNC;
-    input wire I_DATA_ENABLE;
-    input wire I_PIXEL_CLK;
-
-    output wire [P_FRAME_COLUMN_BITS - 1 : 0] O_PIXEL_COLUMN;
-    output wire [P_FRAME_ROW_BITS - 1 : 0] O_PIXEL_ROW;
-    output wire [P_MATRIX_BITS - 1 : 0] O_PIXEL_MATRIX;
-    output wire O_PIXEL_MATRIX_READY;
-    // END port declarations
 
     // START registers and wires
     reg [P_FRAME_COLUMN_BITS - 1 : 0] q_o_pixel_column; // The current state of the output pixel column

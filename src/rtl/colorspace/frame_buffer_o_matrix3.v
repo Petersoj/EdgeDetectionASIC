@@ -18,37 +18,25 @@ module frame_buffer_o_matrix3
     #(
     parameter integer P_COLUMNS = 32'd640, // The number of columns in the frame
     parameter integer P_ROWS = 32'd4, // The number of rows in the frame
-    parameter integer P_PIXEL_DEPTH = 32'd8 // The color depth of the pixel
-    )
-    (
-    I_CLK, // Clock input
-    I_RESET, // Reset input
-    I_COLUMN, // The column of the desired pixel
-    I_ROW, // The row of the desired pixel
-    I_PIXEL, // The pixel data input
-    I_WRITE_ENABLE, // Enable writing of the pixel data at the associated row and column input
-    I_READ_ENABLE, // Enable reading of the pixel data at the associated row and column input
-
-    O_PIXEL_MATRIX // The 3x3 pixel data matrix output
-    );
+    parameter integer P_PIXEL_DEPTH = 32'd8, // The color depth of the pixel
 
     // START local parameters
-    parameter integer P_COLUMNS_BIT_COUNT = $clog2(P_COLUMNS);
-    parameter integer P_ROWS_BIT_COUNT = $clog2(P_ROWS);
-    parameter integer P_O_PIXEL_MATRIX_BIT_COUNT = P_PIXEL_DEPTH * 8;
+    parameter integer P_COLUMNS_BIT_COUNT = $clog2(P_COLUMNS),
+    parameter integer P_ROWS_BIT_COUNT = $clog2(P_ROWS),
+    parameter integer P_O_PIXEL_MATRIX_BIT_COUNT = P_PIXEL_DEPTH * 8
     // END local parameters
+    )
+    (
+    input wire I_CLK, // Clock input
+    input wire I_RESET, // Reset input
+    input wire [P_COLUMNS_BIT_COUNT - 1 : 0] I_COLUMN, // The column of the desired pixel
+    input wire [P_ROWS_BIT_COUNT - 1 : 0] I_ROW, // The row of the desired pixel
+    input wire [P_PIXEL_DEPTH - 1 : 0] I_PIXEL, // The pixel data input
+    input wire I_WRITE_ENABLE, // Enable writing of the pixel data at the associated row and column input
+    input wire I_READ_ENABLE, // Enable reading of the pixel data at the associated row and column input
 
-    // START port declarations
-    input wire I_CLK;
-    input wire I_RESET;
-    input wire [P_COLUMNS_BIT_COUNT - 1 : 0] I_COLUMN;
-    input wire [P_ROWS_BIT_COUNT - 1 : 0] I_ROW;
-    input wire [P_PIXEL_DEPTH - 1 : 0] I_PIXEL;
-    input wire I_WRITE_ENABLE;
-    input wire I_READ_ENABLE;
-
-    output wire [P_O_PIXEL_MATRIX_BIT_COUNT - 1 : 0] O_PIXEL_MATRIX;
-    // END port declarations
+    output wire [P_O_PIXEL_MATRIX_BIT_COUNT - 1 : 0] O_PIXEL_MATRIX // The 3x3 pixel data matrix output
+    );
 
     // START registers and wires
 
