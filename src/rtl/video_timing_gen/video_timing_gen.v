@@ -10,19 +10,29 @@
 ////
 
 module video_timing_gen
+  #(
+    parameter [11:0] I_HS_END = 11'd0,
+    parameter [11:0] I_HBP_END = 11'd0,
+    parameter [11:0] I_HACT_END = 11'd0,
+    parameter [11:0] I_HFP_END = 11'd0,
+    parameter [11:0] I_VS_END = 11'd0,
+    parameter [11:0] I_VBP_END = 11'd0,
+    parameter [11:0] I_VACT_END = 11'd0,
+    parameter [11:0] I_VFP_END = 11'd0
+  )
   (
     input   wire        I_RST,      // Reset
     input   wire        I_PCLK,     // Pixel Clock (25.175 MHz)
     input   wire [23:0] I_PIX_DATA, // Input Pixel Data (Asyncronus)
     input   wire        I_TP_EN,    // Test Pattern Enable
-    input   wire [11:0] I_HS_END,   // Constant used for Horizontal Sync Counter
-    input   wire [11:0] I_HBP_END,  // Constant used for Horizontal Back Porch Counter
-    input   wire [11:0] I_HACT_END, // Constant used for Horizontal Active Counter
-    input   wire [11:0] I_HFP_END,  // Constant used for Horizontal Front Porch Counter
-    input   wire [11:0] I_VS_END,   // Constant used for Vertical Sync Counter
-    input   wire [11:0] I_VBP_END,  // Constant used for Vertical Back Porch Counter
-    input   wire [11:0] I_VACT_END, // Constant used for Vertical Active Counter
-    input   wire [11:0] I_VFP_END,  // Constant used for Vertical Front Porch Counter
+    // input   wire [11:0] I_HS_END,   // Constant used for Horizontal Sync Counter
+    // input   wire [11:0] I_HBP_END,  // Constant used for Horizontal Back Porch Counter
+    // input   wire [11:0] I_HACT_END, // Constant used for Horizontal Active Counter
+    // input   wire [11:0] I_HFP_END,  // Constant used for Horizontal Front Porch Counter
+    // input   wire [11:0] I_VS_END,   // Constant used for Vertical Sync Counter
+    // input   wire [11:0] I_VBP_END,  // Constant used for Vertical Back Porch Counter
+    // input   wire [11:0] I_VACT_END, // Constant used for Vertical Active Counter
+    // input   wire [11:0] I_VFP_END,  // Constant used for Vertical Front Porch Counter
     input   wire        I_VRST,     // Incoming Vertical Sync (used to reset counters)
     output  wire        O_DE,       // Output Data Enable
     output  wire        O_HS,       // Output Horizontal Sync
@@ -33,19 +43,19 @@ module video_timing_gen
   );
 
   // State Parameters
+  //need to set parameters as local, or synthesizer will have warning thinking the parameter is global
+  localparam [2:0]   S_HRESET      = 3'b000;
+  localparam [2:0]   S_HSYNC       = 3'b001;
+  localparam [2:0]   S_HBACK       = 3'b010;
+  localparam [2:0]   S_HACT        = 3'b011;
+  localparam [2:0]   S_HFRONT      = 3'b100;
 
-  parameter [2:0]   S_HRESET      = 3'b000;
-  parameter [2:0]   S_HSYNC       = 3'b001;
-  parameter [2:0]   S_HBACK       = 3'b010;
-  parameter [2:0]   S_HACT        = 3'b011;
-  parameter [2:0]   S_HFRONT      = 3'b100;
-
-  parameter [2:0]   S_VRESET      = 3'b000;
-  parameter [2:0]   S_VSYNC       = 3'b001;
-  parameter [2:0]   S_VBACK_START = 3'b010;
-  parameter [2:0]   S_VBACK       = 3'b011;
-  parameter [2:0]   S_VACT        = 3'b100;
-  parameter [2:0]   S_VFRONT      = 3'b101;
+  localparam [2:0]   S_VRESET      = 3'b000;
+  localparam [2:0]   S_VSYNC       = 3'b001;
+  localparam [2:0]   S_VBACK_START = 3'b010;
+  localparam [2:0]   S_VBACK       = 3'b011;
+  localparam [2:0]   S_VACT        = 3'b100;
+  localparam [2:0]   S_VFRONT      = 3'b101;
 
   wire        n_hs_done;
   wire        n_hbp_done;

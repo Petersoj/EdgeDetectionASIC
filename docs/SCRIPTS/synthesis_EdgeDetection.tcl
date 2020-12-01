@@ -21,7 +21,8 @@ set DDC_DIR 	 	"${BASE_DIR}/DDC/Edge_DDC"
 set DESIGN_LIB	    "${BASE_DIR}/DESIGN_LIBS/$design"
 
 # Define the verilog file list.
-set HDL_FILES [subst {$RTL_DIR/edge_detection_top.v $RTL_DIR/colorspace/colorspace_converter.v $RTL_DIR/colorspace/frame_buffer.v $RTL_DIR/colorspace/grayscale.v $RTL_DIR/sobel_filter/sobel.v $RTL_DIR/video_timing_gen/video_timing_gen.v}]
+set HDL_FILES [subst {$RTL_DIR/edge_detection_top.v $RTL_DIR/sobel_filter/sobel.v $RTL_DIR/video_timing_gen/video_timing_gen.v}]
+# $RTL_DIR/colorspace/buffered_matrix_colorspace_converter.v $RTL_DIR/colorspace/frame_buffer.v $RTL_DIR/colorspace/frame_buffer_o_matrix3.v $RTL_DIR/colorspace/grayscale.v
 
 #Create the directories if they do no exist
 exec mkdir -p $RPT_DIR
