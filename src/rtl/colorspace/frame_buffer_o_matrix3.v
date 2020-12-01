@@ -48,10 +48,10 @@ module frame_buffer_o_matrix3
     wire previous_row_valid; // Asserted if the row above the row of the desired pixel is valid
     wire next_row_valid; // Asserted if the row below the row of the desired pixel is valid
 
-    wire previous_column_index; // The index of the column before the column of the desired pixel
-    wire next_column_index; // The index of the column after the column of the desired pixel
-    wire previous_row_index; // The index of the row before the row of the desired pixel
-    wire next_row_index; // The index of the row after the row of the desired pixel
+    wire [P_COLUMNS_BIT_COUNT - 1 : 0] previous_column_index; // The index of the column before the column of the desired pixel
+    wire [P_COLUMNS_BIT_COUNT - 1 : 0] next_column_index; // The index of the column after the column of the desired pixel
+    wire [P_ROWS_BIT_COUNT - 1 : 0] previous_row_index; // The index of the row before the row of the desired pixel
+    wire [P_ROWS_BIT_COUNT - 1 : 0] next_row_index; // The index of the row after the row of the desired pixel
 
     // The following define the wires of the 3x3 matrix pixels as chosen by the desired row and column inputs.
     wire [P_PIXEL_DEPTH - 1 : 0] top_left_pixel;
@@ -63,13 +63,13 @@ module frame_buffer_o_matrix3
     wire [P_PIXEL_DEPTH - 1 : 0] bottom_pixel;
     wire [P_PIXEL_DEPTH - 1 : 0] bottom_right_pixel;
 
-    reg [P_O_PIXEL_MATRIX_BIT_COUNT - 1 : 0] q_o_pixel; // The current state of the output pixel
-    wire [P_O_PIXEL_MATRIX_BIT_COUNT - 1 : 0] n_o_pixel; // The next state of the output pixel
+    reg [P_O_PIXEL_MATRIX_BIT_COUNT - 1 : 0] q_o_pixel_matrix; // The current state of the output pixel matrix
+    wire [P_O_PIXEL_MATRIX_BIT_COUNT - 1 : 0] n_o_pixel_matrix; // The next state of the output pixel matrix
 
     // END registers and wires
 
     // START output mapping
-    assign O_PIXEL = q_o_pixel;
+    assign O_PIXEL_MATRIX = q_o_pixel_matrix;
     // END output mapping
 
     // START RTL logic
@@ -78,10 +78,10 @@ module frame_buffer_o_matrix3
     assign previous_row_valid = I_ROW == {P_ROWS_BIT_COUNT{1'b0}} ? 1'b0 : 1'b1;
     assign next_row_valid = I_ROW == P_ROWS - 1 ? 1'b0 : 1'b1;
 
-    assign previous_column_index = I_COLUMN - 1;
-    assign next_column_index = I_COLUMN + 1;
-    assign previous_row_index = I_ROW - 1;
-    assign next_row_index = I_ROW + 1;
+    assign previous_column_index = I_COLUMN - 1'b1;
+    assign next_column_index = I_COLUMN + 1'b1;
+    assign previous_row_index = I_ROW - 1'b1;
+    assign next_row_index = I_ROW + 1'b1;
 
     assign top_left_pixel = previous_column_valid && previous_row_valid ?
             buffer_registers[previous_row_index][previous_column_index] : {P_PIXEL_DEPTH{1'b0}};
@@ -107,22 +107,22 @@ module frame_buffer_o_matrix3
     assign bottom_right_pixel = next_column_valid && next_row_valid ?
             buffer_registers[next_row_index][next_column_index] : {P_PIXEL_DEPTH{1'b0}};
 
-    assign n_o_pixel = (I_READ_ENABLE == 1'b1 && I_WRITE_ENABLE == 1'b0) ?
+    assign n_o_pixel_matrix = (I_READ_ENABLE == 1'b1 && I_WRITE_ENABLE == 1'b0) ?
                         {
                             top_left_pixel, top_pixel, top_right_pixel,
                             middle_left_pixel, middle_right_pixel,
                             bottom_left_pixel, bottom_pixel, bottom_right_pixel
                         }
-                        : q_o_pixel;
+                        : q_o_pixel_matrix;
     // END RTL logic
 
     // Clock block
     always @(posedge I_CLK) begin
         if(I_RESET == 1'b1) begin
-            q_o_pixel <= {P_O_PIXEL_MATRIX_BIT_COUNT{1'b0}};
+            q_o_pixel_matrix <= {P_O_PIXEL_MATRIX_BIT_COUNT{1'b0}};
             reset_buffer_registers;
         end else begin
-            q_o_pixel <= n_o_pixel;
+            q_o_pixel_matrix <= n_o_pixel_matrix;
             set_buffer_registers;
         end
     end

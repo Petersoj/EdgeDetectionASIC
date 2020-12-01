@@ -102,19 +102,32 @@ module frame_buffer_o_matrix3_tb();
         $display("Resetting DUT");
         #10000;
         reset = 1'b0;
-
-        $display("Setting (0, 0) to white (0xFF)");
         #10000;
-        column = {$clog2(P_COLUMNS){1'b0}};
-        row = {$clog2(P_ROWS){1'b0}};
+
+        $display("Setting (1, 1) to white (0xFF)");
+        #10000;
+        column = 1'b1;
+        row = 1'b1;
         pixel = {P_PIXEL_DEPTH{1'b1}}; // Color of white
         read_enable = 1'b0;
         write_enable = 1'b1;
+        #10000;
 
         $display("Reading (0, 0)");
         #10000;
+        column = 1'b0;
+        row = 1'b0;
         read_enable = 1'b1;
         write_enable = 1'b0;
+        #10000;
+
+        $display("Reading (2, 2)");
+        #10000;
+        column = 2'd2;
+        row = 2'd2;
+        read_enable = 1'b1;
+        write_enable = 1'b0;
+        #10000;
 
         $display("Setting (%0d, %0d) to 0x7F", P_COLUMNS - 1, P_ROWS - 1);
         #10000;
@@ -123,11 +136,13 @@ module frame_buffer_o_matrix3_tb();
         pixel = 8'h7F;
         read_enable = 1'b0;
         write_enable = 1'b1;
+        #10000;
 
         $display("Reading (%0d, %0d)", P_COLUMNS - 1, P_ROWS - 1);
         #10000;
         read_enable = 1'b1;
         write_enable = 1'b0;
+        #10000;
 
         $display("Setting (%0d, %0d) to 0x7F", P_COLUMNS - 2, P_ROWS - 2);
         #10000;
@@ -136,12 +151,12 @@ module frame_buffer_o_matrix3_tb();
         pixel = 8'h7F;
         read_enable = 1'b0;
         write_enable = 1'b1;
+        #10000;
 
         $display("Reading (%0d, %0d)", P_COLUMNS - 2, P_ROWS - 2);
         #10000;
         read_enable = 1'b1;
         write_enable = 1'b0;
-
         #10000;
 
         $display("================================================================");
