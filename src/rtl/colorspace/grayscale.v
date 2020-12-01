@@ -89,6 +89,8 @@ module grayscale
 
         // w_i_blue * [2^(-4) + 2^(-5) + 2^(-6)]
         (w_i_blue >> 4) + (w_i_blue >> 5) + (w_i_blue >> 6);
+    // NOTE we don't have to check for overflow/carry of the above addition because
+    // the max possible value is 255.
     // END RTL logic
 
     // Clock block

@@ -64,6 +64,8 @@ module frame_buffer
 
     // Task to set all the buffer registers to 0
     task reset_buffer_registers;
+        // TODO determine if the synthesizer will implement this 'mass' reset
+        // of the buffer_registers properly.
         integer row, column;
         for (row = 0; row < P_ROWS; row = row + 1) begin
             for (column = 0; column < P_COLUMNS; column = column + 1) begin
