@@ -12,7 +12,7 @@
 module edge_detection_top
   (
     input wire          I_RST,       // Input Reset
-    input wire          I_CLK_100,   // Input Core Clock (100 MHz?)
+    input wire          I_CORE_CLK,  // Input Core Clock (333 MHz)
 
     input wire  [23:0]  I_PIX_DATA,  // Input RGB Pixel Data
     input wire	        I_VSYNC,     // Input Vertical Sync
@@ -27,7 +27,6 @@ module edge_detection_top
     output wire         O_PCLK       // Output Pixel Clock (25.175 MHz)
   );
 
-  reg [23:0]  pix_data_dly;
   reg         pix_vsync_dly;
 
   // output mapping
@@ -35,13 +34,9 @@ module edge_detection_top
 
   always @(posedge O_PCLK) begin
     if(I_RST == 1'b1) begin
-      pix_data_dly  <= 24'h0;
       pix_vsync_dly <= 1'b0;
-      //pix_hsync_dly <= 1'b0;
-      //pix_de_dly    <= 1'b0;
     end
     else begin
-      pix_data_dly  <= I_PIX_DATA; // Will be changed later
       pix_vsync_dly <= I_VSYNC;    // Will be changed later
     end
   end
@@ -59,40 +54,23 @@ module edge_detection_top
   wire [$clog2(VGA_HACT) - 1:0] colorspace_converter_pixel_col;
   wire [$clog2(VGA_VACT) - 1:0] colorspace_converter_pixel_row;
   wire [23:0] colorspace_converter_pixel;
-  wire colorspace_converter_pixel_write_enable;
+  wire colorspace_converter_pixel_matrix_ready;
+  wire [63:0] colorspace_converter_pixel_matrix;
 
-  colorspace_converter iColorspaceConverter(
-      .I_CLK(I_CLK_100),
-      .I_RESET(I_RST),
-      .I_ENABLE(1'b1),
-
-      .I_PIX_DATA(I_PIX_DATA),
-      .I_VSYNC(I_VSYNC),
-      .I_HSYNC(I_HSYNC),
-      .I_DE(I_DE),
-      .I_PCLK(I_PCLK),
-
-      .O_PIXEL_COL(colorspace_converter_pixel_col),
-      .O_PIXEL_ROW(colorspace_converter_pixel_row),
-      .O_PIXEL(colorspace_converter_pixel),
-      .O_PIXEL_WRITE_ENABLE(colorspace_converter_pixel_write_enable)
-      );
-
-  // Frame Buffer
-  wire [23:0] frame_buffer_pixel;
-
-  frame_buffer iFrameBuffer(
-      .I_CLK(I_CLK_100),
-      .I_RESET(I_RST),
-      .I_ENABLE(1'b1),
-      .I_PIXEL_COL(colorspace_converter_pixel_col),
-      .I_PIXEL_ROW(colorspace_converter_pixel_row),
-      .I_PIXEL(colorspace_converter_pixel),
-      .I_WRITE_ENABLE(colorspace_converter_pixel_write_enable),
-      .I_READ_ENABLE(), // TODO
-
-      .O_PIXEL(frame_buffer_pixel)
-      );
+  buffered_matrix_colorspace_converter iBMCC(
+    .I_CLK(I_CORE_CLK),
+    .I_RESET(I_RST),
+    .I_ENABLE(1'b1),
+    .I_PIXEL(I_PIX_DATA),
+    .I_VSYNC(I_VSYNC),
+    .I_HSYNC(I_VSYNC),
+    .I_DATA_ENABLE(I_DE),
+    .I_PIXEL_CLK(I_PCLK),
+    .O_PIXEL_COLUMN(colorspace_converter_pixel_col),
+    .O_PIXEL_ROW(colorspace_converter_pixel_row),
+    .O_PIXEL_MATRIX(colorspace_converter_pixel_matrix),
+    .O_PIXEL_MATRIX_READY(colorspace_converter_pixel_matrix_ready),
+  );
 
   // Edge Detection
   wire [7:0] out;
@@ -102,7 +80,7 @@ module edge_detection_top
       .col(colorspace_converter_pixel_col),
       .inputPixels(), // TODO
       .clk_pix(I_PCLK),
-      .clk(I_CLK_100),
+      .clk(I_CORE_CLK),
       .start(), // TODO
       .out(out),
       .done() // TODO
@@ -123,7 +101,7 @@ module edge_detection_top
     (
       .I_RST      (I_RST),
       .I_PCLK     (I_PCLK),
-      .I_PIX_DATA (out),
+      .I_PIX_DATA ({out, out, out}),
       .I_TP_EN    (1'b0),
       .I_HS_END   (VGA_HS_END),
       .I_HBP_END  (VGA_HBP_END),
