@@ -4,7 +4,7 @@
 //
 // Create Date: 10/27/2020
 // Module Name: frame_buffer_tb
-// Description: A memory buffer for a 2D matrix/frame testbench.
+// Description: frame_buffer_tb module testbench
 // Authors: Jacob Peterson
 //
 ////
@@ -23,26 +23,26 @@ module frame_buffer_tb();
     // START registers and wires
     logic clock;
     logic reset;
-    logic [$clog2(P_COLUMNS) - 1:0] column;
-    logic [$clog2(P_ROWS) - 1:0] row;
-    logic [P_PIXEL_DEPTH - 1:0] pixel;
+    logic [$clog2(P_COLUMNS) - 1 : 0] column;
+    logic [$clog2(P_ROWS) - 1 : 0] row;
+    logic [P_PIXEL_DEPTH - 1 : 0] pixel;
     logic write_enable;
     logic read_enable;
-    logic [P_PIXEL_DEPTH - 1:0] output_pixel;
+    logic [P_PIXEL_DEPTH - 1 : 0] output_pixel;
     // END registers and wires
 
     // START module instantiations
     frame_buffer #(
-        .P_P_COLUMNS(P_COLUMNS),
-        .P_P_ROWS(P_ROWS),
-        .P_P_PIXEL_DEPTH(P_PIXEL_DEPTH)
+        .P_COLUMNS(P_COLUMNS),
+        .P_ROWS(P_ROWS),
+        .P_PIXEL_DEPTH(P_PIXEL_DEPTH)
         )
         DUT
         (
         .I_CLK(clock),
         .I_RESET(reset),
-        .I_PIXEL_COL(column),
-        .I_PIXEL_ROW(row),
+        .I_COLUMN(column),
+        .I_ROW(row),
         .I_PIXEL(pixel),
         .I_WRITE_ENABLE(write_enable),
         .I_READ_ENABLE(read_enable),
