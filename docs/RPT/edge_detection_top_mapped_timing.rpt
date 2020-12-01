@@ -1,0 +1,31 @@
+Warning: Design 'edge_detection_top' has '1' unresolved references. For more detailed information, use the "link" command. (UID-341)
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : edge_detection_top
+Version: K-2015.06-SP5-6
+Date   : Mon Nov 30 16:09:32 2020
+****************************************
+
+Operating Conditions: PVT_1P8V_25C   Library: sclib_tsmc180_ss
+Wire Load Model Mode: top
+
+  Startpoint: iVidGen/O_PIX_DATA[23] (internal pin)
+  Endpoint: O_PIX_DATA[23]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  iVidGen/O_PIX_DATA[23] (video_timing_gen)               0.00       0.00 r
+  O_PIX_DATA[23] (out)                                    0.00       0.00 r
+  data arrival time                                                  0.00
+  --------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+1

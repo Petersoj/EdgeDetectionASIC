@@ -1,26 +1,27 @@
 # The period has to be changed to see if the design can meet the timing constraint
 #Same for the clk_name when using a different design.
-set clk_period 19.861
+set pix_clk_period 19.861
 #need 6 clock cycles between pixels, slowest speed: 3.31
-set clk_period_fast 3 
+set logic_clk_period 3 
+
 set clk_name clk_pix
 set clk_name_fast clk
 
 #  Define the name of the top module to be synthesized.
-set design sobel
+set design edge_detection_top
 
 # Define the directory paths
 set BASE_DIR	 	[pwd]
 set RPT_DIR         "${BASE_DIR}/RPT/Edge_RPT"
-set RTL_DIR 	 	"${BASE_DIR}/HDL/Edge_RTL/sobel_filter"
+set RTL_DIR 	 	"${BASE_DIR}/HDL/Edge_RTL"
 set GATE_DIR 	 	"${BASE_DIR}/HDL/Edge_RTL/GATE"
 set SDF_DIR 	 	"${BASE_DIR}/SDF/Edge_SDF"
 set SDC_DIR 	 	"${BASE_DIR}/SDC/Edge_SDC"
 set DDC_DIR 	 	"${BASE_DIR}/DDC/Edge_DDC"
-set DESIGN_LIB	"${BASE_DIR}/DESIGN_LIBS/$design"
+set DESIGN_LIB	    "${BASE_DIR}/DESIGN_LIBS/$design"
 
 # Define the verilog file list.
-set HDL_FILES $RTL_DIR/sobel.v
+set HDL_FILES [subst {$RTL_DIR/edge_detection_top.v $RTL_DIR/colorspace/colorspace_converter.v $RTL_DIR/colorspace/frame_buffer.v $RTL_DIR/colorspace/grayscale.v $RTL_DIR/sobel_filter/sobel.v $RTL_DIR/video_timing_gen/video_timing_gen.v}]
 
 #Create the directories if they do no exist
 exec mkdir -p $RPT_DIR
@@ -37,6 +38,7 @@ define_design_lib $design -path $DESIGN_LIB
 
 #  Analyze the Verilog sources
 puts "-i- Analyze Verilog sources"
+puts $HDL_FILES
 analyze -format verilog $HDL_FILES -library $design
 
 #  Elaborate the design
@@ -56,15 +58,15 @@ puts "-i- Define constraints"
 puts "-i- set_max_area 0"
 puts "-i- set_clock"
 set_max_area 0
-create_clock -name $clk_name -period $clk_period $clk_name
-create_clock -name $clk_name_fast -period $clk_period_fast $clk_name_fast
+create_clock -name $clk_name -period $pix_clk_period $clk_name
+create_clock -name $clk_name_fast -period $logic_clk_period $clk_name_fast
 set_clock_groups -asynchronous -group $clk_name -group $clk_name_fast
 
 #Check the design for warnings
 check_design
 
 #  Do not ungroup the hierarchy
-#set_ungroup [get_designs *] false
+set_ungroup [get_designs *] false
 
 #  Map and optimize the design
 puts "-i- Map and optimize design"

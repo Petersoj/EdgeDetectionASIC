@@ -15,10 +15,10 @@ module shift_reg
     parameter G_WIDTH = 1,
     parameter G_DEPTH = 1
   ) (
-    input   wire                  I_CLK;   // Clock for Register
-    input   wire                  I_RESET; // Reset
-    input   wire                  I_EN;    // Enable
-    input   wire  [G_WIDTH-1:0]   I_DATA;  // Input Data Bus
+    input   wire                  I_CLK,   // Clock for Register
+    input   wire                  I_RESET, // Reset
+    input   wire                  I_EN,    // Enable
+    input   wire  [G_WIDTH-1:0]   I_DATA,  // Input Data Bus
     output  wire  [G_WIDTH-1:0]   O_DATA   // Output Data Bus
   );
 
