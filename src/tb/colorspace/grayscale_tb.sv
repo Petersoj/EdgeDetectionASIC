@@ -14,8 +14,8 @@
 module grayscale_tb();
 
     // START local parameters
-    parameter integer P_PIXEL_DEPTH = 24;
-    parameter integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3;
+    localparam P_PIXEL_DEPTH = 24;
+    localparam P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3;
     // END local parameters
 
     // START registers and wires

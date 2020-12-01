@@ -14,10 +14,10 @@
 module frame_buffer_matrix3_tb();
 
     // START local parameters
-    parameter integer P_COLUMNS = 640;
-    parameter integer P_ROWS = 3;
-    parameter integer P_PIXEL_DEPTH = 8;
-    parameter integer P_O_PIXEL_MATRIX_BITS = P_PIXEL_DEPTH * 8;
+    localparam P_COLUMNS = 640;
+    localparam P_ROWS = 3;
+    localparam P_PIXEL_DEPTH = 8;
+    localparam P_O_PIXEL_MATRIX_BITS = P_PIXEL_DEPTH * 8;
     // END local parameters
 
     // START registers and wires

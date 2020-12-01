@@ -25,19 +25,16 @@ module buffered_matrix3_colorspace_converter
     parameter integer P_VSH = 32'd2, // The constant used for Vertical Sync Height (lines)
     parameter integer P_VBP = 32'd33, // The constant used for Vertical Back Porch (lines)
 
-    // START local parameters
+    // START port list local parameters
 
     parameter integer P_FRAME_COLUMN_BITS = $clog2(P_FRAME_COLUMNS),
     parameter integer P_FRAME_ROW_BITS = $clog2(P_FRAME_ROWS),
     parameter integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3,
 
-    // This is the dimension size of the square 2D pixel matrix output (this is also the number of rows for the internal buffer)
-    parameter integer P_OUTPUT_MATRIX_SIZE = 32'd3,
-
     // The output matrix excludes the center grayscaled pixel so we subtract one P_SUBPIXEL_DEPTH.
     parameter integer P_MATRIX_BITS = (P_SUBPIXEL_DEPTH * P_OUTPUT_MATRIX_SIZE * P_OUTPUT_MATRIX_SIZE) - P_SUBPIXEL_DEPTH
 
-    // END local parameters
+    // END port list local parameters
     )
     (
     input wire I_CLK, // Clock input
@@ -59,6 +56,13 @@ module buffered_matrix3_colorspace_converter
                     //  bottom_left, bottom, bottom_right}
     output wire O_PIXEL_MATRIX_READY // Matrix output ready (asserted if outputs are ready/valid)
     );
+
+    // START local parameters
+
+    // This is the dimension size of the square 2D pixel matrix output (this is also the number of rows for the internal buffer)
+    localparam P_OUTPUT_MATRIX_SIZE = 32'd3;
+
+    // END local parameters
 
     // START registers and wires
     reg [P_FRAME_COLUMN_BITS - 1 : 0] q_o_pixel_column; // The current state of the output pixel column

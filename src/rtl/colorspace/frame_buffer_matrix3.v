@@ -20,11 +20,11 @@ module frame_buffer_matrix3
     parameter integer P_ROWS = 32'd4, // The number of rows in the frame
     parameter integer P_PIXEL_DEPTH = 32'd8, // The color depth of the pixel
 
-    // START local parameters
+    // START port list local parameters
     parameter integer P_COLUMNS_BITS = $clog2(P_COLUMNS),
     parameter integer P_ROWS_BITS = $clog2(P_ROWS),
     parameter integer P_O_PIXEL_MATRIX_BITS = P_PIXEL_DEPTH * 8
-    // END local parameters
+    // END port list local parameters
     )
     (
     input wire I_CLK, // Clock input

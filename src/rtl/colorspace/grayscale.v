@@ -15,15 +15,9 @@ module grayscale
     #(
     parameter integer P_PIXEL_DEPTH = 32'd24, // The color depth of the pixel (MUST be a multiple of 3)
 
-    // START local parameters
-    parameter integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3,
-    parameter integer P_RED_MSB = P_SUBPIXEL_DEPTH * 3 - 1,
-    parameter integer P_RED_LSB = P_SUBPIXEL_DEPTH * 3 - P_SUBPIXEL_DEPTH,
-    parameter integer P_GREEN_MSB = P_SUBPIXEL_DEPTH * 2 - 1,
-    parameter integer P_GREEN_LSB = P_SUBPIXEL_DEPTH * 2 - P_SUBPIXEL_DEPTH,
-    parameter integer P_BLUE_MSB = P_SUBPIXEL_DEPTH - 1,
-    parameter integer P_BLUE_LSB = 0
-    // END local parameters
+    // START port list local parameters
+    parameter integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3
+    // END port list local parameters
     )
     (
     input wire I_CLK, // Clock input
@@ -32,6 +26,15 @@ module grayscale
 
     output wire [P_SUBPIXEL_DEPTH - 1 : 0] O_PIXEL // The grayscale pixel data output
     );
+
+    // START local parameters
+    localparam P_RED_MSB = P_SUBPIXEL_DEPTH * 3 - 1;
+    localparam P_RED_LSB = P_SUBPIXEL_DEPTH * 3 - P_SUBPIXEL_DEPTH;
+    localparam P_GREEN_MSB = P_SUBPIXEL_DEPTH * 2 - 1;
+    localparam P_GREEN_LSB = P_SUBPIXEL_DEPTH * 2 - P_SUBPIXEL_DEPTH;
+    localparam P_BLUE_MSB = P_SUBPIXEL_DEPTH - 1;
+    localparam P_BLUE_LSB = 0;
+    // END local parameters
 
     // START registers and wires
     wire [P_SUBPIXEL_DEPTH - 1 : 0] w_i_red = I_PIXEL[P_RED_MSB : P_RED_LSB];

@@ -14,10 +14,10 @@
 module frame_buffer_tb();
 
     // START local parameters
-    parameter integer P_COLUMNS = 640;
-    parameter integer P_ROWS = 3;
-    parameter integer P_PIXEL_DEPTH = 24;
-    parameter integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3;
+    localparam P_COLUMNS = 640;
+    localparam P_ROWS = 3;
+    localparam P_PIXEL_DEPTH = 24;
+    localparam P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3;
     // END local parameters
 
     // START registers and wires
