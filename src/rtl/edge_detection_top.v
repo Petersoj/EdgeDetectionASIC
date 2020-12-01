@@ -60,7 +60,6 @@ module edge_detection_top
   buffered_matrix_colorspace_converter iBMCC(
     .I_CLK(I_CORE_CLK),
     .I_RESET(I_RST),
-    .I_ENABLE(1'b1),
     .I_PIXEL(I_PIX_DATA),
     .I_VSYNC(I_VSYNC),
     .I_HSYNC(I_VSYNC),
@@ -97,7 +96,7 @@ module edge_detection_top
   parameter [11:0] VGA_VBP_END  = VGA_VSW + VGA_VBP;
   parameter [11:0] VGA_VACT_END = VGA_VSW + VGA_VBP + VGA_VACT;
   parameter [11:0] VGA_VFP_END  = VGA_VSW + VGA_VBP + VGA_VACT + VGA_VFP;
-    
+
   always @(posedge I_CORE_CLK)begin
     if(I_RST) begin
       i_tp_en <= 1'b0;

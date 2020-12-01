@@ -13,7 +13,7 @@
 
 module grayscale
     #(
-    parameter integer P_PIXEL_DEPTH = 32'd24, // The color depth of the pixel (MUST be a multiple of 3)
+    parameter integer P_PIXEL_DEPTH = 24, // The color depth of the pixel (MUST be a multiple of 3)
 
     // START port list local parameters
     parameter integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3

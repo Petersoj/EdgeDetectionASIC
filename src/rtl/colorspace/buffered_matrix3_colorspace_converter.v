@@ -11,19 +11,19 @@
 
 module buffered_matrix3_colorspace_converter
     #(
-    parameter integer P_FRAME_COLUMNS = 32'd640, // The number of columns in the frame
-    parameter integer P_FRAME_ROWS = 32'd480, // The number of rows in the frame
-    parameter integer P_PIXEL_DEPTH = 32'd24, // The color depth of the pixel (MUST be a multiple of 3)
+    parameter integer P_FRAME_COLUMNS = 640, // The number of columns in the frame
+    parameter integer P_FRAME_ROWS = 480, // The number of rows in the frame
+    parameter integer P_PIXEL_DEPTH = 24, // The color depth of the pixel (MUST be a multiple of 3)
 
-    parameter integer P_HACT = 32'd640, // The constant used for Horizontal Active (pixels)
-    parameter integer P_HFP = 32'd16, // The constant used for Horizontal Front Porch (pixels)
-    parameter integer P_HSW = 32'd96, // The constant used for Horizontal Sync Width (pixels)
-    parameter integer P_HBP = 32'd48, // The constant used for Horizontal Back Porch (pixels)
+    parameter integer P_HACT = 640, // The constant used for Horizontal Active (pixels)
+    parameter integer P_HFP = 16, // The constant used for Horizontal Front Porch (pixels)
+    parameter integer P_HSW = 96, // The constant used for Horizontal Sync Width (pixels)
+    parameter integer P_HBP = 48, // The constant used for Horizontal Back Porch (pixels)
 
-    parameter integer P_VACT = 32'd480, // The constant used for Vertical Active (lines)
-    parameter integer P_VFP = 32'd10, // The constant used for Vertical Front Porch (lines)
-    parameter integer P_VSH = 32'd2, // The constant used for Vertical Sync Height (lines)
-    parameter integer P_VBP = 32'd33, // The constant used for Vertical Back Porch (lines)
+    parameter integer P_VACT = 480, // The constant used for Vertical Active (lines)
+    parameter integer P_VFP = 10, // The constant used for Vertical Front Porch (lines)
+    parameter integer P_VSH = 2, // The constant used for Vertical Sync Height (lines)
+    parameter integer P_VBP = 33, // The constant used for Vertical Back Porch (lines)
 
     // START port list local parameters
 
@@ -39,7 +39,6 @@ module buffered_matrix3_colorspace_converter
     (
     input wire I_CLK, // Clock input
     input wire I_RESET, // Reset input
-    input wire I_ENABLE, // Enable input
 
     input wire [P_PIXEL_DEPTH - 1 : 0] I_PIXEL,  // RGB pixel input
     input wire I_VSYNC, // Vertical Sync input
@@ -54,13 +53,12 @@ module buffered_matrix3_colorspace_converter
                     // {top_left,    top,    top_right,
                     //  middle_left, 	      middle_right,
                     //  bottom_left, bottom, bottom_right}
-    output wire O_PIXEL_MATRIX_READY // Matrix output ready (asserted if outputs are ready/valid)
+    output wire O_PIXEL_MATRIX_READY // Matrix ready output (asserted if outputs are ready/valid)
     );
 
     // START local parameters
 
-    // This is the dimension size of the square 2D pixel matrix output (this is also the number of rows for the internal buffer)
-    localparam P_OUTPUT_MATRIX_SIZE = 32'd3;
+    localparam P_FRAME_BUFFER_ROWS = 3; // The number of rows to use for the internal grayscaled pixel buffer
 
     // END local parameters
 
@@ -90,7 +88,6 @@ module buffered_matrix3_colorspace_converter
         (
         .I_CLK(I_CLK),
         .I_RESET(I_RESET),
-        .I_ENABLE(I_ENABLE),
         .I_PIXEL(),
 
         .O_PIXEL()
@@ -98,21 +95,20 @@ module buffered_matrix3_colorspace_converter
 
     frame_buffer_matrix3 #(
         .P_COLUMNS(P_FRAME_COLUMNS),
-        .P_ROWS(),
-        .P_PIXEL_DEPTH()
+        .P_ROWS(P_FRAME_BUFFER_ROWS),
+        .P_PIXEL_DEPTH(P_SUBPIXEL_DEPTH)
         )
         iGrayscaledFrameBufferMatrix3
         (
         .I_CLK(I_CLK),
         .I_RESET(I_RESET),
-        .I_ENABLE(I_ENABLE),
-        .I_PIXEL_COL(),
-        .I_PIXEL_ROW(),
+        .I_COLUMN(),
+        .I_ROW(),
         .I_PIXEL(),
         .I_WRITE_ENABLE(),
         .I_READ_ENABLE(),
 
-        .O_PIXEL()
+        .O_PIXEL_MATRIX()
         );
     // END module instantiations
 
@@ -121,13 +117,12 @@ module buffered_matrix3_colorspace_converter
 
     end
 
+    // Task to enable frame buffer reading and disable writing.
+    task enable_frame_buffer_reading;
+
+    endtask
+
     /*
-    grayscale grayscale(
-        .I_PIXEL(I_PIX_DATA),
-
-        .O_PIXEL(grayscale_output)
-        );
-
     always @(posedge I_PCLK) begin
         if (I_ENABLE == 1'b1 && I_DE == 1'b1) begin
             if (I_HSYNC == 1'b1) begin

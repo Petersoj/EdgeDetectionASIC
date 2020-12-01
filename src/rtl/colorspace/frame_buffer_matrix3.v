@@ -16,9 +16,9 @@
 
 module frame_buffer_matrix3
     #(
-    parameter integer P_COLUMNS = 32'd640, // The number of columns in the frame
-    parameter integer P_ROWS = 32'd4, // The number of rows in the frame
-    parameter integer P_PIXEL_DEPTH = 32'd8, // The color depth of the pixel
+    parameter integer P_COLUMNS = 640, // The number of columns in the frame
+    parameter integer P_ROWS = 4, // The number of rows in the frame
+    parameter integer P_PIXEL_DEPTH = 8, // The color depth of the pixel
 
     // START port list local parameters
     parameter integer P_COLUMNS_BITS = $clog2(P_COLUMNS),
