@@ -75,6 +75,11 @@ module buffered_matrix3_colorspace_converter
 
     wire should_frame_buffer_index_increment; // Asserted if the frame buffer index should start counting/incrementing in sync with the input pixel clock
 
+    reg q_i_pixel_clock_was_low; // The current state of if the pixel clock was low
+    wire n_i_pixel_clock_was_low; // The next state of if the pixel clock was low
+    reg q_i_pixel_clock_posedge_pulse; // The current state of the pixel clock positive edge assertion pulse
+    wire n_i_pixel_clock_posedge_pulse; // The next state of the pixel clock positive edge assertion pulse
+
     reg q_frame_buffer_reset; // The current state of if current frame buffer row and column should be reset to zero
     wire n_frame_buffer_reset; // The next state of if current frame buffer row and column should be reset to zero
     reg [P_FRAME_COLUMN_BITS - 1 : 0] q_frame_buffer_column; // The current state of the frame buffer column index
@@ -119,8 +124,9 @@ module buffered_matrix3_colorspace_converter
     assign should_frame_buffer_index_increment = q_frame_column >= P_FRAME_BUFFER_REQUIRED_COLUMNS - 1 &&
                 q_frame_row >= P_FRAME_BUFFER_REQUIRED_ROWS - 1;
 
-    assign n_frame_buffer_write_enable = q_frame_buffer_write_enable ? 1'b0 : I_PIXEL_CLK;
-    assign n_frame_buffer_read_enable = ~q_frame_buffer_write_enable;
+    assign n_i_pixel_clock_was_low = ~I_PIXEL_CLK;
+    assign n_i_pixel_clock_posedge_pulse = q_i_pixel_clock_posedge_pulse ? 1'b0 :
+                (I_PIXEL_CLK && n_i_pixel_clock_was_low);
 
     // NOTE this is a somewhat flawed implementation because this will stop counting prematurely
     // because the 'data valid' input will be low and we will still want to continue incrementing
@@ -133,6 +139,10 @@ module buffered_matrix3_colorspace_converter
     assign n_frame_buffer_row = q_frame_buffer_write_enable ? q_frame_row :
                 q_frame_buffer_reset ? {P_FRAME_ROW_BITS{1'b0}} :
                 (q_frame_buffer_column == P_FRAME_BUFFER_COLUMN_END ? q_frame_buffer_row + 1'b1 : n_frame_buffer_row);
+
+    assign n_frame_buffer_write_enable = I_DATA_VALID &&
+                q_frame_buffer_write_enable ? 1'b0 : q_i_pixel_clock_posedge_pulse;
+    assign n_frame_buffer_read_enable = ~q_frame_buffer_write_enable;
 
     assign n_o_pixel_column = q_frame_buffer_column;
     assign n_o_pixel_row = q_frame_buffer_row;
@@ -174,6 +184,9 @@ module buffered_matrix3_colorspace_converter
     // Clock block
     always @(posedge I_CLK) begin
         if (I_RESET) begin
+            q_i_pixel_clock_was_low <= 1'b0;
+            q_i_pixel_clock_posedge_pulse <= 1'b0;
+
             q_frame_buffer_write_enable <= 1'b0;
             q_frame_buffer_read_enable <= 1'b0;
 
@@ -182,6 +195,9 @@ module buffered_matrix3_colorspace_converter
             q_o_pixel_matrix <= {P_PIXEL_MATRIX_BITS{1'b0}};
             q_o_pixel_matrix_ready <= 1'b0;
         end else begin
+            q_i_pixel_clock_was_low <= n_i_pixel_clock_was_low;
+            q_i_pixel_clock_posedge_pulse <= n_i_pixel_clock_posedge_pulse;
+
             q_frame_buffer_write_enable <= n_frame_buffer_write_enable;
             q_frame_buffer_read_enable <= n_frame_buffer_read_enable;
 
