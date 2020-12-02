@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////
 // Created by: Synopsys DC Expert(TM) in wire load mode
 // Version   : K-2015.06-SP5-6
-// Date      : Tue Dec  1 03:08:09 2020
+// Date      : Tue Dec  1 18:05:46 2020
 /////////////////////////////////////////////////////////////
 
 
@@ -920,7 +920,8 @@ module sobel ( row, col, inputPixels, clk_pix, clk, start, reset, out, done );
 endmodule
 
 
-module video_timing_gen_05f_08f_30f_31f_002_023_203_20d_DW01_inc_0 ( A, SUM );
+module video_timing_gen_05f_08f_30f_31f_002_023_203_20d_0_DW01_inc_0 ( A, SUM
+ );
   input [11:0] A;
   output [11:0] SUM;
   wire   n1, n2, n3, n4, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15, n16;
@@ -955,7 +956,8 @@ module video_timing_gen_05f_08f_30f_31f_002_023_203_20d_DW01_inc_0 ( A, SUM );
 endmodule
 
 
-module video_timing_gen_05f_08f_30f_31f_002_023_203_20d_DW01_inc_1 ( A, SUM );
+module video_timing_gen_05f_08f_30f_31f_002_023_203_20d_0_DW01_inc_1 ( A, SUM
+ );
   input [11:0] A;
   output [11:0] SUM;
   wire   n1, n2, n3, n4, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15, n16;
@@ -990,44 +992,38 @@ module video_timing_gen_05f_08f_30f_31f_002_023_203_20d_DW01_inc_1 ( A, SUM );
 endmodule
 
 
-module video_timing_gen_05f_08f_30f_31f_002_023_203_20d ( I_RST, I_PCLK, 
-        I_PIX_DATA, I_TP_EN, I_VRST, O_DE, O_HS, O_VS, O_HCNT, O_VCNT, 
-        O_PIX_DATA );
+module video_timing_gen_05f_08f_30f_31f_002_023_203_20d_0 ( I_RST, I_PCLK, 
+        I_PIX_DATA, I_VRST, O_DE, O_HS, O_VS, O_HCNT, O_VCNT, O_PIX_DATA );
   input [23:0] I_PIX_DATA;
   output [11:0] O_HCNT;
   output [11:0] O_VCNT;
   output [23:0] O_PIX_DATA;
-  input I_RST, I_PCLK, I_TP_EN, I_VRST;
+  input I_RST, I_PCLK, I_VRST;
   output O_DE, O_HS, O_VS;
-  wire   \q_vctr[0] , N34, N35, N36, N37, N38, N39, N40, N41, N42, N43, N44,
-         N45, N62, N63, N64, N65, N66, N67, N68, N69, N70, N71, N72, N73,
+  wire   \q_vctr[0] , N31, N32, N33, N34, N35, N36, N37, N38, N39, N40, N41,
+         N42, N59, N60, N61, N62, N63, N64, N65, N66, N67, N68, N69, N70,
          q_hde, q_vde, q_hs_done, q_hbp_done, q_hact_done, \q_vstate[2] ,
-         q_vbp_done, q_vact_done, N125, N126, N127, N128, N129, N130, N131,
-         N144, N145, N146, N147, N148, N149, N150, N151, N152, N153, N154,
-         N155, N162, N164, N166, N167, N168, N170, N171, N180, N181, N182,
-         N183, N184, N185, N186, N187, N188, N189, N190, N191, N192, N193,
-         N194, N195, N196, N197, N198, N199, N200, N201, N202, N203, N204,
-         N205, N206, N207, N208, N209, N210, N211, N212, N213, N214, N215,
-         N216, N217, N218, N219, n29, n30, n31, n32, n33, n34, n35, n36, n37,
-         n38, n39, n40, n41, n42, n43, n44, n47, n50, n216, n217, n218, n219,
-         n220, n221, \gte_128/B[1] , \gte_128/B[2] , \gte_128/B[3] ,
-         \gte_128/B[4] , \gte_128/B[5] , \gte_128/B[6] , \gte_128/B[7] ,
-         \gte_128/B[8] , \gte_128/B[9] , \gte_128/B[10] , \gte_128/B[11] , n1,
-         n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15, n16,
-         n17, n18, n19, n20, n21, n22, n23, n24, n25, n26, n27, n28, n45, n46,
-         n48, n49, n51, n52, n53, n54, n55, n56, n57, n58, n59, n60, n61, n62,
-         n63, n64, n65, n66, n67, n68, n69, n70, n71, n72, n73, n74, n75, n76,
-         n77, n78, n79, n80, n81, n82, n83, n84, n85, n86, n87, n88, n89, n90,
-         n91, n92, n93, n94, n95, n96, n97, n98, n99, n100, n101, n102, n103,
-         n104, n105, n106, n107, n108, n109, n110, n111, n112, n113, n114,
-         n115, n116, n117, n118, n119, n120, n121, n122, n123, n124, n125,
-         n126, n127, n128, n129, n130, n131, n132, n133, n134, n135, n136,
-         n137, n138, n139, n140, n141, n142, n143, n144, n145, n146, n147,
-         n148, n149, n150, n151, n152, n153, n154, n155, n156, n157, n158,
-         n159, n160, n161, n162, n163, n164, n165, n166, n167, n168, n169,
-         n170, n171, n172, n173;
-  wire   [23:0] q_tstpat;
-  wire   [23:0] q_pix_data;
+         q_vbp_done, q_vact_done, N122, N123, N124, N125, N126, N127, N128,
+         N141, N142, N143, N144, N145, N146, N147, N148, N149, N150, N151,
+         N152, N159, N161, N163, N164, N165, N167, N168, N169, N170, N171,
+         N172, N173, N174, N175, N176, N177, N178, N179, N180, N181, N182,
+         N183, N184, N185, N186, N187, N188, N189, N190, N191, N192, n29, n30,
+         n31, n32, n33, n34, n35, n36, n37, n38, n39, n40, n41, n42, n43, n44,
+         n47, n50, n167, n168, n169, n170, n171, n172, \gte_129/B[1] ,
+         \gte_129/B[2] , \gte_129/B[3] , \gte_129/B[4] , \gte_129/B[5] ,
+         \gte_129/B[6] , \gte_129/B[7] , \gte_129/B[8] , \gte_129/B[9] ,
+         \gte_129/B[10] , \gte_129/B[11] , n1, n2, n3, n4, n5, n6, n7, n8, n9,
+         n10, n11, n12, n13, n14, n15, n16, n17, n18, n19, n20, n21, n22, n23,
+         n24, n25, n26, n27, n28, n45, n46, n48, n49, n51, n52, n53, n54, n55,
+         n56, n57, n58, n59, n60, n61, n62, n63, n64, n65, n66, n67, n68, n69,
+         n70, n71, n72, n73, n74, n75, n76, n77, n78, n79, n80, n81, n82, n83,
+         n84, n85, n86, n87, n88, n89, n90, n91, n92, n93, n94, n95, n96, n97,
+         n98, n99, n100, n101, n102, n103, n104, n105, n106, n107, n108, n109,
+         n110, n111, n112, n113, n114, n115, n116, n117, n118, n119, n120,
+         n121, n122, n123, n124, n125, n126, n127, n128, n129, n130, n131,
+         n132, n133, n134, n135, n136, n137, n138, n139, n140, n141, n142,
+         n143, n144, n145, n146, n147, n148, n149, n150, n151, n152, n153,
+         n154, n155, n156, n157, n158;
   wire   [11:0] q_hctr;
   wire   [11:0] n_hctr;
   wire   [3:0] n_hsDly;
@@ -1035,8 +1031,8 @@ module video_timing_gen_05f_08f_30f_31f_002_023_203_20d ( I_RST, I_PCLK,
   tri   I_RST;
   tri   I_PCLK;
 
-  DFFQBX1 \q_hstate_reg[0]  ( .D(n221), .CLK(I_PCLK), .QB(n44) );
-  DFFQBX1 \q_hstate_reg[1]  ( .D(n220), .CLK(I_PCLK), .QB(n43) );
+  DFFQBX1 \q_hstate_reg[0]  ( .D(n172), .CLK(I_PCLK), .QB(n44) );
+  DFFQBX1 \q_hstate_reg[1]  ( .D(n171), .CLK(I_PCLK), .QB(n43) );
   DFFQX1 \q_hctr_reg[6]  ( .D(n_hctr[6]), .CLK(I_PCLK), .Q(q_hctr[6]) );
   DFFQX1 \q_hctr_reg[0]  ( .D(n_hctr[0]), .CLK(I_PCLK), .Q(q_hctr[0]) );
   DFFQX1 \q_hctr_reg[1]  ( .D(n_hctr[1]), .CLK(I_PCLK), .Q(q_hctr[1]) );
@@ -1048,411 +1044,293 @@ module video_timing_gen_05f_08f_30f_31f_002_023_203_20d ( I_RST, I_PCLK,
   DFFQX1 \q_hctr_reg[8]  ( .D(n_hctr[8]), .CLK(I_PCLK), .Q(q_hctr[8]) );
   DFFQX1 \q_hctr_reg[9]  ( .D(n_hctr[9]), .CLK(I_PCLK), .Q(q_hctr[9]) );
   DFFQX1 \q_hctr_reg[10]  ( .D(n_hctr[10]), .CLK(I_PCLK), .Q(q_hctr[10]) );
-  DFFQX1 q_hact_done_reg ( .D(N127), .CLK(I_PCLK), .Q(q_hact_done) );
-  DFFQX1 q_hbp_done_reg ( .D(N126), .CLK(I_PCLK), .Q(q_hbp_done) );
-  DFFQBX1 q_hfp_done_reg ( .D(N128), .CLK(I_PCLK), .QB(n47) );
+  DFFQX1 q_hact_done_reg ( .D(N124), .CLK(I_PCLK), .Q(q_hact_done) );
+  DFFQX1 q_hbp_done_reg ( .D(N123), .CLK(I_PCLK), .Q(q_hbp_done) );
+  DFFQBX1 q_hfp_done_reg ( .D(N125), .CLK(I_PCLK), .QB(n47) );
   DFFQX1 \q_hctr_reg[11]  ( .D(n_hctr[11]), .CLK(I_PCLK), .Q(q_hctr[11]) );
-  DFFQX1 q_hs_done_reg ( .D(N125), .CLK(I_PCLK), .Q(q_hs_done) );
-  DFFQBX1 \q_hstate_reg[2]  ( .D(n219), .CLK(I_PCLK), .QB(n42) );
-  DFFQBX1 \q_vstate_reg[0]  ( .D(n218), .CLK(I_PCLK), .QB(n41) );
-  DFFQBX1 \q_vstate_reg[1]  ( .D(n217), .CLK(I_PCLK), .QB(n40) );
-  DFFQX1 \q_vstate_reg[2]  ( .D(n216), .CLK(I_PCLK), .Q(\q_vstate[2] ) );
-  DFFQBX1 \q_vctr_reg[11]  ( .D(N155), .CLK(I_PCLK), .QB(n39) );
-  DFFQX1 \q_vctr_reg[0]  ( .D(N144), .CLK(I_PCLK), .Q(\q_vctr[0] ) );
-  DFFQBX1 \q_vctr_reg[1]  ( .D(N145), .CLK(I_PCLK), .QB(n38) );
-  DFFQBX1 \q_vctr_reg[2]  ( .D(N146), .CLK(I_PCLK), .QB(n37) );
-  DFFQBX1 \q_vctr_reg[3]  ( .D(N147), .CLK(I_PCLK), .QB(n36) );
-  DFFQBX1 \q_vctr_reg[4]  ( .D(N148), .CLK(I_PCLK), .QB(n35) );
-  DFFQBX1 \q_vctr_reg[5]  ( .D(N149), .CLK(I_PCLK), .QB(n34) );
-  DFFQBX1 \q_vctr_reg[6]  ( .D(N150), .CLK(I_PCLK), .QB(n33) );
-  DFFQBX1 \q_vctr_reg[7]  ( .D(N151), .CLK(I_PCLK), .QB(n32) );
-  DFFQBX1 \q_vctr_reg[8]  ( .D(N152), .CLK(I_PCLK), .QB(n31) );
-  DFFQBX1 \q_vctr_reg[9]  ( .D(N153), .CLK(I_PCLK), .QB(n30) );
-  DFFQBX1 \q_vctr_reg[10]  ( .D(N154), .CLK(I_PCLK), .QB(n29) );
-  DFFQBX1 q_vfp_done_reg ( .D(N131), .CLK(I_PCLK), .QB(n50) );
-  DFFQX1 q_vbp_done_reg ( .D(N129), .CLK(I_PCLK), .Q(q_vbp_done) );
-  DFFQX1 q_vact_done_reg ( .D(N130), .CLK(I_PCLK), .Q(q_vact_done) );
-  DFFQX1 q_hde_reg ( .D(N162), .CLK(I_PCLK), .Q(q_hde) );
-  DFFQX1 q_vde_reg ( .D(n172), .CLK(I_PCLK), .Q(q_vde) );
-  DFFQX1 q_vsync_reg ( .D(N164), .CLK(I_PCLK), .Q(O_VS) );
-  DFFQX1 \q_hsDly_reg[0]  ( .D(n171), .CLK(I_PCLK), .Q(n_hsDly[1]) );
-  DFFQX1 \q_hsDly_reg[1]  ( .D(N166), .CLK(I_PCLK), .Q(n_hsDly[2]) );
-  DFFQX1 \q_hsDly_reg[2]  ( .D(N167), .CLK(I_PCLK), .Q(n_hsDly[3]) );
-  DFFQX1 \q_hsDly_reg[3]  ( .D(N168), .CLK(I_PCLK), .Q(O_HS) );
-  DFFQX1 \q_deDly_reg[0]  ( .D(n173), .CLK(I_PCLK), .Q(n_deDly[1]) );
-  DFFQX1 \q_deDly_reg[1]  ( .D(N170), .CLK(I_PCLK), .Q(n_deDly[2]) );
-  DFFQX1 \q_deDly_reg[2]  ( .D(N171), .CLK(I_PCLK), .Q(O_DE) );
-  DFFQX1 \q_tstpat_reg[8]  ( .D(N180), .CLK(I_PCLK), .Q(q_tstpat[8]) );
-  DFFQX1 \q_tstpat_reg[0]  ( .D(N180), .CLK(I_PCLK), .Q(q_tstpat[0]) );
-  DFFQX1 \q_tstpat_reg[9]  ( .D(N181), .CLK(I_PCLK), .Q(q_tstpat[9]) );
-  DFFQX1 \q_tstpat_reg[1]  ( .D(N181), .CLK(I_PCLK), .Q(q_tstpat[1]) );
-  DFFQX1 \q_tstpat_reg[10]  ( .D(N182), .CLK(I_PCLK), .Q(q_tstpat[10]) );
-  DFFQX1 \q_tstpat_reg[2]  ( .D(N182), .CLK(I_PCLK), .Q(q_tstpat[2]) );
-  DFFQX1 \q_tstpat_reg[11]  ( .D(N183), .CLK(I_PCLK), .Q(q_tstpat[11]) );
-  DFFQX1 \q_tstpat_reg[3]  ( .D(N183), .CLK(I_PCLK), .Q(q_tstpat[3]) );
-  DFFQX1 \q_tstpat_reg[12]  ( .D(N184), .CLK(I_PCLK), .Q(q_tstpat[12]) );
-  DFFQX1 \q_tstpat_reg[4]  ( .D(N184), .CLK(I_PCLK), .Q(q_tstpat[4]) );
-  DFFQX1 \q_tstpat_reg[13]  ( .D(N185), .CLK(I_PCLK), .Q(q_tstpat[13]) );
-  DFFQX1 \q_tstpat_reg[5]  ( .D(N185), .CLK(I_PCLK), .Q(q_tstpat[5]) );
-  DFFQX1 \q_tstpat_reg[14]  ( .D(N186), .CLK(I_PCLK), .Q(q_tstpat[14]) );
-  DFFQX1 \q_tstpat_reg[6]  ( .D(N186), .CLK(I_PCLK), .Q(q_tstpat[6]) );
-  DFFQX1 \q_tstpat_reg[15]  ( .D(N187), .CLK(I_PCLK), .Q(q_tstpat[15]) );
-  DFFQX1 \q_tstpat_reg[7]  ( .D(N187), .CLK(I_PCLK), .Q(q_tstpat[7]) );
-  DFFQX1 \q_tstpat_reg[16]  ( .D(N188), .CLK(I_PCLK), .Q(q_tstpat[16]) );
-  DFFQX1 \q_tstpat_reg[17]  ( .D(N189), .CLK(I_PCLK), .Q(q_tstpat[17]) );
-  DFFQX1 \q_tstpat_reg[18]  ( .D(N190), .CLK(I_PCLK), .Q(q_tstpat[18]) );
-  DFFQX1 \q_tstpat_reg[19]  ( .D(N191), .CLK(I_PCLK), .Q(q_tstpat[19]) );
-  DFFQX1 \q_tstpat_reg[20]  ( .D(N192), .CLK(I_PCLK), .Q(q_tstpat[20]) );
-  DFFQX1 \q_tstpat_reg[21]  ( .D(N193), .CLK(I_PCLK), .Q(q_tstpat[21]) );
-  DFFQX1 \q_tstpat_reg[22]  ( .D(N194), .CLK(I_PCLK), .Q(q_tstpat[22]) );
-  DFFQX1 \q_tstpat_reg[23]  ( .D(N195), .CLK(I_PCLK), .Q(q_tstpat[23]) );
-  DFFQX1 \q_pix_data_reg[0]  ( .D(N196), .CLK(I_PCLK), .Q(q_pix_data[0]) );
-  DFFQX1 \q_pix_data_reg[1]  ( .D(N197), .CLK(I_PCLK), .Q(q_pix_data[1]) );
-  DFFQX1 \q_pix_data_reg[2]  ( .D(N198), .CLK(I_PCLK), .Q(q_pix_data[2]) );
-  DFFQX1 \q_pix_data_reg[3]  ( .D(N199), .CLK(I_PCLK), .Q(q_pix_data[3]) );
-  DFFQX1 \q_pix_data_reg[4]  ( .D(N200), .CLK(I_PCLK), .Q(q_pix_data[4]) );
-  DFFQX1 \q_pix_data_reg[5]  ( .D(N201), .CLK(I_PCLK), .Q(q_pix_data[5]) );
-  DFFQX1 \q_pix_data_reg[6]  ( .D(N202), .CLK(I_PCLK), .Q(q_pix_data[6]) );
-  DFFQX1 \q_pix_data_reg[7]  ( .D(N203), .CLK(I_PCLK), .Q(q_pix_data[7]) );
-  DFFQX1 \q_pix_data_reg[8]  ( .D(N204), .CLK(I_PCLK), .Q(q_pix_data[8]) );
-  DFFQX1 \q_pix_data_reg[9]  ( .D(N205), .CLK(I_PCLK), .Q(q_pix_data[9]) );
-  DFFQX1 \q_pix_data_reg[10]  ( .D(N206), .CLK(I_PCLK), .Q(q_pix_data[10]) );
-  DFFQX1 \q_pix_data_reg[11]  ( .D(N207), .CLK(I_PCLK), .Q(q_pix_data[11]) );
-  DFFQX1 \q_pix_data_reg[12]  ( .D(N208), .CLK(I_PCLK), .Q(q_pix_data[12]) );
-  DFFQX1 \q_pix_data_reg[13]  ( .D(N209), .CLK(I_PCLK), .Q(q_pix_data[13]) );
-  DFFQX1 \q_pix_data_reg[14]  ( .D(N210), .CLK(I_PCLK), .Q(q_pix_data[14]) );
-  DFFQX1 \q_pix_data_reg[15]  ( .D(N211), .CLK(I_PCLK), .Q(q_pix_data[15]) );
-  DFFQX1 \q_pix_data_reg[16]  ( .D(N212), .CLK(I_PCLK), .Q(q_pix_data[16]) );
-  DFFQX1 \q_pix_data_reg[17]  ( .D(N213), .CLK(I_PCLK), .Q(q_pix_data[17]) );
-  DFFQX1 \q_pix_data_reg[18]  ( .D(N214), .CLK(I_PCLK), .Q(q_pix_data[18]) );
-  DFFQX1 \q_pix_data_reg[19]  ( .D(N215), .CLK(I_PCLK), .Q(q_pix_data[19]) );
-  DFFQX1 \q_pix_data_reg[20]  ( .D(N216), .CLK(I_PCLK), .Q(q_pix_data[20]) );
-  DFFQX1 \q_pix_data_reg[21]  ( .D(N217), .CLK(I_PCLK), .Q(q_pix_data[21]) );
-  DFFQX1 \q_pix_data_reg[22]  ( .D(N218), .CLK(I_PCLK), .Q(q_pix_data[22]) );
-  DFFQX1 \q_pix_data_reg[23]  ( .D(N219), .CLK(I_PCLK), .Q(q_pix_data[23]) );
-  video_timing_gen_05f_08f_30f_31f_002_023_203_20d_DW01_inc_0 add_134 ( .A(
-        q_hctr), .SUM({N73, N72, N71, N70, N69, N68, N67, N66, N65, N64, N63, 
-        N62}) );
-  video_timing_gen_05f_08f_30f_31f_002_023_203_20d_DW01_inc_1 add_130 ( .A({
-        \gte_128/B[11] , \gte_128/B[10] , \gte_128/B[9] , \gte_128/B[8] , 
-        \gte_128/B[7] , \gte_128/B[6] , \gte_128/B[5] , \gte_128/B[4] , 
-        \gte_128/B[3] , \gte_128/B[2] , \gte_128/B[1] , \q_vctr[0] }), .SUM({
-        N45, N44, N43, N42, N41, N40, N39, N38, N37, N36, N35, N34}) );
-  INVX1 U3 ( .A(n1), .Z(n173) );
+  DFFQX1 q_hs_done_reg ( .D(N122), .CLK(I_PCLK), .Q(q_hs_done) );
+  DFFQBX1 \q_hstate_reg[2]  ( .D(n170), .CLK(I_PCLK), .QB(n42) );
+  DFFQBX1 \q_vstate_reg[0]  ( .D(n169), .CLK(I_PCLK), .QB(n41) );
+  DFFQBX1 \q_vstate_reg[1]  ( .D(n168), .CLK(I_PCLK), .QB(n40) );
+  DFFQX1 \q_vstate_reg[2]  ( .D(n167), .CLK(I_PCLK), .Q(\q_vstate[2] ) );
+  DFFQBX1 \q_vctr_reg[11]  ( .D(N152), .CLK(I_PCLK), .QB(n39) );
+  DFFQX1 \q_vctr_reg[0]  ( .D(N141), .CLK(I_PCLK), .Q(\q_vctr[0] ) );
+  DFFQBX1 \q_vctr_reg[1]  ( .D(N142), .CLK(I_PCLK), .QB(n38) );
+  DFFQBX1 \q_vctr_reg[2]  ( .D(N143), .CLK(I_PCLK), .QB(n37) );
+  DFFQBX1 \q_vctr_reg[3]  ( .D(N144), .CLK(I_PCLK), .QB(n36) );
+  DFFQBX1 \q_vctr_reg[4]  ( .D(N145), .CLK(I_PCLK), .QB(n35) );
+  DFFQBX1 \q_vctr_reg[5]  ( .D(N146), .CLK(I_PCLK), .QB(n34) );
+  DFFQBX1 \q_vctr_reg[6]  ( .D(N147), .CLK(I_PCLK), .QB(n33) );
+  DFFQBX1 \q_vctr_reg[7]  ( .D(N148), .CLK(I_PCLK), .QB(n32) );
+  DFFQBX1 \q_vctr_reg[8]  ( .D(N149), .CLK(I_PCLK), .QB(n31) );
+  DFFQBX1 \q_vctr_reg[9]  ( .D(N150), .CLK(I_PCLK), .QB(n30) );
+  DFFQBX1 \q_vctr_reg[10]  ( .D(N151), .CLK(I_PCLK), .QB(n29) );
+  DFFQBX1 q_vfp_done_reg ( .D(N128), .CLK(I_PCLK), .QB(n50) );
+  DFFQX1 q_vbp_done_reg ( .D(N126), .CLK(I_PCLK), .Q(q_vbp_done) );
+  DFFQX1 q_vact_done_reg ( .D(N127), .CLK(I_PCLK), .Q(q_vact_done) );
+  DFFQX1 q_hde_reg ( .D(N159), .CLK(I_PCLK), .Q(q_hde) );
+  DFFQX1 q_vde_reg ( .D(n157), .CLK(I_PCLK), .Q(q_vde) );
+  DFFQX1 \q_deDly_reg[0]  ( .D(n158), .CLK(I_PCLK), .Q(n_deDly[1]) );
+  DFFQX1 \q_deDly_reg[1]  ( .D(N167), .CLK(I_PCLK), .Q(n_deDly[2]) );
+  DFFQX1 \q_deDly_reg[2]  ( .D(N168), .CLK(I_PCLK), .Q(O_DE) );
+  DFFQX1 \q_pix_data_reg[0]  ( .D(N169), .CLK(I_PCLK), .Q(O_PIX_DATA[0]) );
+  DFFQX1 \q_pix_data_reg[1]  ( .D(N170), .CLK(I_PCLK), .Q(O_PIX_DATA[1]) );
+  DFFQX1 \q_pix_data_reg[2]  ( .D(N171), .CLK(I_PCLK), .Q(O_PIX_DATA[2]) );
+  DFFQX1 \q_pix_data_reg[3]  ( .D(N172), .CLK(I_PCLK), .Q(O_PIX_DATA[3]) );
+  DFFQX1 \q_pix_data_reg[4]  ( .D(N173), .CLK(I_PCLK), .Q(O_PIX_DATA[4]) );
+  DFFQX1 \q_pix_data_reg[5]  ( .D(N174), .CLK(I_PCLK), .Q(O_PIX_DATA[5]) );
+  DFFQX1 \q_pix_data_reg[6]  ( .D(N175), .CLK(I_PCLK), .Q(O_PIX_DATA[6]) );
+  DFFQX1 \q_pix_data_reg[7]  ( .D(N176), .CLK(I_PCLK), .Q(O_PIX_DATA[7]) );
+  DFFQX1 \q_pix_data_reg[8]  ( .D(N177), .CLK(I_PCLK), .Q(O_PIX_DATA[8]) );
+  DFFQX1 \q_pix_data_reg[9]  ( .D(N178), .CLK(I_PCLK), .Q(O_PIX_DATA[9]) );
+  DFFQX1 \q_pix_data_reg[10]  ( .D(N179), .CLK(I_PCLK), .Q(O_PIX_DATA[10]) );
+  DFFQX1 \q_pix_data_reg[11]  ( .D(N180), .CLK(I_PCLK), .Q(O_PIX_DATA[11]) );
+  DFFQX1 \q_pix_data_reg[12]  ( .D(N181), .CLK(I_PCLK), .Q(O_PIX_DATA[12]) );
+  DFFQX1 \q_pix_data_reg[13]  ( .D(N182), .CLK(I_PCLK), .Q(O_PIX_DATA[13]) );
+  DFFQX1 \q_pix_data_reg[14]  ( .D(N183), .CLK(I_PCLK), .Q(O_PIX_DATA[14]) );
+  DFFQX1 \q_pix_data_reg[15]  ( .D(N184), .CLK(I_PCLK), .Q(O_PIX_DATA[15]) );
+  DFFQX1 \q_pix_data_reg[16]  ( .D(N185), .CLK(I_PCLK), .Q(O_PIX_DATA[16]) );
+  DFFQX1 \q_pix_data_reg[17]  ( .D(N186), .CLK(I_PCLK), .Q(O_PIX_DATA[17]) );
+  DFFQX1 \q_pix_data_reg[18]  ( .D(N187), .CLK(I_PCLK), .Q(O_PIX_DATA[18]) );
+  DFFQX1 \q_pix_data_reg[19]  ( .D(N188), .CLK(I_PCLK), .Q(O_PIX_DATA[19]) );
+  DFFQX1 \q_pix_data_reg[20]  ( .D(N189), .CLK(I_PCLK), .Q(O_PIX_DATA[20]) );
+  DFFQX1 \q_pix_data_reg[21]  ( .D(N190), .CLK(I_PCLK), .Q(O_PIX_DATA[21]) );
+  DFFQX1 \q_pix_data_reg[22]  ( .D(N191), .CLK(I_PCLK), .Q(O_PIX_DATA[22]) );
+  DFFQX1 \q_pix_data_reg[23]  ( .D(N192), .CLK(I_PCLK), .Q(O_PIX_DATA[23]) );
+  DFFQX1 q_vsync_reg ( .D(N161), .CLK(I_PCLK), .Q(O_VS) );
+  DFFQX1 \q_hsDly_reg[0]  ( .D(n156), .CLK(I_PCLK), .Q(n_hsDly[1]) );
+  DFFQX1 \q_hsDly_reg[1]  ( .D(N163), .CLK(I_PCLK), .Q(n_hsDly[2]) );
+  DFFQX1 \q_hsDly_reg[2]  ( .D(N164), .CLK(I_PCLK), .Q(n_hsDly[3]) );
+  DFFQX1 \q_hsDly_reg[3]  ( .D(N165), .CLK(I_PCLK), .Q(O_HS) );
+  video_timing_gen_05f_08f_30f_31f_002_023_203_20d_0_DW01_inc_0 add_135 ( .A(
+        q_hctr), .SUM({N70, N69, N68, N67, N66, N65, N64, N63, N62, N61, N60, 
+        N59}) );
+  video_timing_gen_05f_08f_30f_31f_002_023_203_20d_0_DW01_inc_1 add_131 ( .A({
+        \gte_129/B[11] , \gte_129/B[10] , \gte_129/B[9] , \gte_129/B[8] , 
+        \gte_129/B[7] , \gte_129/B[6] , \gte_129/B[5] , \gte_129/B[4] , 
+        \gte_129/B[3] , \gte_129/B[2] , \gte_129/B[1] , \q_vctr[0] }), .SUM({
+        N42, N41, N40, N39, N38, N37, N36, N35, N34, N33, N32, N31}) );
+  INVX1 U3 ( .A(n1), .Z(n158) );
   NAND3X1 U4 ( .A(q_hde), .B(n2), .C(q_vde), .Z(n1) );
-  AND2X1 U5 ( .A(n3), .B(N66), .Z(n_hctr[4]) );
-  AND2X1 U6 ( .A(n3), .B(N64), .Z(n_hctr[2]) );
-  AND2X1 U7 ( .A(n3), .B(N63), .Z(n_hctr[1]) );
+  AND2X1 U5 ( .A(n3), .B(N63), .Z(n_hctr[4]) );
+  AND2X1 U6 ( .A(n3), .B(N61), .Z(n_hctr[2]) );
+  AND2X1 U7 ( .A(n3), .B(N60), .Z(n_hctr[1]) );
   NOR2X1 U8 ( .A(n4), .B(n5), .Z(n_hctr[11]) );
   NOR2X1 U9 ( .A(n4), .B(n6), .Z(n_hctr[10]) );
-  AND2X1 U10 ( .A(n3), .B(N62), .Z(n_hctr[0]) );
-  MUX2X1 U11 ( .A(n7), .B(n8), .S(n9), .Z(n221) );
-  NOR2X1 U12 ( .A(n10), .B(n11), .Z(n7) );
-  INVX1 U13 ( .A(n12), .Z(n11) );
-  NOR2X1 U14 ( .A(n42), .B(n43), .Z(n10) );
-  NAND2X1 U15 ( .A(n13), .B(n14), .Z(n220) );
-  NAND2X1 U16 ( .A(n15), .B(n16), .Z(n14) );
-  NAND2X1 U17 ( .A(n17), .B(n18), .Z(n15) );
-  NAND2X1 U18 ( .A(n12), .B(n42), .Z(n18) );
-  NAND2X1 U19 ( .A(n17), .B(n171), .Z(n13) );
-  INVX1 U20 ( .A(n9), .Z(n17) );
-  MUX2X1 U21 ( .A(N162), .B(n19), .S(n9), .Z(n219) );
-  NAND3X1 U22 ( .A(n20), .B(n21), .C(n22), .Z(n9) );
-  NAND2X1 U23 ( .A(n23), .B(N162), .Z(n22) );
-  INVX1 U24 ( .A(q_hact_done), .Z(n23) );
-  NAND2X1 U25 ( .A(n24), .B(n12), .Z(n21) );
-  MUX2X1 U26 ( .A(n25), .B(n26), .S(n16), .Z(n24) );
-  NOR2X1 U27 ( .A(q_hbp_done), .B(n19), .Z(n26) );
-  NOR2X1 U28 ( .A(n42), .B(n27), .Z(n25) );
-  NAND2X1 U29 ( .A(n28), .B(n171), .Z(n20) );
-  NOR2X1 U30 ( .A(n16), .B(n45), .Z(n171) );
-  INVX1 U31 ( .A(q_hs_done), .Z(n28) );
-  NAND2X1 U32 ( .A(n46), .B(n48), .Z(n218) );
-  OR2X1 U33 ( .A(n49), .B(I_RST), .Z(n48) );
-  MUX2X1 U34 ( .A(n51), .B(n41), .S(n52), .Z(n46) );
-  NOR2X1 U35 ( .A(n53), .B(n172), .Z(n51) );
-  INVX1 U36 ( .A(n54), .Z(n172) );
-  MUX2X1 U37 ( .A(n55), .B(n56), .S(n57), .Z(n217) );
-  OR2X1 U38 ( .A(n52), .B(n53), .Z(n56) );
-  NOR2X1 U39 ( .A(n58), .B(n59), .Z(n53) );
-  NAND3X1 U40 ( .A(n60), .B(n54), .C(n61), .Z(n216) );
-  NAND2X1 U41 ( .A(\q_vstate[2] ), .B(n52), .Z(n61) );
-  NAND2X1 U42 ( .A(n55), .B(n57), .Z(n60) );
-  INVX1 U43 ( .A(n62), .Z(n55) );
-  NAND3X1 U44 ( .A(n63), .B(n59), .C(n64), .Z(n62) );
-  INVX1 U45 ( .A(n52), .Z(n64) );
-  NAND2X1 U46 ( .A(n65), .B(n66), .Z(n52) );
-  NAND3X1 U47 ( .A(n2), .B(n59), .C(n67), .Z(n66) );
-  MUX2X1 U48 ( .A(n68), .B(n69), .S(\q_vstate[2] ), .Z(n67) );
-  AND2X1 U49 ( .A(n40), .B(n50), .Z(n69) );
-  MUX2X1 U50 ( .A(n70), .B(n71), .S(n57), .Z(n68) );
-  INVX1 U51 ( .A(q_vbp_done), .Z(n71) );
-  NOR2X1 U52 ( .A(n72), .B(n73), .Z(n70) );
-  NAND3X1 U53 ( .A(n38), .B(n37), .C(n74), .Z(n73) );
-  INVX1 U54 ( .A(n75), .Z(n74) );
-  NAND3X1 U55 ( .A(n35), .B(n34), .C(n36), .Z(n72) );
-  OR2X1 U56 ( .A(q_vact_done), .B(n54), .Z(n65) );
-  NAND3X1 U57 ( .A(\q_vstate[2] ), .B(n41), .C(n76), .Z(n54) );
-  NOR2X1 U58 ( .A(I_RST), .B(n57), .Z(n76) );
-  INVX1 U59 ( .A(n40), .Z(n57) );
-  MUX2X1 U60 ( .A(q_pix_data[9]), .B(q_tstpat[9]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[9]) );
-  MUX2X1 U61 ( .A(q_pix_data[8]), .B(q_tstpat[8]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[8]) );
-  MUX2X1 U62 ( .A(q_pix_data[7]), .B(q_tstpat[7]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[7]) );
-  MUX2X1 U63 ( .A(q_pix_data[6]), .B(q_tstpat[6]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[6]) );
-  MUX2X1 U64 ( .A(q_pix_data[5]), .B(q_tstpat[5]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[5]) );
-  MUX2X1 U65 ( .A(q_pix_data[4]), .B(q_tstpat[4]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[4]) );
-  MUX2X1 U66 ( .A(q_pix_data[3]), .B(q_tstpat[3]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[3]) );
-  MUX2X1 U67 ( .A(q_pix_data[2]), .B(q_tstpat[2]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[2]) );
-  MUX2X1 U68 ( .A(q_pix_data[23]), .B(q_tstpat[23]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[23]) );
-  MUX2X1 U69 ( .A(q_pix_data[22]), .B(q_tstpat[22]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[22]) );
-  MUX2X1 U70 ( .A(q_pix_data[21]), .B(q_tstpat[21]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[21]) );
-  MUX2X1 U71 ( .A(q_pix_data[20]), .B(q_tstpat[20]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[20]) );
-  MUX2X1 U72 ( .A(q_pix_data[1]), .B(q_tstpat[1]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[1]) );
-  MUX2X1 U73 ( .A(q_pix_data[19]), .B(q_tstpat[19]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[19]) );
-  MUX2X1 U74 ( .A(q_pix_data[18]), .B(q_tstpat[18]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[18]) );
-  MUX2X1 U75 ( .A(q_pix_data[17]), .B(q_tstpat[17]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[17]) );
-  MUX2X1 U76 ( .A(q_pix_data[16]), .B(q_tstpat[16]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[16]) );
-  MUX2X1 U77 ( .A(q_pix_data[15]), .B(q_tstpat[15]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[15]) );
-  MUX2X1 U78 ( .A(q_pix_data[14]), .B(q_tstpat[14]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[14]) );
-  MUX2X1 U79 ( .A(q_pix_data[13]), .B(q_tstpat[13]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[13]) );
-  MUX2X1 U80 ( .A(q_pix_data[12]), .B(q_tstpat[12]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[12]) );
-  MUX2X1 U81 ( .A(q_pix_data[11]), .B(q_tstpat[11]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[11]) );
-  MUX2X1 U82 ( .A(q_pix_data[10]), .B(q_tstpat[10]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[10]) );
-  MUX2X1 U83 ( .A(q_pix_data[0]), .B(q_tstpat[0]), .S(I_TP_EN), .Z(
-        O_PIX_DATA[0]) );
-  INVX1 U84 ( .A(q_hctr[0]), .Z(O_HCNT[0]) );
-  AND2X1 U85 ( .A(I_PIX_DATA[23]), .B(N171), .Z(N219) );
-  AND2X1 U86 ( .A(I_PIX_DATA[22]), .B(N171), .Z(N218) );
-  AND2X1 U87 ( .A(I_PIX_DATA[21]), .B(N171), .Z(N217) );
-  AND2X1 U88 ( .A(I_PIX_DATA[20]), .B(N171), .Z(N216) );
-  AND2X1 U89 ( .A(I_PIX_DATA[19]), .B(N171), .Z(N215) );
-  AND2X1 U90 ( .A(I_PIX_DATA[18]), .B(N171), .Z(N214) );
-  AND2X1 U91 ( .A(I_PIX_DATA[17]), .B(N171), .Z(N213) );
-  AND2X1 U92 ( .A(I_PIX_DATA[16]), .B(N171), .Z(N212) );
-  AND2X1 U93 ( .A(I_PIX_DATA[15]), .B(N171), .Z(N211) );
-  AND2X1 U94 ( .A(I_PIX_DATA[14]), .B(N171), .Z(N210) );
-  AND2X1 U95 ( .A(I_PIX_DATA[13]), .B(N171), .Z(N209) );
-  AND2X1 U96 ( .A(I_PIX_DATA[12]), .B(N171), .Z(N208) );
-  AND2X1 U97 ( .A(I_PIX_DATA[11]), .B(N171), .Z(N207) );
-  AND2X1 U98 ( .A(I_PIX_DATA[10]), .B(N171), .Z(N206) );
-  AND2X1 U99 ( .A(I_PIX_DATA[9]), .B(N171), .Z(N205) );
-  AND2X1 U100 ( .A(I_PIX_DATA[8]), .B(N171), .Z(N204) );
-  AND2X1 U101 ( .A(I_PIX_DATA[7]), .B(N171), .Z(N203) );
-  AND2X1 U102 ( .A(I_PIX_DATA[6]), .B(N171), .Z(N202) );
-  AND2X1 U103 ( .A(I_PIX_DATA[5]), .B(N171), .Z(N201) );
-  AND2X1 U104 ( .A(I_PIX_DATA[4]), .B(N171), .Z(N200) );
-  AND2X1 U105 ( .A(I_PIX_DATA[3]), .B(N171), .Z(N199) );
-  AND2X1 U106 ( .A(I_PIX_DATA[2]), .B(N171), .Z(N198) );
-  AND2X1 U107 ( .A(I_PIX_DATA[1]), .B(N171), .Z(N197) );
-  AND2X1 U108 ( .A(I_PIX_DATA[0]), .B(N171), .Z(N196) );
-  AND2X1 U109 ( .A(N171), .B(O_VCNT[7]), .Z(N195) );
-  XOR2X1 U110 ( .A(n77), .B(n32), .Z(O_VCNT[7]) );
-  OR2X1 U111 ( .A(n78), .B(\gte_128/B[6] ), .Z(n77) );
-  AND2X1 U112 ( .A(O_VCNT[6]), .B(N171), .Z(N194) );
-  XOR2X1 U113 ( .A(n78), .B(n33), .Z(O_VCNT[6]) );
-  AND2X1 U114 ( .A(O_VCNT[5]), .B(N171), .Z(N193) );
-  XOR2X1 U115 ( .A(n79), .B(\gte_128/B[5] ), .Z(O_VCNT[5]) );
-  AND2X1 U116 ( .A(O_VCNT[4]), .B(N171), .Z(N192) );
-  NAND2X1 U117 ( .A(n79), .B(n80), .Z(O_VCNT[4]) );
-  NAND2X1 U118 ( .A(n81), .B(\gte_128/B[4] ), .Z(n80) );
-  INVX1 U119 ( .A(n82), .Z(n79) );
-  AND2X1 U120 ( .A(O_VCNT[3]), .B(N171), .Z(N191) );
-  NAND2X1 U121 ( .A(n81), .B(n83), .Z(O_VCNT[3]) );
-  NAND2X1 U122 ( .A(n84), .B(\gte_128/B[3] ), .Z(n83) );
-  AND2X1 U123 ( .A(O_VCNT[2]), .B(N171), .Z(N190) );
-  NAND2X1 U124 ( .A(n84), .B(n85), .Z(O_VCNT[2]) );
-  NAND3X1 U125 ( .A(\gte_128/B[2] ), .B(\gte_128/B[1] ), .C(\q_vctr[0] ), .Z(
-        n85) );
-  AND2X1 U126 ( .A(N171), .B(O_VCNT[1]), .Z(N189) );
-  XOR2X1 U127 ( .A(n38), .B(O_VCNT[0]), .Z(O_VCNT[1]) );
-  NOR2X1 U128 ( .A(\q_vctr[0] ), .B(n86), .Z(N188) );
-  AND2X1 U129 ( .A(N171), .B(O_HCNT[7]), .Z(N187) );
-  XOR2X1 U130 ( .A(n87), .B(q_hctr[7]), .Z(O_HCNT[7]) );
-  OR2X1 U131 ( .A(n88), .B(q_hctr[6]), .Z(n87) );
-  AND2X1 U132 ( .A(O_HCNT[6]), .B(N171), .Z(N186) );
-  XOR2X1 U133 ( .A(q_hctr[6]), .B(n89), .Z(O_HCNT[6]) );
-  AND2X1 U134 ( .A(O_HCNT[5]), .B(N171), .Z(N185) );
-  NAND2X1 U135 ( .A(n88), .B(n90), .Z(O_HCNT[5]) );
-  NAND2X1 U136 ( .A(q_hctr[5]), .B(n91), .Z(n90) );
-  INVX1 U137 ( .A(n89), .Z(n88) );
-  NOR2X1 U138 ( .A(n91), .B(q_hctr[5]), .Z(n89) );
-  AND2X1 U139 ( .A(O_HCNT[4]), .B(N171), .Z(N184) );
-  NAND2X1 U140 ( .A(n91), .B(n92), .Z(O_HCNT[4]) );
-  NAND2X1 U141 ( .A(q_hctr[4]), .B(n93), .Z(n92) );
-  OR2X1 U142 ( .A(n93), .B(q_hctr[4]), .Z(n91) );
-  AND2X1 U143 ( .A(q_hctr[3]), .B(n94), .Z(n93) );
-  AND2X1 U144 ( .A(O_HCNT[3]), .B(N171), .Z(N183) );
-  XOR2X1 U145 ( .A(q_hctr[3]), .B(n94), .Z(O_HCNT[3]) );
-  AND2X1 U146 ( .A(q_hctr[2]), .B(n95), .Z(n94) );
-  AND2X1 U147 ( .A(O_HCNT[2]), .B(N171), .Z(N182) );
-  XOR2X1 U148 ( .A(n95), .B(q_hctr[2]), .Z(O_HCNT[2]) );
-  AND2X1 U149 ( .A(q_hctr[1]), .B(q_hctr[0]), .Z(n95) );
-  AND2X1 U150 ( .A(O_HCNT[1]), .B(N171), .Z(N181) );
-  XOR2X1 U151 ( .A(q_hctr[1]), .B(q_hctr[0]), .Z(O_HCNT[1]) );
-  NOR2X1 U152 ( .A(q_hctr[0]), .B(n86), .Z(N180) );
-  INVX1 U153 ( .A(n86), .Z(N171) );
-  NAND2X1 U154 ( .A(n_deDly[2]), .B(n2), .Z(n86) );
-  AND2X1 U155 ( .A(n_deDly[1]), .B(n2), .Z(N170) );
-  AND2X1 U156 ( .A(n_hsDly[3]), .B(n2), .Z(N168) );
-  AND2X1 U157 ( .A(n_hsDly[2]), .B(n2), .Z(N167) );
-  AND2X1 U158 ( .A(n_hsDly[1]), .B(n2), .Z(N166) );
-  NOR2X1 U159 ( .A(n96), .B(n58), .Z(N164) );
-  INVX1 U160 ( .A(n63), .Z(n58) );
-  NOR2X1 U161 ( .A(I_RST), .B(\q_vstate[2] ), .Z(n63) );
-  XOR2X1 U162 ( .A(n40), .B(n59), .Z(n96) );
-  NOR2X1 U163 ( .A(n45), .B(n43), .Z(N162) );
-  NAND3X1 U164 ( .A(n2), .B(n8), .C(n42), .Z(n45) );
-  NAND2X1 U165 ( .A(n97), .B(n98), .Z(N155) );
-  NAND2X1 U166 ( .A(n99), .B(\gte_128/B[11] ), .Z(n98) );
-  INVX1 U167 ( .A(n39), .Z(\gte_128/B[11] ) );
-  NAND2X1 U168 ( .A(N45), .B(n100), .Z(n97) );
-  NAND2X1 U169 ( .A(n101), .B(n102), .Z(N154) );
-  NAND2X1 U170 ( .A(n99), .B(\gte_128/B[10] ), .Z(n102) );
-  NAND2X1 U171 ( .A(N44), .B(n100), .Z(n101) );
-  NAND2X1 U172 ( .A(n103), .B(n104), .Z(N153) );
-  NAND2X1 U173 ( .A(n99), .B(\gte_128/B[9] ), .Z(n104) );
-  NAND2X1 U174 ( .A(N43), .B(n100), .Z(n103) );
-  NAND2X1 U175 ( .A(n105), .B(n106), .Z(N152) );
-  NAND2X1 U176 ( .A(n99), .B(\gte_128/B[8] ), .Z(n106) );
-  INVX1 U177 ( .A(n31), .Z(\gte_128/B[8] ) );
-  NAND2X1 U178 ( .A(N42), .B(n100), .Z(n105) );
-  NAND2X1 U179 ( .A(n107), .B(n108), .Z(N151) );
-  NAND2X1 U180 ( .A(n99), .B(\gte_128/B[7] ), .Z(n108) );
-  INVX1 U181 ( .A(n32), .Z(\gte_128/B[7] ) );
-  NAND2X1 U182 ( .A(N41), .B(n100), .Z(n107) );
-  NAND2X1 U183 ( .A(n109), .B(n110), .Z(N150) );
-  NAND2X1 U184 ( .A(n99), .B(\gte_128/B[6] ), .Z(n110) );
-  INVX1 U185 ( .A(n33), .Z(\gte_128/B[6] ) );
-  NAND2X1 U186 ( .A(N40), .B(n100), .Z(n109) );
-  NAND2X1 U187 ( .A(n111), .B(n112), .Z(N149) );
-  NAND2X1 U188 ( .A(n99), .B(\gte_128/B[5] ), .Z(n112) );
-  NAND2X1 U189 ( .A(N39), .B(n100), .Z(n111) );
-  NAND2X1 U190 ( .A(n113), .B(n114), .Z(N148) );
-  NAND2X1 U191 ( .A(n99), .B(\gte_128/B[4] ), .Z(n114) );
-  NAND2X1 U192 ( .A(N38), .B(n100), .Z(n113) );
-  NAND2X1 U193 ( .A(n115), .B(n116), .Z(N147) );
-  NAND2X1 U194 ( .A(n99), .B(\gte_128/B[3] ), .Z(n116) );
-  NAND2X1 U195 ( .A(N37), .B(n100), .Z(n115) );
-  NAND2X1 U196 ( .A(n117), .B(n118), .Z(N146) );
-  NAND2X1 U197 ( .A(n99), .B(\gte_128/B[2] ), .Z(n118) );
-  NAND2X1 U198 ( .A(N36), .B(n100), .Z(n117) );
-  NAND2X1 U199 ( .A(n119), .B(n120), .Z(N145) );
-  NAND2X1 U200 ( .A(n99), .B(\gte_128/B[1] ), .Z(n120) );
-  NAND2X1 U201 ( .A(N35), .B(n100), .Z(n119) );
-  NAND2X1 U202 ( .A(n121), .B(n122), .Z(N144) );
-  NAND2X1 U203 ( .A(n99), .B(\q_vctr[0] ), .Z(n122) );
-  AND2X1 U204 ( .A(n123), .B(n3), .Z(n99) );
-  NAND2X1 U205 ( .A(N34), .B(n100), .Z(n121) );
-  INVX1 U206 ( .A(n124), .Z(n100) );
-  NAND3X1 U207 ( .A(n123), .B(n12), .C(n125), .Z(n124) );
-  NOR2X1 U208 ( .A(n16), .B(n126), .Z(n125) );
-  NAND2X1 U209 ( .A(n19), .B(n27), .Z(n126) );
-  INVX1 U210 ( .A(n47), .Z(n27) );
-  INVX1 U211 ( .A(n42), .Z(n19) );
-  INVX1 U212 ( .A(n43), .Z(n16) );
-  NOR2X1 U213 ( .A(n8), .B(I_RST), .Z(n12) );
-  INVX1 U214 ( .A(n44), .Z(n8) );
-  NOR2X1 U215 ( .A(n127), .B(I_VRST), .Z(n123) );
-  NOR2X1 U216 ( .A(n50), .B(n49), .Z(n127) );
-  NAND3X1 U217 ( .A(n40), .B(n59), .C(\q_vstate[2] ), .Z(n49) );
-  INVX1 U218 ( .A(n41), .Z(n59) );
-  AND2X1 U219 ( .A(n128), .B(n2), .Z(N131) );
-  NAND2X1 U220 ( .A(n129), .B(n130), .Z(n128) );
-  NAND2X1 U221 ( .A(n131), .B(\gte_128/B[9] ), .Z(n130) );
-  NAND2X1 U222 ( .A(n132), .B(n35), .Z(n131) );
-  NAND3X1 U223 ( .A(\gte_128/B[3] ), .B(\gte_128/B[2] ), .C(n133), .Z(n132) );
-  NAND2X1 U224 ( .A(n38), .B(O_VCNT[0]), .Z(n133) );
-  INVX1 U225 ( .A(\q_vctr[0] ), .Z(O_VCNT[0]) );
-  INVX1 U226 ( .A(n37), .Z(\gte_128/B[2] ) );
-  INVX1 U227 ( .A(n134), .Z(n129) );
-  NOR2X1 U228 ( .A(I_RST), .B(n135), .Z(N130) );
-  NOR2X1 U229 ( .A(n136), .B(n134), .Z(n135) );
-  NAND3X1 U230 ( .A(n29), .B(n39), .C(n137), .Z(n134) );
-  NAND2X1 U231 ( .A(n138), .B(\gte_128/B[9] ), .Z(n137) );
-  INVX1 U232 ( .A(n30), .Z(\gte_128/B[9] ) );
-  OR2X1 U233 ( .A(n139), .B(\gte_128/B[5] ), .Z(n138) );
-  INVX1 U234 ( .A(n34), .Z(\gte_128/B[5] ) );
-  NOR2X1 U235 ( .A(n30), .B(n82), .Z(n136) );
-  NOR2X1 U236 ( .A(I_RST), .B(n140), .Z(N129) );
-  NOR2X1 U237 ( .A(n78), .B(n75), .Z(n140) );
-  NAND3X1 U238 ( .A(n39), .B(n30), .C(n141), .Z(n75) );
-  NOR2X1 U239 ( .A(\gte_128/B[10] ), .B(n139), .Z(n141) );
-  NAND3X1 U240 ( .A(n32), .B(n31), .C(n33), .Z(n139) );
-  INVX1 U241 ( .A(n29), .Z(\gte_128/B[10] ) );
-  NOR2X1 U242 ( .A(n34), .B(n82), .Z(n78) );
-  NOR2X1 U243 ( .A(n81), .B(\gte_128/B[4] ), .Z(n82) );
-  INVX1 U244 ( .A(n35), .Z(\gte_128/B[4] ) );
-  OR2X1 U245 ( .A(n84), .B(\gte_128/B[3] ), .Z(n81) );
-  INVX1 U246 ( .A(n36), .Z(\gte_128/B[3] ) );
-  NAND2X1 U247 ( .A(n142), .B(n37), .Z(n84) );
-  NAND2X1 U248 ( .A(\q_vctr[0] ), .B(\gte_128/B[1] ), .Z(n142) );
-  INVX1 U249 ( .A(n38), .Z(\gte_128/B[1] ) );
-  NAND2X1 U250 ( .A(n143), .B(n144), .Z(N128) );
-  NAND3X1 U251 ( .A(N70), .B(n145), .C(n_hctr[9]), .Z(n144) );
-  NAND3X1 U252 ( .A(n146), .B(n147), .C(n148), .Z(n145) );
-  NOR2X1 U253 ( .A(n_hctr[7]), .B(n_hctr[5]), .Z(n148) );
-  NOR2X1 U254 ( .A(n149), .B(n4), .Z(n_hctr[5]) );
-  NAND2X1 U255 ( .A(n150), .B(N66), .Z(n146) );
-  INVX1 U256 ( .A(n151), .Z(n150) );
-  NAND2X1 U257 ( .A(n143), .B(n152), .Z(N127) );
-  NAND3X1 U258 ( .A(N70), .B(n153), .C(n_hctr[9]), .Z(n152) );
-  OR2X1 U259 ( .A(n154), .B(N69), .Z(n153) );
-  NAND3X1 U260 ( .A(n155), .B(n143), .C(n156), .Z(N126) );
-  NOR2X1 U261 ( .A(n_hctr[9]), .B(n_hctr[8]), .Z(n156) );
-  AND2X1 U262 ( .A(N70), .B(n3), .Z(n_hctr[8]) );
-  NOR2X1 U263 ( .A(n157), .B(n4), .Z(n_hctr[9]) );
-  NAND2X1 U264 ( .A(n3), .B(n158), .Z(n143) );
-  NAND2X1 U265 ( .A(n6), .B(n5), .Z(n158) );
-  INVX1 U266 ( .A(N73), .Z(n5) );
-  INVX1 U267 ( .A(N72), .Z(n6) );
-  NAND2X1 U268 ( .A(n_hctr[7]), .B(n154), .Z(n155) );
-  NAND3X1 U269 ( .A(n147), .B(n151), .C(n159), .Z(n154) );
-  NOR2X1 U270 ( .A(N67), .B(N66), .Z(n159) );
-  NAND2X1 U271 ( .A(n_hctr[3]), .B(n160), .Z(n151) );
-  NOR2X1 U272 ( .A(n161), .B(n4), .Z(n_hctr[3]) );
-  AND2X1 U273 ( .A(N69), .B(n3), .Z(n_hctr[7]) );
-  NOR2X1 U274 ( .A(n162), .B(n163), .Z(N125) );
-  NAND3X1 U275 ( .A(n_hctr[6]), .B(n160), .C(n164), .Z(n163) );
-  NOR2X1 U276 ( .A(n161), .B(n165), .Z(n164) );
-  NAND2X1 U277 ( .A(N66), .B(n149), .Z(n165) );
-  INVX1 U278 ( .A(N67), .Z(n149) );
-  INVX1 U279 ( .A(N65), .Z(n161) );
-  INVX1 U280 ( .A(n166), .Z(n160) );
-  NAND3X1 U281 ( .A(N63), .B(N64), .C(N62), .Z(n166) );
-  INVX1 U282 ( .A(n147), .Z(n_hctr[6]) );
-  NAND2X1 U283 ( .A(N68), .B(n3), .Z(n147) );
-  INVX1 U284 ( .A(n4), .Z(n3) );
-  NAND2X1 U285 ( .A(n2), .B(n167), .Z(n4) );
-  NAND3X1 U286 ( .A(n44), .B(n43), .C(n168), .Z(n167) );
-  NOR2X1 U287 ( .A(n47), .B(n42), .Z(n168) );
-  INVX1 U288 ( .A(I_RST), .Z(n2) );
-  NAND3X1 U289 ( .A(n169), .B(n157), .C(n170), .Z(n162) );
-  NOR2X1 U290 ( .A(N70), .B(N69), .Z(n170) );
-  INVX1 U291 ( .A(N71), .Z(n157) );
-  NOR2X1 U292 ( .A(N73), .B(N72), .Z(n169) );
+  AND2X1 U10 ( .A(n3), .B(N59), .Z(n_hctr[0]) );
+  MUX2X1 U11 ( .A(n7), .B(n8), .S(n9), .Z(n172) );
+  NOR2X1 U12 ( .A(n10), .B(n11), .Z(n8) );
+  NOR2X1 U13 ( .A(n42), .B(n43), .Z(n10) );
+  NAND2X1 U14 ( .A(n12), .B(n13), .Z(n171) );
+  NAND2X1 U15 ( .A(n14), .B(n15), .Z(n13) );
+  NAND2X1 U16 ( .A(n9), .B(n16), .Z(n14) );
+  NAND2X1 U17 ( .A(n17), .B(n42), .Z(n16) );
+  NAND2X1 U18 ( .A(n9), .B(n156), .Z(n12) );
+  MUX2X1 U19 ( .A(n18), .B(N159), .S(n9), .Z(n170) );
+  INVX1 U20 ( .A(n19), .Z(n9) );
+  NAND3X1 U21 ( .A(n20), .B(n21), .C(n22), .Z(n19) );
+  NAND2X1 U22 ( .A(n23), .B(N159), .Z(n22) );
+  INVX1 U23 ( .A(q_hact_done), .Z(n23) );
+  NAND2X1 U24 ( .A(n24), .B(n17), .Z(n21) );
+  MUX2X1 U25 ( .A(n25), .B(n26), .S(n43), .Z(n24) );
+  NOR2X1 U26 ( .A(n42), .B(n27), .Z(n26) );
+  NOR2X1 U27 ( .A(q_hbp_done), .B(n18), .Z(n25) );
+  NAND2X1 U28 ( .A(n28), .B(n156), .Z(n20) );
+  NOR2X1 U29 ( .A(n15), .B(n45), .Z(n156) );
+  INVX1 U30 ( .A(q_hs_done), .Z(n28) );
+  NAND2X1 U31 ( .A(n46), .B(n48), .Z(n169) );
+  OR2X1 U32 ( .A(n49), .B(I_RST), .Z(n48) );
+  MUX2X1 U33 ( .A(n41), .B(n51), .S(n52), .Z(n46) );
+  NOR2X1 U34 ( .A(n53), .B(n157), .Z(n51) );
+  INVX1 U35 ( .A(n54), .Z(n157) );
+  MUX2X1 U36 ( .A(n55), .B(n56), .S(n40), .Z(n168) );
+  OR2X1 U37 ( .A(n57), .B(n53), .Z(n55) );
+  NOR2X1 U38 ( .A(n58), .B(n59), .Z(n53) );
+  NAND3X1 U39 ( .A(n60), .B(n54), .C(n61), .Z(n167) );
+  NAND2X1 U40 ( .A(\q_vstate[2] ), .B(n57), .Z(n61) );
+  NAND2X1 U41 ( .A(n56), .B(n62), .Z(n60) );
+  INVX1 U42 ( .A(n63), .Z(n56) );
+  NAND3X1 U43 ( .A(n64), .B(n59), .C(n52), .Z(n63) );
+  INVX1 U44 ( .A(n57), .Z(n52) );
+  NAND2X1 U45 ( .A(n65), .B(n66), .Z(n57) );
+  NAND3X1 U46 ( .A(n2), .B(n59), .C(n67), .Z(n66) );
+  MUX2X1 U47 ( .A(n68), .B(n69), .S(\q_vstate[2] ), .Z(n67) );
+  AND2X1 U48 ( .A(n40), .B(n50), .Z(n69) );
+  MUX2X1 U49 ( .A(n70), .B(n71), .S(n40), .Z(n68) );
+  NOR2X1 U50 ( .A(n72), .B(n73), .Z(n71) );
+  NAND3X1 U51 ( .A(n38), .B(n37), .C(n74), .Z(n73) );
+  INVX1 U52 ( .A(n75), .Z(n74) );
+  NAND3X1 U53 ( .A(n35), .B(n34), .C(n36), .Z(n72) );
+  INVX1 U54 ( .A(q_vbp_done), .Z(n70) );
+  OR2X1 U55 ( .A(q_vact_done), .B(n54), .Z(n65) );
+  NAND3X1 U56 ( .A(\q_vstate[2] ), .B(n41), .C(n76), .Z(n54) );
+  NOR2X1 U57 ( .A(I_RST), .B(n62), .Z(n76) );
+  INVX1 U58 ( .A(q_hctr[0]), .Z(O_HCNT[0]) );
+  AND2X1 U59 ( .A(I_PIX_DATA[23]), .B(N168), .Z(N192) );
+  AND2X1 U60 ( .A(I_PIX_DATA[22]), .B(N168), .Z(N191) );
+  AND2X1 U61 ( .A(I_PIX_DATA[21]), .B(N168), .Z(N190) );
+  AND2X1 U62 ( .A(I_PIX_DATA[20]), .B(N168), .Z(N189) );
+  AND2X1 U63 ( .A(I_PIX_DATA[19]), .B(N168), .Z(N188) );
+  AND2X1 U64 ( .A(I_PIX_DATA[18]), .B(N168), .Z(N187) );
+  AND2X1 U65 ( .A(I_PIX_DATA[17]), .B(N168), .Z(N186) );
+  AND2X1 U66 ( .A(I_PIX_DATA[16]), .B(N168), .Z(N185) );
+  AND2X1 U67 ( .A(I_PIX_DATA[15]), .B(N168), .Z(N184) );
+  AND2X1 U68 ( .A(I_PIX_DATA[14]), .B(N168), .Z(N183) );
+  AND2X1 U69 ( .A(I_PIX_DATA[13]), .B(N168), .Z(N182) );
+  AND2X1 U70 ( .A(I_PIX_DATA[12]), .B(N168), .Z(N181) );
+  AND2X1 U71 ( .A(I_PIX_DATA[11]), .B(N168), .Z(N180) );
+  AND2X1 U72 ( .A(I_PIX_DATA[10]), .B(N168), .Z(N179) );
+  AND2X1 U73 ( .A(I_PIX_DATA[9]), .B(N168), .Z(N178) );
+  AND2X1 U74 ( .A(I_PIX_DATA[8]), .B(N168), .Z(N177) );
+  AND2X1 U75 ( .A(I_PIX_DATA[7]), .B(N168), .Z(N176) );
+  AND2X1 U76 ( .A(I_PIX_DATA[6]), .B(N168), .Z(N175) );
+  AND2X1 U77 ( .A(I_PIX_DATA[5]), .B(N168), .Z(N174) );
+  AND2X1 U78 ( .A(I_PIX_DATA[4]), .B(N168), .Z(N173) );
+  AND2X1 U79 ( .A(I_PIX_DATA[3]), .B(N168), .Z(N172) );
+  AND2X1 U80 ( .A(I_PIX_DATA[2]), .B(N168), .Z(N171) );
+  AND2X1 U81 ( .A(I_PIX_DATA[1]), .B(N168), .Z(N170) );
+  AND2X1 U82 ( .A(I_PIX_DATA[0]), .B(N168), .Z(N169) );
+  AND2X1 U83 ( .A(n_deDly[2]), .B(n2), .Z(N168) );
+  AND2X1 U84 ( .A(n_deDly[1]), .B(n2), .Z(N167) );
+  AND2X1 U85 ( .A(n_hsDly[3]), .B(n2), .Z(N165) );
+  AND2X1 U86 ( .A(n_hsDly[2]), .B(n2), .Z(N164) );
+  AND2X1 U87 ( .A(n_hsDly[1]), .B(n2), .Z(N163) );
+  NOR2X1 U88 ( .A(n77), .B(n58), .Z(N161) );
+  INVX1 U89 ( .A(n64), .Z(n58) );
+  NOR2X1 U90 ( .A(I_RST), .B(\q_vstate[2] ), .Z(n64) );
+  XOR2X1 U91 ( .A(n62), .B(n41), .Z(n77) );
+  INVX1 U92 ( .A(n40), .Z(n62) );
+  NOR2X1 U93 ( .A(n45), .B(n43), .Z(N159) );
+  NAND3X1 U94 ( .A(n2), .B(n7), .C(n42), .Z(n45) );
+  INVX1 U95 ( .A(n44), .Z(n7) );
+  NAND2X1 U96 ( .A(n78), .B(n79), .Z(N152) );
+  NAND2X1 U97 ( .A(n80), .B(\gte_129/B[11] ), .Z(n79) );
+  INVX1 U98 ( .A(n39), .Z(\gte_129/B[11] ) );
+  NAND2X1 U99 ( .A(N42), .B(n81), .Z(n78) );
+  NAND2X1 U100 ( .A(n82), .B(n83), .Z(N151) );
+  NAND2X1 U101 ( .A(n80), .B(\gte_129/B[10] ), .Z(n83) );
+  NAND2X1 U102 ( .A(N41), .B(n81), .Z(n82) );
+  NAND2X1 U103 ( .A(n84), .B(n85), .Z(N150) );
+  NAND2X1 U104 ( .A(n80), .B(\gte_129/B[9] ), .Z(n85) );
+  NAND2X1 U105 ( .A(N40), .B(n81), .Z(n84) );
+  NAND2X1 U106 ( .A(n86), .B(n87), .Z(N149) );
+  NAND2X1 U107 ( .A(n80), .B(\gte_129/B[8] ), .Z(n87) );
+  INVX1 U108 ( .A(n31), .Z(\gte_129/B[8] ) );
+  NAND2X1 U109 ( .A(N39), .B(n81), .Z(n86) );
+  NAND2X1 U110 ( .A(n88), .B(n89), .Z(N148) );
+  NAND2X1 U111 ( .A(n80), .B(\gte_129/B[7] ), .Z(n89) );
+  INVX1 U112 ( .A(n32), .Z(\gte_129/B[7] ) );
+  NAND2X1 U113 ( .A(N38), .B(n81), .Z(n88) );
+  NAND2X1 U114 ( .A(n90), .B(n91), .Z(N147) );
+  NAND2X1 U115 ( .A(n80), .B(\gte_129/B[6] ), .Z(n91) );
+  INVX1 U116 ( .A(n33), .Z(\gte_129/B[6] ) );
+  NAND2X1 U117 ( .A(N37), .B(n81), .Z(n90) );
+  NAND2X1 U118 ( .A(n92), .B(n93), .Z(N146) );
+  NAND2X1 U119 ( .A(n80), .B(\gte_129/B[5] ), .Z(n93) );
+  NAND2X1 U120 ( .A(N36), .B(n81), .Z(n92) );
+  NAND2X1 U121 ( .A(n94), .B(n95), .Z(N145) );
+  NAND2X1 U122 ( .A(n80), .B(\gte_129/B[4] ), .Z(n95) );
+  NAND2X1 U123 ( .A(N35), .B(n81), .Z(n94) );
+  NAND2X1 U124 ( .A(n96), .B(n97), .Z(N144) );
+  NAND2X1 U125 ( .A(n80), .B(\gte_129/B[3] ), .Z(n97) );
+  NAND2X1 U126 ( .A(N34), .B(n81), .Z(n96) );
+  NAND2X1 U127 ( .A(n98), .B(n99), .Z(N143) );
+  NAND2X1 U128 ( .A(n80), .B(\gte_129/B[2] ), .Z(n99) );
+  NAND2X1 U129 ( .A(N33), .B(n81), .Z(n98) );
+  NAND2X1 U130 ( .A(n100), .B(n101), .Z(N142) );
+  NAND2X1 U131 ( .A(n80), .B(\gte_129/B[1] ), .Z(n101) );
+  NAND2X1 U132 ( .A(N32), .B(n81), .Z(n100) );
+  NAND2X1 U133 ( .A(n102), .B(n103), .Z(N141) );
+  NAND2X1 U134 ( .A(n80), .B(\q_vctr[0] ), .Z(n103) );
+  AND2X1 U135 ( .A(n104), .B(n3), .Z(n80) );
+  NAND2X1 U136 ( .A(N31), .B(n81), .Z(n102) );
+  INVX1 U137 ( .A(n105), .Z(n81) );
+  NAND3X1 U138 ( .A(n104), .B(n17), .C(n106), .Z(n105) );
+  NOR2X1 U139 ( .A(n15), .B(n107), .Z(n106) );
+  NAND2X1 U140 ( .A(n18), .B(n27), .Z(n107) );
+  INVX1 U141 ( .A(n47), .Z(n27) );
+  INVX1 U142 ( .A(n42), .Z(n18) );
+  INVX1 U143 ( .A(n43), .Z(n15) );
+  INVX1 U144 ( .A(n11), .Z(n17) );
+  NAND2X1 U145 ( .A(n44), .B(n2), .Z(n11) );
+  NOR2X1 U146 ( .A(n108), .B(I_VRST), .Z(n104) );
+  NOR2X1 U147 ( .A(n50), .B(n49), .Z(n108) );
+  NAND3X1 U148 ( .A(n40), .B(n59), .C(\q_vstate[2] ), .Z(n49) );
+  INVX1 U149 ( .A(n41), .Z(n59) );
+  AND2X1 U150 ( .A(n109), .B(n2), .Z(N128) );
+  NAND2X1 U151 ( .A(n110), .B(n111), .Z(n109) );
+  NAND2X1 U152 ( .A(n112), .B(\gte_129/B[9] ), .Z(n111) );
+  NAND2X1 U153 ( .A(n113), .B(n35), .Z(n112) );
+  NAND3X1 U154 ( .A(\gte_129/B[3] ), .B(\gte_129/B[2] ), .C(n114), .Z(n113) );
+  NAND2X1 U155 ( .A(n38), .B(O_VCNT[0]), .Z(n114) );
+  INVX1 U156 ( .A(\q_vctr[0] ), .Z(O_VCNT[0]) );
+  INVX1 U157 ( .A(n37), .Z(\gte_129/B[2] ) );
+  INVX1 U158 ( .A(n115), .Z(n110) );
+  NOR2X1 U159 ( .A(I_RST), .B(n116), .Z(N127) );
+  NOR2X1 U160 ( .A(n117), .B(n115), .Z(n116) );
+  NAND3X1 U161 ( .A(n29), .B(n39), .C(n118), .Z(n115) );
+  NAND2X1 U162 ( .A(n119), .B(\gte_129/B[9] ), .Z(n118) );
+  INVX1 U163 ( .A(n30), .Z(\gte_129/B[9] ) );
+  OR2X1 U164 ( .A(n120), .B(\gte_129/B[5] ), .Z(n119) );
+  INVX1 U165 ( .A(n34), .Z(\gte_129/B[5] ) );
+  NOR2X1 U166 ( .A(n30), .B(n121), .Z(n117) );
+  NOR2X1 U167 ( .A(I_RST), .B(n122), .Z(N126) );
+  NOR2X1 U168 ( .A(n123), .B(n75), .Z(n122) );
+  NAND3X1 U169 ( .A(n39), .B(n30), .C(n124), .Z(n75) );
+  NOR2X1 U170 ( .A(\gte_129/B[10] ), .B(n120), .Z(n124) );
+  NAND3X1 U171 ( .A(n32), .B(n31), .C(n33), .Z(n120) );
+  INVX1 U172 ( .A(n29), .Z(\gte_129/B[10] ) );
+  NOR2X1 U173 ( .A(n34), .B(n121), .Z(n123) );
+  INVX1 U174 ( .A(n125), .Z(n121) );
+  NAND3X1 U175 ( .A(n126), .B(n37), .C(n127), .Z(n125) );
+  NOR2X1 U176 ( .A(\gte_129/B[4] ), .B(\gte_129/B[3] ), .Z(n127) );
+  INVX1 U177 ( .A(n36), .Z(\gte_129/B[3] ) );
+  INVX1 U178 ( .A(n35), .Z(\gte_129/B[4] ) );
+  NAND2X1 U179 ( .A(\q_vctr[0] ), .B(\gte_129/B[1] ), .Z(n126) );
+  INVX1 U180 ( .A(n38), .Z(\gte_129/B[1] ) );
+  NAND2X1 U181 ( .A(n128), .B(n129), .Z(N125) );
+  NAND3X1 U182 ( .A(N67), .B(n130), .C(n_hctr[9]), .Z(n129) );
+  NAND3X1 U183 ( .A(n131), .B(n132), .C(n133), .Z(n130) );
+  NOR2X1 U184 ( .A(n_hctr[7]), .B(n_hctr[5]), .Z(n133) );
+  NOR2X1 U185 ( .A(n134), .B(n4), .Z(n_hctr[5]) );
+  NAND2X1 U186 ( .A(n135), .B(N63), .Z(n131) );
+  INVX1 U187 ( .A(n136), .Z(n135) );
+  NAND2X1 U188 ( .A(n128), .B(n137), .Z(N124) );
+  NAND3X1 U189 ( .A(N67), .B(n138), .C(n_hctr[9]), .Z(n137) );
+  OR2X1 U190 ( .A(n139), .B(N66), .Z(n138) );
+  NAND3X1 U191 ( .A(n140), .B(n128), .C(n141), .Z(N123) );
+  NOR2X1 U192 ( .A(n_hctr[9]), .B(n_hctr[8]), .Z(n141) );
+  AND2X1 U193 ( .A(N67), .B(n3), .Z(n_hctr[8]) );
+  NOR2X1 U194 ( .A(n142), .B(n4), .Z(n_hctr[9]) );
+  NAND2X1 U195 ( .A(n3), .B(n143), .Z(n128) );
+  NAND2X1 U196 ( .A(n6), .B(n5), .Z(n143) );
+  INVX1 U197 ( .A(N70), .Z(n5) );
+  INVX1 U198 ( .A(N69), .Z(n6) );
+  NAND2X1 U199 ( .A(n_hctr[7]), .B(n139), .Z(n140) );
+  NAND3X1 U200 ( .A(n132), .B(n136), .C(n144), .Z(n139) );
+  NOR2X1 U201 ( .A(N64), .B(N63), .Z(n144) );
+  NAND2X1 U202 ( .A(n_hctr[3]), .B(n145), .Z(n136) );
+  NOR2X1 U203 ( .A(n146), .B(n4), .Z(n_hctr[3]) );
+  AND2X1 U204 ( .A(N66), .B(n3), .Z(n_hctr[7]) );
+  NOR2X1 U205 ( .A(n147), .B(n148), .Z(N122) );
+  NAND3X1 U206 ( .A(n_hctr[6]), .B(n145), .C(n149), .Z(n148) );
+  NOR2X1 U207 ( .A(n146), .B(n150), .Z(n149) );
+  NAND2X1 U208 ( .A(N63), .B(n134), .Z(n150) );
+  INVX1 U209 ( .A(N64), .Z(n134) );
+  INVX1 U210 ( .A(N62), .Z(n146) );
+  INVX1 U211 ( .A(n151), .Z(n145) );
+  NAND3X1 U212 ( .A(N60), .B(N61), .C(N59), .Z(n151) );
+  INVX1 U213 ( .A(n132), .Z(n_hctr[6]) );
+  NAND2X1 U214 ( .A(N65), .B(n3), .Z(n132) );
+  INVX1 U215 ( .A(n4), .Z(n3) );
+  NAND2X1 U216 ( .A(n2), .B(n152), .Z(n4) );
+  NAND3X1 U217 ( .A(n44), .B(n43), .C(n153), .Z(n152) );
+  NOR2X1 U218 ( .A(n47), .B(n42), .Z(n153) );
+  INVX1 U219 ( .A(I_RST), .Z(n2) );
+  NAND3X1 U220 ( .A(n154), .B(n142), .C(n155), .Z(n147) );
+  NOR2X1 U221 ( .A(N67), .B(N66), .Z(n155) );
+  INVX1 U222 ( .A(N68), .Z(n142) );
+  NOR2X1 U223 ( .A(N70), .B(N69), .Z(n154) );
 endmodule
 
 
@@ -1462,8 +1340,9 @@ module edge_detection_top ( I_RST, I_CORE_CLK, I_PIX_DATA, I_VSYNC, I_HSYNC,
   output [23:0] O_PIX_DATA;
   input I_RST, I_CORE_CLK, I_VSYNC, I_HSYNC, I_DE, I_PCLK;
   output O_VSYNC, O_HSYNC, O_DE, O_PCLK;
-  wire   pix_vsync_dly, N4, i_tp_en, n2;
+  wire   pix_vsync_dly, N4, n2;
   wire   [7:0] out;
+  tri   I_RST;
   tri   I_CORE_CLK;
   tri   [23:0] I_PIX_DATA;
   tri   I_VSYNC;
@@ -1473,29 +1352,27 @@ module edge_detection_top ( I_RST, I_CORE_CLK, I_PIX_DATA, I_VSYNC, I_HSYNC,
   tri   [8:0] colorspace_converter_pixel_row;
   tri   [63:0] colorspace_converter_pixel_matrix;
   tri   colorspace_converter_pixel_matrix_ready;
-  tri   N5;
   tri   n3;
   assign O_PCLK = I_PCLK;
-  assign N5 = I_RST;
 
   DFFQX1 pix_vsync_dly_reg ( .D(N4), .CLK(O_PCLK), .Q(pix_vsync_dly) );
-  buffered_matrix_colorspace_converter iBMCC ( .I_CLK(I_CORE_CLK), .I_RESET(N5), .I_ENABLE(1'b1), .I_PIXEL(I_PIX_DATA), .I_VSYNC(I_VSYNC), .I_HSYNC(I_VSYNC), 
-        .I_DATA_ENABLE(I_DE), .I_PIXEL_CLK(O_PCLK), .O_PIXEL_COLUMN(
-        colorspace_converter_pixel_col), .O_PIXEL_ROW(
+  buffered_matrix_colorspace_converter iBMCC ( .I_CLK(I_CORE_CLK), .I_RESET(
+        I_RST), .I_ENABLE(1'b1), .I_PIXEL(I_PIX_DATA), .I_VSYNC(I_VSYNC), 
+        .I_HSYNC(I_VSYNC), .I_DATA_ENABLE(I_DE), .I_PIXEL_CLK(O_PCLK), 
+        .O_PIXEL_COLUMN(colorspace_converter_pixel_col), .O_PIXEL_ROW(
         colorspace_converter_pixel_row), .O_PIXEL_MATRIX(
         colorspace_converter_pixel_matrix), .O_PIXEL_MATRIX_READY(
         colorspace_converter_pixel_matrix_ready) );
   sobel iSobel ( .row(colorspace_converter_pixel_row), .col(
         colorspace_converter_pixel_col), .inputPixels(
         colorspace_converter_pixel_matrix), .clk_pix(O_PCLK), .clk(I_CORE_CLK), 
-        .start(colorspace_converter_pixel_matrix_ready), .reset(N5), .out(out)
+        .start(colorspace_converter_pixel_matrix_ready), .reset(I_RST), .out(
+        out) );
+  video_timing_gen_05f_08f_30f_31f_002_023_203_20d_0 iVidGen ( .I_RST(I_RST), 
+        .I_PCLK(O_PCLK), .I_PIX_DATA({out, out, out}), .I_VRST(pix_vsync_dly), 
+        .O_DE(O_DE), .O_HS(O_HSYNC), .O_VS(O_VSYNC), .O_PIX_DATA(O_PIX_DATA)
          );
-  video_timing_gen_05f_08f_30f_31f_002_023_203_20d iVidGen ( .I_RST(N5), 
-        .I_PCLK(O_PCLK), .I_PIX_DATA({out, out, out}), .I_TP_EN(i_tp_en), 
-        .I_VRST(pix_vsync_dly), .O_DE(O_DE), .O_HS(O_HSYNC), .O_VS(O_VSYNC), 
-        .O_PIX_DATA(O_PIX_DATA) );
-  TIE0 U6 ( .Z(i_tp_en) );
-  NOR2X1 U7 ( .A(N5), .B(n2), .Z(N4) );
-  INVX1 U8 ( .A(I_VSYNC), .Z(n2) );
+  NOR2X1 U5 ( .A(I_RST), .B(n2), .Z(N4) );
+  INVX1 U6 ( .A(I_VSYNC), .Z(n2) );
 endmodule
 

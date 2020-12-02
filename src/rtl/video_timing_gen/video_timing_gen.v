@@ -18,13 +18,14 @@ module video_timing_gen
     parameter [11:0] I_VS_END = 11'd0,
     parameter [11:0] I_VBP_END = 11'd0,
     parameter [11:0] I_VACT_END = 11'd0,
-    parameter [11:0] I_VFP_END = 11'd0
+    parameter [11:0] I_VFP_END = 11'd0,
+    parameter        I_TP_EN = 1
   )
   (
     input   wire        I_RST,      // Reset
     input   wire        I_PCLK,     // Pixel Clock (25.175 MHz)
     input   wire [23:0] I_PIX_DATA, // Input Pixel Data (Asyncronus)
-    input   wire        I_TP_EN,    // Test Pattern Enable
+    // input   wire        I_TP_EN,    // Test Pattern Enable
     // input   wire [11:0] I_HS_END,   // Constant used for Horizontal Sync Counter
     // input   wire [11:0] I_HBP_END,  // Constant used for Horizontal Back Porch Counter
     // input   wire [11:0] I_HACT_END, // Constant used for Horizontal Active Counter

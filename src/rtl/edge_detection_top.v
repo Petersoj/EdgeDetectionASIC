@@ -81,10 +81,10 @@ module edge_detection_top
       .inputPixels(colorspace_converter_pixel_matrix),
       .clk_pix(I_PCLK),
       .clk(I_CORE_CLK),
-      .start(colorspace_converter_pixel_matrix_ready), // TODO
+      .start(colorspace_converter_pixel_matrix_ready), 
       .out(out),
       .reset(I_RST),
-      .done() // TODO
+      .done() // TODO remove?
       );
 
   // Video Sync and Timing Gen
@@ -97,12 +97,14 @@ module edge_detection_top
   parameter [11:0] VGA_VBP_END  = VGA_VSW + VGA_VBP;
   parameter [11:0] VGA_VACT_END = VGA_VSW + VGA_VBP + VGA_VACT;
   parameter [11:0] VGA_VFP_END  = VGA_VSW + VGA_VBP + VGA_VACT + VGA_VFP;
+  parameter        TP_EN        = 0;
+
     
-  always @(posedge I_CORE_CLK)begin
-    if(I_RST) begin
-      i_tp_en <= 1'b0;
-    end
-  end
+  // always @(posedge I_CORE_CLK)begin
+  //   if(I_RST) begin
+  //     i_tp_en <= 1'b0;
+  //   end
+  // end
 
   //need to change inputs to be wires assigned to the parameters during reset
   //many synthesis warnings about connecting constants to nets
@@ -114,20 +116,20 @@ module edge_detection_top
       .I_VS_END   (VGA_VS_END),
       .I_VBP_END  (VGA_VBP_END),
       .I_VACT_END (VGA_VACT_END),
-      .I_VFP_END  (VGA_VFP_END)
+      .I_VFP_END  (VGA_VFP_END),
+      .I_TP_EN    (TP_EN)
     )
     iVidGen
     (
       .I_RST      (I_RST),
       .I_PCLK     (I_PCLK),
       .I_PIX_DATA ({out, out, out}),
-      .I_TP_EN    (i_tp_en),
       .I_VRST     (pix_vsync_dly), // Will need to be delayed to line up with incoming data
       .O_DE       (O_DE),
       .O_HS       (O_HSYNC),
       .O_VS       (O_VSYNC),
-      .O_HCNT     (),
-      .O_VCNT     (),
+      .O_HCNT     (),         //TODO remove?
+      .O_VCNT     (),         //TODO remove?
       .O_PIX_DATA (O_PIX_DATA)
     );
 
