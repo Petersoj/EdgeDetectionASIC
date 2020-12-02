@@ -35,7 +35,6 @@ module buffered_matrix3_colorspace_converter
 
     input wire I_PIXEL_CLK, // Pixel clock input
     input wire I_DATA_VALID, // The data valid input (should be asserted when in the active region of the frame)
-    input wire I_VSYNC, // The Vertical Sync input
     input wire [P_PIXEL_DEPTH - 1 : 0] I_PIXEL,  // RGB pixel input
 
     output wire [P_FRAME_COLUMN_BITS - 1 : 0] O_PIXEL_COLUMN, // The start column of the output matrix relative to the start column of the frame output
@@ -52,47 +51,43 @@ module buffered_matrix3_colorspace_converter
 
     // START local parameters
     localparam P_FRAME_BUFFER_ROWS = 3; // The number of rows to use for the internal grayscaled pixel buffer
+
+    localparam P_FRAME_BUFFER_REQUIRED_COLUMNS = 2; // The minimum number of columns required for a valid pixel matrix output
     localparam P_FRAME_BUFFER_REQUIRED_ROWS = 2; // The minimum number of rows required for a valid pixel matrix output
-    localparam P_FRAME_BUFFER_REQUIRED_COLUMNS = 3; // The minimum number of columns required for a valid pixel matrix output
+    localparam P_FRAME_BUFFER_COLUMN_END = P_FRAME_COLUMNS - 1 - P_FRAME_BUFFER_REQUIRED_COLUMNS - 1;
+    localparam P_FRAME_BUFFER_ROW_END = P_FRAME_ROWS - 1 - P_FRAME_BUFFER_REQUIRED_ROWS - 1;
     // END local parameters
 
     // START registers and wires
 
     // States for input frame (synchronized with pixel clock)
-    reg q_frame_column_reset; // The current state of if current frame column should be reset to zero
-    wire n_frame_column_reset; // The next state of if current frame column should be reset to zero
-    reg q_frame_row_reset; // The current state of if current frame row should be reset to zero
-    wire n_frame_row_reset; // The next state of if current frame row should be reset to zero
-    reg q_frame_row_increment_pulse; // The current state of the assertion pulse if current frame row should be incremented
-    wire n_frame_row_increment_pulse; // The next state of the assertion pulse if current frame row should be incremented
+    reg q_frame_reset; // The current state of if current frame row and column should be reset to zero
+    wire n_frame_reset; // The next state of if current frame row and column should be reset to zero
     reg [P_FRAME_COLUMN_BITS - 1 : 0] q_frame_column; // The current state of the current frame pixel column
     wire [P_FRAME_COLUMN_BITS - 1 : 0] n_frame_column; // The next state of the current frame pixel column
     reg [P_FRAME_ROW_BITS - 1 : 0] q_frame_row; // The current state of the current frame pixel row
     wire [P_FRAME_ROW_BITS - 1 : 0] n_frame_row; // The next state of the current frame pixel row
 
-    // States for iGrayscale
+    // Wires for iGrayscale
     wire [P_SUBPIXEL_DEPTH - 1 : 0] grayscaled_pixel; // Grayscale output of the directly-inputted pixel
 
-    // States for iGrayscaledFrameBufferMatrix3
-    wire should_frame_buffer_increment; // Asserted if the frame buffer should start counting in sync with the input pixel clock
-    reg q_frame_buffer_column_reset; // The current state of if current frame buffer column should be reset to zero
-    wire n_frame_buffer_column_reset; // The next state of if current frame buffer column should be reset to zero
-    reg q_frame_buffer_row_reset; // The current state of if current frame buffer row should be reset to zero
-    wire n_frame_buffer_row_reset; // The next state of if current frame buffer row should be reset to zero
-    reg q_frame_buffer_row_increment_pulse; // The current state of the assertion pulse if current frame buffer row should be incremented
-    wire n_frame_buffer_row_increment_pulse; // The next state of the assertion pulse if current frame buffer row should be incremented
+    // START states/registers for iGrayscaledFrameBufferMatrix3
+
+    wire should_frame_buffer_index_increment; // Asserted if the frame buffer index should start counting/incrementing in sync with the input pixel clock
+
+    reg q_frame_buffer_reset; // The current state of if current frame buffer row and column should be reset to zero
+    wire n_frame_buffer_reset; // The next state of if current frame buffer row and column should be reset to zero
     reg [P_FRAME_COLUMN_BITS - 1 : 0] q_frame_buffer_column; // The current state of the frame buffer column index
     wire [P_FRAME_COLUMN_BITS - 1 : 0] n_frame_buffer_column; // The next state of the frame buffer column index
     reg [P_FRAME_ROW_BITS - 1 : 0] q_frame_buffer_row; // The current state of the frame buffer row index
     wire [P_FRAME_ROW_BITS - 1 : 0] n_frame_buffer_row; // The next state of the frame buffer row index
+
     reg q_frame_buffer_write_enable; // The current state of if the frame buffer should enable writing
     wire n_frame_buffer_write_enable; // The next state of if the frame buffer should enable writing
     reg q_frame_buffer_read_enable; // The current state of if the frame buffer should enable reading
     wire n_frame_buffer_read_enable; // The next state of if the frame buffer should enable reading
 
-    // States for logic
-    reg q_frame_buffer_write_pulse; // The current state of the assertion pulse if the buffered should be written to
-    wire n_frame_buffer_write_pulse; // The next state of the assertion pulse if the buffered should be written to
+    // END states/registers for iGrayscaledFrameBufferMatrix3
 
     // States for output
     reg [P_FRAME_COLUMN_BITS - 1 : 0] q_o_pixel_column; // The current state of the output pixel column
@@ -114,22 +109,26 @@ module buffered_matrix3_colorspace_converter
     // END output mapping
 
     // START RTL logic
-    assign n_frame_column_reset = ~I_DATA_VALID;
-    assign n_frame_row_reset = ~I_VSYNC;
-    assign n_frame_row_increment_pulse = I_DATA_VALID ? 1'b0 : (q_frame_row_increment_pulse ? 1'b0 : 1'b1);
-    assign n_frame_column = q_frame_column_reset ? {P_FRAME_COLUMN_BITS{1'b0}} : q_frame_column + 1'b1;
-    assign n_frame_row = q_frame_row_reset ? {P_FRAME_ROW_BITS{1'b0}} :
-                (q_frame_row_increment_pulse ? q_frame_row + 1'b1 : q_frame_row);
 
-    assign should_frame_buffer_increment = q_frame_column >= P_FRAME_BUFFER_REQUIRED_COLUMNS - 1 &&
+    assign n_frame_reset = q_frame_column == P_FRAME_COLUMNS - 1 && q_frame_row == P_FRAME_ROWS - 1;
+    assign n_frame_column = q_frame_column == P_FRAME_COLUMNS - 1 ? {P_FRAME_COLUMN_BITS{1'b0}} :
+                (I_DATA_VALID ? q_frame_column + 1'b1 : q_frame_column);
+    assign n_frame_row = q_frame_reset ? {P_FRAME_ROW_BITS{1'b0}} :
+                (q_frame_column == P_FRAME_COLUMNS - 1 ? q_frame_row + 1'b1 : q_frame_row);
+
+    assign should_frame_buffer_index_increment = q_frame_column >= P_FRAME_BUFFER_REQUIRED_COLUMNS - 1 &&
                 q_frame_row >= P_FRAME_BUFFER_REQUIRED_ROWS - 1;
 
-    assign n_frame_buffer_column_reset = ~I_DATA_VALID;
-    assign n_frame_buffer_row_reset = ~I_VSYNC;
-    assign n_frame_buffer_row_increment_pulse = I_DATA_VALID ? 1'b0 : (q_frame_buffer_row_increment_pulse ? 1'b0 : 1'b1);
-    assign n_frame_buffer_column = q_frame_buffer_column_reset ? {P_FRAME_COLUMN_BITS{1'b0}} : q_frame_buffer_column + 1'b1;
-    assign n_frame_buffer_row = q_frame_buffer_row_reset ? {P_FRAME_ROW_BITS{1'b0}} :
-                (q_frame_buffer_row_increment_pulse ? q_frame_buffer_row + 1'b1 : q_frame_buffer_row);
+    // NOTE this is a somewhat flawed implementation because this will stop counting prematurely
+    // because the 'data valid' input will be low and we will still want to continue incrementing
+    // our internal grayscale frame buffer even after that goes low. Instead, we'll just exclude
+    // a margin of the frame border from consideration.
+    assign n_frame_buffer_reset = q_frame_buffer_column == P_FRAME_BUFFER_COLUMN_END && q_frame_buffer_row == P_FRAME_BUFFER_ROW_END;
+    assign n_frame_buffer_column = q_frame_buffer_column == P_FRAME_BUFFER_COLUMN_END ? {P_FRAME_COLUMN_BITS{1'b0}} :
+                (I_DATA_VALID ? q_frame_buffer_column + 1'b1 : q_frame_buffer_column);
+    assign n_frame_buffer_row = q_frame_buffer_reset ? {P_FRAME_ROW_BITS{1'b0}} :
+                (q_frame_buffer_column == P_FRAME_BUFFER_COLUMN_END ? q_frame_buffer_row + 1'b1 : n_frame_buffer_row);
+
     // END RTL logic
 
     // START module instantiations
@@ -167,24 +166,16 @@ module buffered_matrix3_colorspace_converter
     // Clock block
     always @(posedge I_CLK) begin
         if (I_RESET) begin
-            q_frame_buffer_column <= {P_FRAME_COLUMN_BITS{1'b0}};
-            q_frame_buffer_row <= {P_FRAME_ROW_BITS{1'b0}};
             q_frame_buffer_write_enable <= 1'b0;
             q_frame_buffer_read_enable <= 1'b0;
-
-            q_frame_buffer_write_pulse <= 1'b0;
 
             q_o_pixel_column <= {P_FRAME_COLUMN_BITS{1'b0}};
             q_o_pixel_row <= {P_FRAME_ROW_BITS{1'b0}};
             q_o_pixel_matrix <= {P_PIXEL_MATRIX_BITS{1'b0}};
             q_o_pixel_matrix_ready <= 1'b0;
         end else begin
-            q_frame_buffer_column <= n_frame_buffer_column;
-            q_frame_buffer_row <= n_frame_buffer_row;
             q_frame_buffer_write_enable <= n_frame_buffer_write_enable;
             q_frame_buffer_read_enable <= n_frame_buffer_read_enable;
-
-            q_frame_buffer_write_pulse <= n_frame_buffer_write_pulse;
 
             q_o_pixel_column <= n_o_pixel_column;
             q_o_pixel_row <= n_o_pixel_row;
@@ -196,27 +187,19 @@ module buffered_matrix3_colorspace_converter
     // Pixel clock block
     always @(posedge I_PIXEL_CLK) begin
         if (I_RESET) begin
-            q_frame_column_reset <= 1'b0;
-            q_frame_row_reset <= 1'b0;
-            q_frame_row_increment_pulse <= 1'b0;
+            q_frame_reset <= 1'b0;
             q_frame_column <= {P_FRAME_COLUMN_BITS{1'b0}};
             q_frame_row <= {P_FRAME_ROW_BITS{1'b0}};
 
-            q_frame_buffer_column_reset <= 1'b0;
-            q_frame_buffer_row_reset <= 1'b0;
-            q_frame_buffer_row_increment_pulse <= 1'b0;
+            q_frame_buffer_reset <= 1'b0;
             q_frame_buffer_column <= {P_FRAME_COLUMN_BITS{1'b0}};
             q_frame_buffer_row <= {P_FRAME_ROW_BITS{1'b0}};
         end else begin
-            q_frame_column_reset <= n_frame_column_reset;
-            q_frame_row_reset <= n_frame_row_reset;
-            q_frame_row_increment_pulse <= n_frame_row_increment_pulse;
+            q_frame_reset <= n_frame_reset;
             q_frame_column <= n_frame_column;
             q_frame_row <= n_frame_row;
 
-            q_frame_buffer_column_reset <= n_frame_buffer_column_reset;
-            q_frame_buffer_row_reset <= n_frame_buffer_row_reset;
-            q_frame_buffer_row_increment_pulse <= n_frame_buffer_row_increment_pulse;
+            q_frame_buffer_reset <= n_frame_buffer_reset;
             q_frame_buffer_column <= n_frame_buffer_column;
             q_frame_buffer_row <= n_frame_buffer_row;
         end
