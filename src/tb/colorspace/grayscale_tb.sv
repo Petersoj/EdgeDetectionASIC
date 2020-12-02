@@ -48,7 +48,7 @@ module grayscale_tb();
     end
 
     initial begin
-        forever #5000 clock = ~clock; // 100MHz clock (period of 10ns)
+        forever #5000 clock = ~clock; // 200MHz clock (period of 10ns)
     end
 
     initial begin
