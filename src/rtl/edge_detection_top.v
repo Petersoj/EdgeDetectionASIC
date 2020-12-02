@@ -60,7 +60,6 @@ module edge_detection_top
   buffered_matrix_colorspace_converter iBMCC(
     .I_CLK(I_CORE_CLK),
     .I_RESET(I_RST),
-    .I_ENABLE(1'b1),
     .I_PIXEL(I_PIX_DATA),
     .I_VSYNC(I_VSYNC),
     .I_HSYNC(I_VSYNC),
@@ -105,6 +104,7 @@ module edge_detection_top
   //     i_tp_en <= 1'b0;
   //   end
   // end
+
 
   //need to change inputs to be wires assigned to the parameters during reset
   //many synthesis warnings about connecting constants to nets

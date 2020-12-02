@@ -12,37 +12,29 @@
 ////
 
 module grayscale
-    // #(
-    // parameter integer P_PIXEL_DEPTH = 32'd24 // The color depth of the pixel (MUST be a multiple of 3)
-    // )
-    (
-    I_CLK, // Clock input
-    I_RESET, // Reset input
-    I_PIXEL, // The RGB pixel data input
+    #(
+    parameter integer P_PIXEL_DEPTH = 24, // The color depth of the pixel (MUST be a multiple of 3)
 
-    O_PIXEL // The grayscale pixel data output
+    // START port list local parameters
+    parameter integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3
+    // END port list local parameters
+    )
+    (
+    input wire I_CLK, // Clock input
+    input wire I_RESET, // Reset input
+    input wire [P_PIXEL_DEPTH - 1 : 0] I_PIXEL, // The RGB pixel data input
+
+    output wire [P_SUBPIXEL_DEPTH - 1 : 0] O_PIXEL // The grayscale pixel data output
     );
 
     // START local parameters
-    //put input parameter here due to synthesis warnings
-    localparam integer P_PIXEL_DEPTH = 32'd24; // The color depth of the pixel (MUST be a multiple of 3)
-
-    localparam integer P_SUBPIXEL_DEPTH = P_PIXEL_DEPTH / 3;
-    localparam integer P_RED_MSB = P_SUBPIXEL_DEPTH * 3 - 1;
-    localparam integer P_RED_LSB = P_SUBPIXEL_DEPTH * 3 - P_SUBPIXEL_DEPTH;
-    localparam integer P_GREEN_MSB = P_SUBPIXEL_DEPTH * 2 - 1;
-    localparam integer P_GREEN_LSB = P_SUBPIXEL_DEPTH * 2 - P_SUBPIXEL_DEPTH;
-    localparam integer P_BLUE_MSB = P_SUBPIXEL_DEPTH - 1;
-    localparam integer P_BLUE_LSB = 0;
+    localparam P_RED_MSB = P_SUBPIXEL_DEPTH * 3 - 1;
+    localparam P_RED_LSB = P_SUBPIXEL_DEPTH * 3 - P_SUBPIXEL_DEPTH;
+    localparam P_GREEN_MSB = P_SUBPIXEL_DEPTH * 2 - 1;
+    localparam P_GREEN_LSB = P_SUBPIXEL_DEPTH * 2 - P_SUBPIXEL_DEPTH;
+    localparam P_BLUE_MSB = P_SUBPIXEL_DEPTH - 1;
+    localparam P_BLUE_LSB = 0;
     // END local parameters
-
-    // START port declarations
-    input wire I_CLK;
-    input wire I_RESET;
-    input wire [P_PIXEL_DEPTH - 1 : 0] I_PIXEL;
-
-    output wire [P_SUBPIXEL_DEPTH - 1 : 0] O_PIXEL;
-    // END port declarations
 
     // START registers and wires
     wire [P_SUBPIXEL_DEPTH - 1 : 0] w_i_red = I_PIXEL[P_RED_MSB : P_RED_LSB];
