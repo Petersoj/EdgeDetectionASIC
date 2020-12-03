@@ -19,6 +19,7 @@ module edge_detection_top_tb();
   // logic [2000:0]  out_vector_3_file_name =  "vectors/out_3.ppm";
   logic [2000:0]  in_vector_file_name =   "../../vectors/rocks.ppm";
   logic [2000:0]  out_vector_3_file_name =  "../../vectors/out_3.ppm";
+  logic [2000:0]  out_vector_4_file_name =  "../../vectors/out_4.ppm";
   logic [23:0]    pixel_input_data[`V_LINES][`H_PIXELS];
   logic [23:0]    pixel_grey_data[`V_LINES][`H_PIXELS];
   logic [23:0]    pixel_output_data[`V_LINES][`H_PIXELS];
@@ -120,8 +121,8 @@ module edge_detection_top_tb();
       video_greyscale_stream;
       video_output_stream;
     join
-    // write_ppm_file(out_vector_3_file_name, pixel_output_data);
-    write_ppm_file(out_vector_3_file_name, pixel_grey_data);
+    write_ppm_file(out_vector_3_file_name, pixel_output_data);
+    write_ppm_file(out_vector_4_file_name, pixel_grey_data);
 
     $display("================================================================");
     $display("=========================== END SIM ============================");
