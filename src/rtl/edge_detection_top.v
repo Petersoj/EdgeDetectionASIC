@@ -53,18 +53,16 @@ module edge_detection_top
   // Colorspace Converter
   wire [$clog2(VGA_HACT) - 1:0] colorspace_converter_pixel_col;
   wire [$clog2(VGA_VACT) - 1:0] colorspace_converter_pixel_row;
-  wire [23:0] colorspace_converter_pixel;
+  // wire [23:0] colorspace_converter_pixel;
   wire colorspace_converter_pixel_matrix_ready;
   wire [63:0] colorspace_converter_pixel_matrix;
 
-  buffered_matrix_colorspace_converter iBMCC(
+  buffered_matrix3_colorspace_converter iBMCC(
     .I_CLK(I_CORE_CLK),
     .I_RESET(I_RST),
-    .I_PIXEL(I_PIX_DATA),
-    .I_VSYNC(I_VSYNC),
-    .I_HSYNC(I_VSYNC),
-    .I_DATA_ENABLE(I_DE),
     .I_PIXEL_CLK(I_PCLK),
+    .I_DATA_VALID(I_DE),
+    .I_PIXEL(I_PIX_DATA),
     .O_PIXEL_COLUMN(colorspace_converter_pixel_col),
     .O_PIXEL_ROW(colorspace_converter_pixel_row),
     .O_PIXEL_MATRIX(colorspace_converter_pixel_matrix),

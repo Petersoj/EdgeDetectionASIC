@@ -27,7 +27,7 @@ module edge_detection_top_tb();
   logic           clk_333, clk_pix, o_clk_pix;
   logic           istrb_clk_333, istrb_clk_pix;
   logic           i_de, i_vs, i_hs, o_de, o_vs, o_hs;
-  logic [23:0]    i_pix_data, o_pix_data, g_pix_data;
+  logic [23:0]    i_pix_data, o_pix_data;
 
   // generate clock
   initial clk_333 = 1'b1;
@@ -65,7 +65,12 @@ module edge_detection_top_tb();
   parameter [11:0] VGA_VFP_END  = VGA_VSW + VGA_VBP + VGA_VACT + VGA_VFP;
 
   // Generate input video signals (VS, HS, DE) according to VGA timing
-  video_timing_gen  #(
+  video_timing_gen iVidGen
+    (
+      .I_RST      (reset),
+      .I_PCLK     (clk_pix),
+      .I_PIX_DATA (24'h0),
+      .I_TP_EN    (1'b1),
       .I_HS_END   (VGA_HS_END),
       .I_HBP_END  (VGA_HBP_END),
       .I_HACT_END (VGA_HACT_END),
@@ -74,13 +79,6 @@ module edge_detection_top_tb();
       .I_VBP_END  (VGA_VBP_END),
       .I_VACT_END (VGA_VACT_END),
       .I_VFP_END  (VGA_VFP_END),
-      .I_TP_EN    (1'b1)
-    )
-    iVidGen
-    (
-      .I_RST      (reset),
-      .I_PCLK     (clk_pix),
-      .I_PIX_DATA (24'h0),
       .I_VRST     (1'b0),
       .O_DE       (i_de),
       .O_HS       (i_hs),
@@ -90,23 +88,21 @@ module edge_detection_top_tb();
       .O_PIX_DATA ()
     );
 
-  edge_detection_top DUT
-    (
-      .I_RST          (reset),     // Input Reset
-      .I_CORE_CLK     (clk_333),     // Input Core Clock (100 MHz?)
-      .I_PIX_DATA     (i_pix_data),     // Input RGB Pixel Data
-      .I_VSYNC        (i_vs),     // Input Vertical Sync
-      .I_HSYNC        (i_hs),     // Input Horizontal Sync
-      .I_DE           (i_de),     // Input Data Enable (Data Valid)
-      .I_PCLK         (clk_pix),     // Input Pixel Clock (25.175 MHz)
-      .O_PIX_DATA     (o_pix_data),     // Output RGB Pixel Data
-      .O_VSYNC        (o_vs),     // Output Vertical Sync
-      .O_HSYNC        (o_hs),     // Output Horizontal Sync
-      .O_DE           (o_de),     // Output Data Enable (Data Valid)
-      .O_PCLK         (o_clk_pix)      // Output Pixel Clock (25.175 MHz)
-    );
-
-  assign g_pix_data = {3{DUT.iBMCC.iGrayscale.O_PIXEL}};
+edge_detection_top DUT
+  (
+    .I_RST          (reset),     // Input Reset
+    .I_CORE_CLK     (clk_333),     // Input Core Clock (100 MHz?)
+    .I_PIX_DATA     (i_pix_data),     // Input RGB Pixel Data
+    .I_VSYNC        (i_vs),     // Input Vertical Sync
+    .I_HSYNC        (i_hs),     // Input Horizontal Sync
+    .I_DE           (i_de),     // Input Data Enable (Data Valid)
+    .I_PCLK         (clk_pix),     // Input Pixel Clock (25.175 MHz)
+    .O_PIX_DATA     (o_pix_data),     // Output RGB Pixel Data
+    .O_VSYNC        (o_vs),     // Output Vertical Sync
+    .O_HSYNC        (o_hs),     // Output Horizontal Sync
+    .O_DE           (o_de),     // Output Data Enable (Data Valid)
+    .O_PCLK         (o_clk_pix)      // Output Pixel Clock (25.175 MHz)
+  );
 
   initial begin
     $display("================================================================");
@@ -117,23 +113,21 @@ module edge_detection_top_tb();
     fork
       // run tests
       video_input_stream;
-      video_greyscale_stream;
       video_output_stream;
     join
-    // write_ppm_file(out_vector_3_file_name, pixel_output_data);
-    write_ppm_file(out_vector_3_file_name, pixel_grey_data);
+    write_ppm_file(out_vector_3_file_name, pixel_output_data);
 
     $display("================================================================");
     $display("=========================== END SIM ============================");
     $display("================================================================");
-    // $stop;
+    $stop;
   end
 
   task tb_init;
     begin
       read_ppm_file(in_vector_file_name, pixel_input_data);
       reset = 1'b1;
-      repeat(100) @(posedge clk_333);
+      repeat(10) @(posedge clk_333);
       reset = 1'b0;
       repeat(10) @(posedge clk_333);
     end
@@ -144,7 +138,6 @@ module edge_detection_top_tb();
       @(posedge clk_pix);
       // i_de = 1'b1; // TO BE REMOVED
       $display ("+++ video_input_stream");
-      i_pix_data = 0;
       vid_x = 0;
       vid_y = 0;
       while(vid_y < `V_LINES) begin
@@ -159,7 +152,6 @@ module edge_detection_top_tb();
           begin
             vid_x = 0;
             vid_y = vid_y + 1;
-            i_pix_data = 0;
           end
         end
         else
@@ -178,8 +170,7 @@ module edge_detection_top_tb();
         @(posedge istrb_clk_pix);
         if(i_de == 1'b1)
         begin
-
-          pixel_grey_data[g_vid_y][g_vid_x] = g_pix_data;
+          // pixel_grey_data[g_vid_y][g_vid_x] = o_pix_data;
           @(posedge clk_pix);
           if(g_vid_x < `H_PIXELS - 1)
             g_vid_x = g_vid_x + 1;
