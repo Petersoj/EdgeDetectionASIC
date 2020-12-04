@@ -28,6 +28,7 @@ module edge_detection_top
   );
 
   reg         pix_vsync_dly;
+  wire        vsync_rising_edge_pulse;
 
   // output mapping
   assign O_PCLK     = I_PCLK; // May need a clock buffer
@@ -103,6 +104,7 @@ module edge_detection_top
   //   end
   // end
 
+  assign vsync_rising_edge_pulse = (pix_vsync_dly == 1'b0 && I_VSYNC == 1'b1) ? 1'b1 : 1'b0;
 
   //need to change inputs to be wires assigned to the parameters during reset
   //many synthesis warnings about connecting constants to nets
@@ -122,7 +124,7 @@ module edge_detection_top
       .I_RST      (I_RST),
       .I_PCLK     (I_PCLK),
       .I_PIX_DATA ({out, out, out}),
-      .I_VRST     (pix_vsync_dly), // Will need to be delayed to line up with incoming data
+      .I_VRST     (vsync_rising_edge_pulse), // Will need to be delayed to line up with incoming data
       .O_DE       (O_DE),
       .O_HS       (O_HSYNC),
       .O_VS       (O_VSYNC),
