@@ -1,4 +1,3 @@
-Warning: Design 'edge_detection_top' has '1' unresolved references. For more detailed information, use the "link" command. (UID-341)
  
 ****************************************
 Report : timing
@@ -7,29 +6,165 @@ Report : timing
         -max_paths 1
 Design : edge_detection_top
 Version: K-2015.06-SP5-6
-Date   : Tue Dec  1 18:05:46 2020
+Date   : Fri Dec  4 17:55:07 2020
 ****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
 
 Operating Conditions: PVT_1P8V_25C   Library: sclib_tsmc180_ss
 Wire Load Model Mode: top
 
-  Startpoint: iVidGen/q_pix_data_reg[23]
-              (rising edge-triggered flip-flop)
-  Endpoint: O_PIX_DATA[23]
-            (output port)
-  Path Group: (none)
+  Startpoint: iBMCC/q_frame_buffer_column_reg[1]
+              (rising edge-triggered flip-flop clocked by I_CORE_CLK)
+  Endpoint: iBMCC/iGrayscaledFrameBufferMatrix3/q_o_pixel_matrix_reg[47]
+            (rising edge-triggered flip-flop clocked by I_CORE_CLK)
+  Path Group: I_CORE_CLK
   Path Type: max
 
   Point                                                   Incr       Path
   --------------------------------------------------------------------------
-  iVidGen/q_pix_data_reg[23]/CLK (DFFQX1)                 0.00       0.00 r
-  iVidGen/q_pix_data_reg[23]/Q (DFFQX1)                   0.11       0.11 f
-  iVidGen/O_PIX_DATA[23] (video_timing_gen_05f_08f_30f_31f_002_023_203_20d_0)
-                                                          0.00       0.11 f
-  O_PIX_DATA[23] (out)                                    0.00       0.11 f
-  data arrival time                                                  0.11
+  clock I_CORE_CLK (rise edge)                            0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  iBMCC/q_frame_buffer_column_reg[1]/CLK (DFFQX1)         0.00 #     0.00 r
+  iBMCC/q_frame_buffer_column_reg[1]/Q (DFFQX1)           0.15       0.15 f
+  iBMCC/U15/Z (INVX4)                                     0.07       0.22 r
+  iBMCC/U3/Z (INVX8)                                      0.04       0.26 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/I_COLUMN[1] (frame_buffer_matrix3_P_COLUMNS640_P_ROWS3_P_PIXEL_DEPTH8)
+                                                          0.00       0.26 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U13463/Z (NAND3X1)
+                                                          0.13       0.39 r
+  iBMCC/iGrayscaledFrameBufferMatrix3/U1365/Z (NOR2X1)
+                                                          0.10       0.49 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U58/Z (NAND2X1)     0.10       0.59 r
+  iBMCC/iGrayscaledFrameBufferMatrix3/U13466/Z (INVX2)
+                                                          0.06       0.65 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U13467/Z (NAND2X1)
+                                                          0.10       0.75 r
+  iBMCC/iGrayscaledFrameBufferMatrix3/U14141/Z (INVX2)
+                                                          0.05       0.80 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U14143/Z (MUX2X1)
+                                                          0.19       1.00 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U14144/Z (NAND3X1)
+                                                          0.10       1.09 r
+  iBMCC/iGrayscaledFrameBufferMatrix3/U14544/Z (NAND3X1)
+                                                          0.07       1.16 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U14545/Z (INVX2)
+                                                          0.05       1.22 r
+  iBMCC/iGrayscaledFrameBufferMatrix3/U14546/Z (NAND2X1)
+                                                          0.06       1.28 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U6080/Z (INVX4)     0.06       1.33 r
+  iBMCC/iGrayscaledFrameBufferMatrix3/U1267/Z (NAND2X1)
+                                                          0.08       1.41 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U1896/Z (INVX4)     0.10       1.51 r
+  iBMCC/iGrayscaledFrameBufferMatrix3/U17211/Z (NAND2X1)
+                                                          0.11       1.62 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U165159/Z (NOR2X1)
+                                                          0.08       1.70 r
+  iBMCC/iGrayscaledFrameBufferMatrix3/U165160/Z (NOR2X1)
+                                                          0.06       1.76 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U165162/Z (NAND3X1)
+                                                          0.08       1.84 r
+  iBMCC/iGrayscaledFrameBufferMatrix3/U165163/Z (NOR2X1)
+                                                          0.07       1.91 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U165167/Z (NAND3X1)
+                                                          0.08       1.99 r
+  iBMCC/iGrayscaledFrameBufferMatrix3/U165168/Z (NOR2X1)
+                                                          0.07       2.06 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U165170/Z (NAND3X1)
+                                                          0.08       2.14 r
+  iBMCC/iGrayscaledFrameBufferMatrix3/U165228/Z (NOR2X1)
+                                                          0.07       2.21 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U165229/Z (NAND3X1)
+                                                          0.12       2.33 r
+  iBMCC/iGrayscaledFrameBufferMatrix3/U165824/Z (NOR2X1)
+                                                          0.07       2.40 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U165825/Z (NOR2X1)
+                                                          0.07       2.47 r
+  iBMCC/iGrayscaledFrameBufferMatrix3/U165827/Z (NOR2X1)
+                                                          0.07       2.54 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U165828/Z (NAND3X1)
+                                                          0.08       2.62 r
+  iBMCC/iGrayscaledFrameBufferMatrix3/U165830/Z (NOR2X1)
+                                                          0.07       2.69 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U165837/Z (NAND3X1)
+                                                          0.08       2.77 r
+  iBMCC/iGrayscaledFrameBufferMatrix3/U165839/Z (NOR2X1)
+                                                          0.07       2.84 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U165840/Z (NAND3X1)
+                                                          0.08       2.92 r
+  iBMCC/iGrayscaledFrameBufferMatrix3/U165844/Z (NOR2X1)
+                                                          0.07       2.99 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U166358/Z (NAND3X1)
+                                                          0.08       3.06 r
+  iBMCC/iGrayscaledFrameBufferMatrix3/U166360/Z (NOR2X1)
+                                                          0.07       3.13 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U169834/Z (NAND3X1)
+                                                          0.07       3.21 r
+  iBMCC/iGrayscaledFrameBufferMatrix3/U1265/Z (NAND2X1)
+                                                          0.08       3.28 f
+  iBMCC/iGrayscaledFrameBufferMatrix3/U1266/Z (INVX4)     0.05       3.33 r
+  iBMCC/iGrayscaledFrameBufferMatrix3/q_o_pixel_matrix_reg[47]/D (DFFQBX1)
+                                                          0.00       3.33 r
+  data arrival time                                                  3.33
+
+  clock I_CORE_CLK (rise edge)                            3.00       3.00
+  clock network delay (ideal)                             0.00       3.00
+  iBMCC/iGrayscaledFrameBufferMatrix3/q_o_pixel_matrix_reg[47]/CLK (DFFQBX1)
+                                                          0.00       3.00 r
+  library setup time                                     -0.09       2.91
+  data required time                                                 2.91
   --------------------------------------------------------------------------
-  (Path is unconstrained)
+  data required time                                                 2.91
+  data arrival time                                                 -3.33
+  --------------------------------------------------------------------------
+  slack (VIOLATED)                                                  -0.42
+
+
+  Startpoint: iVidGen/q_hctr_reg[0]
+              (rising edge-triggered flip-flop clocked by I_PCLK)
+  Endpoint: iVidGen/q_hact_done_reg
+            (rising edge-triggered flip-flop clocked by I_PCLK)
+  Path Group: I_PCLK
+  Path Type: max
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock I_PCLK (rise edge)                                0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  iVidGen/q_hctr_reg[0]/CLK (DFFQX1)                      0.00       0.00 r
+  iVidGen/q_hctr_reg[0]/Q (DFFQX1)                        0.23       0.23 f
+  iVidGen/add_135/A[0] (video_timing_gen_05f_08f_30f_31f_002_023_203_20d_0_DW01_inc_1)
+                                                          0.00       0.23 f
+  iVidGen/add_135/U27/Z (NAND3X1)                         0.15       0.39 r
+  iVidGen/add_135/U4/Z (INVX2)                            0.09       0.48 f
+  iVidGen/add_135/U26/Z (NAND3X1)                         0.12       0.60 r
+  iVidGen/add_135/U3/Z (INVX2)                            0.09       0.69 f
+  iVidGen/add_135/U25/Z (NAND3X1)                         0.12       0.80 r
+  iVidGen/add_135/U2/Z (INVX2)                            0.09       0.90 f
+  iVidGen/add_135/U24/Z (NAND3X1)                         0.12       1.01 r
+  iVidGen/add_135/U1/Z (INVX2)                            0.08       1.10 f
+  iVidGen/add_135/U23/Z (AND2X1)                          0.16       1.25 f
+  iVidGen/add_135/U21/Z (AND2X1)                          0.15       1.41 f
+  iVidGen/add_135/U20/Z (XOR2X1)                          0.18       1.59 f
+  iVidGen/add_135/SUM[11] (video_timing_gen_05f_08f_30f_31f_002_023_203_20d_0_DW01_inc_1)
+                                                          0.00       1.59 f
+  iVidGen/U201/Z (AND2X1)                                 0.13       1.72 f
+  iVidGen/U199/Z (NOR2X1)                                 0.14       1.85 r
+  iVidGen/U180/Z (NAND2X1)                                0.08       1.93 f
+  iVidGen/U179/Z (AND2X1)                                 0.14       2.07 f
+  iVidGen/q_hact_done_reg/D (DFFQX1)                      0.00       2.07 f
+  data arrival time                                                  2.07
+
+  clock I_PCLK (rise edge)                               19.86      19.86
+  clock network delay (ideal)                             0.00      19.86
+  iVidGen/q_hact_done_reg/CLK (DFFQX1)                    0.00      19.86 r
+  library setup time                                     -0.11      19.75
+  data required time                                                19.75
+  --------------------------------------------------------------------------
+  data required time                                                19.75
+  data arrival time                                                 -2.07
+  --------------------------------------------------------------------------
+  slack (MET)                                                       17.68
 
 
 1

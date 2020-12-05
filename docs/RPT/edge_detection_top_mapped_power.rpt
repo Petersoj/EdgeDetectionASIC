@@ -1,15 +1,13 @@
 Information: Propagating switching activity (low effort zero delay simulation). (PWR-6)
-Warning: There is no defined clock in the design. (PWR-80)
 Warning: Design has unannotated primary inputs. (PWR-414)
 Warning: Design has unannotated sequential cell outputs. (PWR-415)
-Warning: Design has unannotated black box outputs. (PWR-428)
  
 ****************************************
 Report : power
         -analysis_effort low
 Design : edge_detection_top
 Version: K-2015.06-SP5-6
-Date   : Tue Dec  1 18:05:46 2020
+Date   : Fri Dec  4 17:55:18 2020
 ****************************************
 
 
@@ -31,14 +29,13 @@ Power-specific unit information :
     Leakage Power Units = 1nW
 
 
-  Cell Internal Power  = 337.9132 uW   (51%)
-  Net Switching Power  = 322.9040 uW   (49%)
+  Cell Internal Power  =  51.1256 mW   (90%)
+  Net Switching Power  =   5.9320 mW   (10%)
                          ---------
-Total Dynamic Power    = 660.8173 uW  (100%)
+Total Dynamic Power    =  57.0576 mW  (100%)
 
-Cell Leakage Power     =  26.1605 nW
+Cell Leakage Power     =   3.7484 uW
 
-Information: report_power power group summary does not include estimated clock tree power. (PWR-789)
 
                  Internal         Switching           Leakage            Total
 Power Group      Power            Power               Power              Power   (   %    )  Attrs
@@ -46,10 +43,10 @@ Power Group      Power            Power               Power              Power  
 io_pad             0.0000            0.0000            0.0000            0.0000  (   0.00%)
 memory             0.0000            0.0000            0.0000            0.0000  (   0.00%)
 black_box          0.0000            0.0000            0.0000            0.0000  (   0.00%)
-clock_network      0.0000            0.0000            0.0000            0.0000  (   0.00%)
-register           0.0000            0.0000            0.0000            0.0000  (   0.00%)
-sequential     8.2279e-02        2.3660e-03            8.9226        8.4654e-02  (  12.81%)
-combinational      0.2556            0.3205           17.2379            0.5761  (  87.19%)
+clock_network  6.1291e-03        5.7428e-03            0.3466        1.1872e-02  (   0.02%)
+register          50.2744        9.8729e-03        1.0892e+03           50.2833  (  88.11%)
+sequential         0.0000            0.0000            0.0000            0.0000  (   0.00%)
+combinational      0.8533            5.9164        2.6588e+03            6.7727  (  11.87%)
 --------------------------------------------------------------------------------------------------
-Total              0.3379 mW         0.3228 mW        26.1605 nW         0.6608 mW
+Total             51.1338 mW         5.9320 mW     3.7484e+03 nW        57.0678 mW
 1

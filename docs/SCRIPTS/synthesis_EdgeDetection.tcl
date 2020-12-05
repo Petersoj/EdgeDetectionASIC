@@ -4,8 +4,8 @@ set pix_clk_period 19.861
 #need 6 clock cycles between pixels, slowest speed: 3.31
 set logic_clk_period 3 
 
-set clk_name clk_pix
-set clk_name_fast clk
+set clk_name I_PCLK
+set clk_name_fast I_CORE_CLK
 
 #  Define the name of the top module to be synthesized.
 set design edge_detection_top
@@ -21,10 +21,9 @@ set DDC_DIR 	 	"${BASE_DIR}/DDC/Edge_DDC"
 set DESIGN_LIB	    "${BASE_DIR}/DESIGN_LIBS/$design"
 
 # Define the verilog file list.
-set HDL_FILES [subst {$RTL_DIR/edge_detection_top.v $RTL_DIR/sobel_filter/sobel.v $RTL_DIR/video_timing_gen/video_timing_gen.v}]
-# $RTL_DIR/colorspace/buffered_matrix_colorspace_converter.v $RTL_DIR/colorspace/frame_buffer.v $RTL_DIR/colorspace/frame_buffer_o_matrix3.v $RTL_DIR/colorspace/grayscale.v
+set HDL_FILES [subst {$RTL_DIR/edge_detection_top.v $RTL_DIR/sobel_filter/sobel.v $RTL_DIR/video_timing_gen/video_timing_gen.v $RTL_DIR/colorspace/buffered_matrix3_colorspace_converter.v $RTL_DIR/colorspace/frame_buffer.v $RTL_DIR/colorspace/frame_buffer_matrix3.v $RTL_DIR/colorspace/grayscale.v}]
 
-#Create the directories if they do no exist
+# Create the directories if they do no exist
 exec mkdir -p $RPT_DIR
 exec mkdir -p $DDC_DIR
 exec mkdir -p $SDF_DIR

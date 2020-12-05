@@ -1,0 +1,37 @@
+ 
+****************************************
+Report : cell
+Design : edge_detection_top
+Version: K-2015.06-SP5-6
+Date   : Fri Dec  4 17:05:30 2020
+****************************************
+
+Attributes:
+    b - black box (unknown)
+    h - hierarchical
+    n - noncombinational
+    p - parameterized
+    r - removable
+    u - contains unmapped logic
+
+Cell                      Reference       Library             Area  Attributes
+--------------------------------------------------------------------------------
+U4                        NOR2X1          sclib_tsmc180_ss
+                                                          12.661600 
+U5                        NOR2X1          sclib_tsmc180_ss
+                                                          12.661600 
+U6                        INVX2           sclib_tsmc180_ss
+                                                          8.271200  
+iBMCC                     buffered_matrix3_colorspace_converter
+                                                          4354115.564707
+                                                                    h, n
+iSobel                    sobel                           18038.531961
+                                                                    h, n
+iVidGen                   video_timing_gen_05f_08f_30f_31f_002_023_203_20d_0
+                                                          7451.440809
+                                                                    h, n, p
+pix_vsync_dly_reg         DFFQX1          sclib_tsmc180_ss
+                                                          49.980000 n
+--------------------------------------------------------------------------------
+Total 7 cells                                             4379689.111877
+1
