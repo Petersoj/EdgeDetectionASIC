@@ -137,7 +137,7 @@ proc import_design {{how "init"}} {
    put_header [concat "Importing " $design " " $how "..."]
 
    switch $how {
-      "init"      {  uplevel #0 source CONF/project.globals
+      "init"      {  uplevel #0 source CONF/Edge_SCRIPTS/project.globals
                      init_design
                      save_design import
                   }
