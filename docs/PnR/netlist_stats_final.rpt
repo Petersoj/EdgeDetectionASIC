@@ -1,0 +1,57 @@
+*** Statistics for net list edge_detection_top_pads ***
+Number of cells      = 598946
+Number of nets       = 251615
+Number of tri-nets   = 0
+Number of degen nets = 14
+Number of pins       = 745746
+Number of i/os       = 58
+
+Number of nets with    1 terms = 14 (0.0%)
+Number of nets with    2 terms = 197079 (78.3%)
+Number of nets with    3 terms = 17952 (7.1%)
+Number of nets with    4 terms = 6999 (2.8%)
+Number of nets with    5 terms = 7586 (3.0%)
+Number of nets with    6 terms = 7354 (2.9%)
+Number of nets with    7 terms = 3581 (1.4%)
+Number of nets with    8 terms = 1193 (0.5%)
+Number of nets with    9 terms = 3003 (1.2%)
+Number of nets with >=10 terms = 6854 (2.7%)
+
+*** 36 Primitives used:
+Primitive pad_in (30 insts)
+Primitive pad_out (28 insts)
+Primitive pad_vdd (1 insts)
+Primitive pad_gnd (1 insts)
+Primitive pad_corner (4 insts)
+Primitive pad_fill_8 (58 insts)
+Primitive XOR2X1 (319 insts)
+Primitive TIE1 (1 insts)
+Primitive TIE0 (3 insts)
+Primitive OR2X1 (517 insts)
+Primitive NOR2X1 (49800 insts)
+Primitive NAND3X1 (25319 insts)
+Primitive NAND2X1 (124035 insts)
+Primitive MUX2X1 (24 insts)
+Primitive pad_fill_005 (620 insts)
+Primitive pad_fill_1 (11 insts)
+Primitive pad_fill_01 (195 insts)
+Primitive pad_fill_4 (15 insts)
+Primitive pad_fill_32 (138 insts)
+Primitive INVX8 (258 insts)
+Primitive INVX4 (1245 insts)
+Primitive INVX32 (9 insts)
+Primitive INVX2 (20105 insts)
+Primitive INVX16 (43 insts)
+Primitive INVX1 (745 insts)
+Primitive FILL8 (52288 insts)
+Primitive FILL4 (76280 insts)
+Primitive FILL32 (2559 insts)
+Primitive FILL2 (92589 insts)
+Primitive FILL16 (24350 insts)
+Primitive FILL1 (99574 insts)
+Primitive DFFQX1 (14242 insts)
+Primitive DFFQQBX1 (1428 insts)
+Primitive DFFQBX1 (12 insts)
+Primitive BUFX1 (9281 insts)
+Primitive AND2X1 (2819 insts)
+************
