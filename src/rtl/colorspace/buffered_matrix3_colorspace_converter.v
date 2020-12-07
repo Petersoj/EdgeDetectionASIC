@@ -51,7 +51,7 @@ module buffered_matrix3_colorspace_converter
 
     // START local parameters
     localparam P_HTOTAL = 800;
-    localparam P_FRAME_BUFFER_ROWS = 4; // The number of rows to use for the internal grayscaled pixel buffer
+    localparam P_FRAME_BUFFER_ROWS = 3; // The number of rows to use for the internal grayscaled pixel buffer
     localparam P_FRAME_BUF_ROW_BITS = 2;
     localparam P_FRAME_BUFFER_REQUIRED_COLUMNS = 2; // The minimum number of columns required for a valid pixel matrix output
     localparam P_FRAME_BUFFER_REQUIRED_ROWS = 2; // The minimum number of rows required for a valid pixel matrix output
@@ -122,12 +122,12 @@ module buffered_matrix3_colorspace_converter
     
     reg   [8:0]   q_rd_y_index_pclk;
     wire  [8:0]   n_rd_y_index_pclk;
-    reg           q_rd_y_rst_pulse;
-    wire          n_rd_y_rst_pulse;
+    reg           q_y_rst_pulse;
+    wire          n_y_rst_pulse;
     reg   [9:0]   q_rd_x_index_pclk;
     wire  [9:0]   n_rd_x_index_pclk;
-    reg           q_rd_x_rst_pulse;
-    wire          n_rd_x_rst_pulse;
+    reg           q_x_rst_pulse;
+    wire          n_x_rst_pulse;
     reg   [8:0]   q_rd_y_index;
     wire  [8:0]   n_rd_y_index;
 
@@ -135,6 +135,10 @@ module buffered_matrix3_colorspace_converter
     reg   [1:0]   q_frame_buffer_wr_row;
     wire  [1:0]   n_frame_buffer_rd_row; 
     reg   [1:0]   q_frame_buffer_rd_row;
+    wire  [1:0]   n_wr_y_ctr;
+    reg   [1:0]   q_wr_y_ctr;
+    wire  [1:0]   n_rd_y_ctr;
+    reg   [1:0]   q_rd_y_ctr;
 
     // END registers and wires
 
@@ -157,16 +161,6 @@ module buffered_matrix3_colorspace_converter
     assign n_row_rst_pulse = (q_row_ctr == P_FRAME_ROWS) ? 1'b1 : 1'b0;
 
     // the following signals and counters are used to get the read indicies
-    assign n_rd_y_index_pclk =  (I_RESET == 1'b1) ? 9'h0 :
-                                (q_rd_y_rst_pulse == 1'b1) ? 9'h0 :
-                                (q_rd_x_rst_pulse == 1'b1) ? q_rd_y_index_pclk + 1 :
-                                q_rd_y_index_pclk;
-    assign n_rd_y_rst_pulse = (q_rd_y_index_pclk == P_FRAME_COLUMNS + 2) ? 1'b1 : 1'b0;
-    assign n_rd_x_index_pclk =  (I_RESET == 1'b1) ? 10'h0 :
-                                (q_rd_x_rst_pulse == 1'b1) ? 10'h0 : 
-                                q_rd_x_index_pclk + 1;
-    assign n_rd_x_rst_pulse = (n_de_dly == 1'b0 && I_DATA_VALID == 1'b1) ? 1'b1 : 
-                              (q_rd_x_index_pclk == P_HTOTAL) ? 1'b1 : 1'b0;
     assign n_de_dly = I_DATA_VALID;
     // same as n_row_rst_pulse
     // assign n_frame_reset = q_frame_column == P_FRAME_COLUMNS - 1 && q_frame_row == P_FRAME_ROWS - 1;
@@ -197,11 +191,11 @@ module buffered_matrix3_colorspace_converter
     assign n_frame_buffer_column =  (q_frame_buffer_write_enable == 1'b1) ? q_col_ctr : q_frame_buffer_column;
     // fixed
     assign frame_buffer_row = (q_frame_buffer_write_enable == 1'b1) ? q_frame_buffer_wr_row : q_frame_buffer_rd_row;
-    assign n_frame_buffer_wr_row =  (q_frame_buffer_reset == 1'b1) ? 2'b0 :
-                                    (q_frame_buffer_write_enable == 1'b1) ? q_row_ctr[1:0] : 
+    assign n_frame_buffer_wr_row =  (q_y_rst_pulse == 1'b1) ? 2'b0 :
+                                    (q_frame_buffer_write_enable == 1'b1) ? q_wr_y_ctr : 
                                     q_frame_buffer_wr_row;
-    assign n_frame_buffer_rd_row =  (q_frame_buffer_reset == 1'b1) ? 2'b0 :
-                                    (q_frame_buffer_read_enable == 1'b1) ? q_rd_y_index[1:0] : 
+    assign n_frame_buffer_rd_row =  (q_y_rst_pulse == 1'b1) ? 2'b0 :
+                                    (q_frame_buffer_read_enable == 1'b1) ? q_rd_y_ctr : 
                                     q_frame_buffer_rd_row;
     // fixed
     assign n_frame_buffer_write_enable = (I_DATA_VALID && q_pclk_posedge_pulse) ? 1'b1 : 1'b0;
@@ -215,6 +209,17 @@ module buffered_matrix3_colorspace_converter
     // q_rd_x_index and q_rd_y_index contain the READ location
 
     assign n_rd_y_index = (q_row_ctr - 2 > 480) ? 10'b0 : q_row_ctr - 2;
+
+    assign n_y_rst_pulse = (q_row_ctr == 0 && q_x_rst_pulse == 1'b1) ? 1'b1 : 
+                            1'b0;
+    assign n_x_rst_pulse = (q_de_dly == 1'b0 && I_DATA_VALID == 1'b1 && q_pclk_posedge_pulse == 1'b1) ? 1'b1 : 
+                            1'b0;
+    assign n_wr_y_ctr =    (q_y_rst_pulse == 1'b1 || q_wr_y_ctr == 2'd3) ? 2'b0 :
+                           (q_x_rst_pulse == 1'b1) ? q_wr_y_ctr + 1 :
+                           q_wr_y_ctr;
+    assign n_rd_y_ctr =    (n_wr_y_ctr == 2'd0) ? 2'd1 :
+                           (n_wr_y_ctr == 2'd1) ? 2'd2 :
+                           2'd0;
 
     assign n_o_pixel_column = q_col_ctr;
     assign n_o_pixel_row = n_rd_y_index;
@@ -239,7 +244,8 @@ module buffered_matrix3_colorspace_converter
     frame_buffer_matrix3 #(
         .P_COLUMNS(P_FRAME_COLUMNS),
         .P_ROWS(P_FRAME_BUFFER_ROWS),
-        .P_PIXEL_DEPTH(P_SUBPIXEL_DEPTH)
+        .P_PIXEL_DEPTH(4),
+        .P_MATRIX_PIXEL_DEPTH(8)
         )
         iGrayscaledFrameBufferMatrix3
         (
@@ -247,7 +253,7 @@ module buffered_matrix3_colorspace_converter
         .I_RESET(I_RESET),
         .I_COLUMN(q_frame_buffer_column),
         .I_ROW(frame_buffer_row),
-        .I_PIXEL(grayscaled_pixel),
+        .I_PIXEL(grayscaled_pixel[7:4]),
         .I_WRITE_ENABLE(q_frame_buffer_write_enable),
         .I_READ_ENABLE(q_frame_buffer_read_enable),
 
@@ -276,6 +282,10 @@ module buffered_matrix3_colorspace_converter
             q_frame_buffer_rd_row <= {P_FRAME_BUF_ROW_BITS{1'b0}};
             q_frame_buffer_column <= 10'b0;
             q_rd_y_index <= 9'b0;
+            q_x_rst_pulse <= 1'b0;
+            q_y_rst_pulse <= 1'b0;
+            q_wr_y_ctr <= 2'b0;
+            q_rd_y_ctr <= 2'b0;
         end else begin
             q_i_pixel_clock_was_low <= n_i_pixel_clock_was_low;
             q_i_pixel_clock_posedge_pulse <= n_i_pixel_clock_posedge_pulse;
@@ -295,6 +305,10 @@ module buffered_matrix3_colorspace_converter
             q_frame_buffer_rd_row <= n_frame_buffer_rd_row;
             q_frame_buffer_column <= n_frame_buffer_column;
             q_rd_y_index <= n_rd_y_index;
+            q_x_rst_pulse <= n_x_rst_pulse;
+            q_y_rst_pulse <= n_y_rst_pulse;
+            q_wr_y_ctr <= n_wr_y_ctr;
+            q_rd_y_ctr <= n_rd_y_ctr;
         end
     end
 
@@ -311,9 +325,7 @@ module buffered_matrix3_colorspace_converter
             q_row_ctr <= 9'h0;
             q_col_rst_pulse <= 1'b0;
             q_rd_y_index_pclk <= 9'h0;
-            q_rd_y_rst_pulse <= 1'b0;
             q_rd_x_index_pclk <= 10'b0;
-            q_rd_x_rst_pulse <= 1'b0;
         end else begin
             // q_frame_reset <= n_frame_reset;
             // q_frame_column <= n_frame_column;
@@ -325,9 +337,7 @@ module buffered_matrix3_colorspace_converter
             q_row_ctr <= n_row_ctr;
             q_col_rst_pulse <= n_col_rst_pulse;
             q_rd_y_index_pclk <= n_rd_y_index_pclk;
-            q_rd_y_rst_pulse <= n_rd_y_rst_pulse;
             q_rd_x_index_pclk <= n_rd_x_index_pclk;
-            q_rd_x_rst_pulse <= n_rd_x_rst_pulse;
         end
     end
 endmodule

@@ -19,11 +19,12 @@ module frame_buffer_matrix3
     parameter integer P_COLUMNS = 640, // The number of columns in the frame
     parameter integer P_ROWS = 4, // The number of rows in the frame
     parameter integer P_PIXEL_DEPTH = 8, // The color depth of the pixel
+    parameter integer P_MATRIX_PIXEL_DEPTH = 8, // pixel depth fed into sobel filter (P_PIXEL_DEPTH padded with 0s on LSBs)
 
     // START port list local parameters
     parameter integer P_COLUMNS_BITS = $clog2(P_COLUMNS),
     parameter integer P_ROWS_BITS = $clog2(P_ROWS),
-    parameter integer P_O_PIXEL_MATRIX_BITS = P_PIXEL_DEPTH * 8
+    parameter integer P_O_PIXEL_MATRIX_BITS = P_MATRIX_PIXEL_DEPTH * 8
     // END port list local parameters
     )
     (
@@ -49,14 +50,14 @@ module frame_buffer_matrix3
     wire [P_ROWS_BITS - 1 : 0] next_row_index; // The index of the row after the row of the desired pixel
 
     // The following define the wires of the 3x3 matrix pixels as chosen by the desired row and column inputs.
-    wire [P_PIXEL_DEPTH - 1 : 0] top_left_pixel;
-    wire [P_PIXEL_DEPTH - 1 : 0] top_pixel;
-    wire [P_PIXEL_DEPTH - 1 : 0] top_right_pixel;
-    wire [P_PIXEL_DEPTH - 1 : 0] middle_left_pixel;
-    wire [P_PIXEL_DEPTH - 1 : 0] middle_right_pixel;
-    wire [P_PIXEL_DEPTH - 1 : 0] bottom_left_pixel;
-    wire [P_PIXEL_DEPTH - 1 : 0] bottom_pixel;
-    wire [P_PIXEL_DEPTH - 1 : 0] bottom_right_pixel;
+    wire [P_MATRIX_PIXEL_DEPTH - 1 : 0] top_left_pixel;
+    wire [P_MATRIX_PIXEL_DEPTH - 1 : 0] top_pixel;
+    wire [P_MATRIX_PIXEL_DEPTH - 1 : 0] top_right_pixel;
+    wire [P_MATRIX_PIXEL_DEPTH - 1 : 0] middle_left_pixel;
+    wire [P_MATRIX_PIXEL_DEPTH - 1 : 0] middle_right_pixel;
+    wire [P_MATRIX_PIXEL_DEPTH - 1 : 0] bottom_left_pixel;
+    wire [P_MATRIX_PIXEL_DEPTH - 1 : 0] bottom_pixel;
+    wire [P_MATRIX_PIXEL_DEPTH - 1 : 0] bottom_right_pixel;
 
     reg [P_O_PIXEL_MATRIX_BITS - 1 : 0] q_o_pixel_matrix; // The current state of the output pixel matrix
     wire [P_O_PIXEL_MATRIX_BITS - 1 : 0] n_o_pixel_matrix; // The next state of the output pixel matrix
@@ -74,21 +75,15 @@ module frame_buffer_matrix3
     assign previous_row_index = (I_ROW == 0) ? (P_ROWS - 1) : I_ROW - 1;
     assign next_row_index = (I_ROW == P_ROWS - 1) ? {P_ROWS_BITS{1'b0}} : I_ROW + 1;
 
-    assign top_left_pixel = buffer_registers[previous_row_index][previous_column_index];
-
-    assign top_pixel = buffer_registers[previous_row_index][I_COLUMN];
-
-    assign top_right_pixel = buffer_registers[previous_row_index][next_column_index];
-
-    assign middle_left_pixel = buffer_registers[I_ROW][previous_column_index];
-
-    assign middle_right_pixel = buffer_registers[I_ROW][next_column_index];
-
-    assign bottom_left_pixel = buffer_registers[next_row_index][previous_column_index];
-
-    assign bottom_pixel = buffer_registers[next_row_index][I_COLUMN];
-
-    assign bottom_right_pixel = buffer_registers[next_row_index][next_column_index];
+    assign top_left_pixel =     {buffer_registers[previous_row_index][previous_column_index], 4'h0};
+    assign top_pixel =          {buffer_registers[previous_row_index][I_COLUMN], 4'h0};
+    assign top_right_pixel =    {buffer_registers[previous_row_index][next_column_index], 4'h0};
+    assign middle_left_pixel =  {buffer_registers[I_ROW][previous_column_index], 4'h0};
+    assign middle_right_pixel = {buffer_registers[I_ROW][next_column_index], 4'h0};
+    assign bottom_left_pixel =  {buffer_registers[next_row_index][previous_column_index], 4'h0};
+    assign bottom_pixel =       {buffer_registers[next_row_index][I_COLUMN], 4'h0};
+    assign bottom_right_pixel = {buffer_registers[next_row_index][next_column_index], 4'h0};    
+    
 
     assign n_o_pixel_matrix = (I_READ_ENABLE == 1'b1 && I_WRITE_ENABLE == 1'b0) ?
                         {

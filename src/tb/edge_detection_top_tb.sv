@@ -17,7 +17,7 @@ module edge_detection_top_tb();
 
   // logic [2000:0]  in_vector_file_name =   "vectors/rocks.ppm";
   // logic [2000:0]  out_vector_3_file_name =  "vectors/out_3.ppm";
-  logic [2000:0]  in_vector_file_name =   "../../vectors/rocks.ppm";
+  logic [2000:0]  in_vector_file_name =   "../../vectors/metal.ppm";
   logic [2000:0]  out_vector_3_file_name =  "../../vectors/out_3.ppm";
   logic [2000:0]  out_vector_4_file_name =  "../../vectors/out_4.ppm";
   logic [23:0]    pixel_input_data[`V_LINES][`H_PIXELS];
