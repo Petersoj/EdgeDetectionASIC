@@ -1,8 +1,8 @@
 # The period has to be changed to see if the design can meet the timing constraint
 #Same for the clk_name when using a different design.
-set pix_clk_period 19.861
+set pix_clk_period 39.722
 #need 6 clock cycles between pixels, slowest speed: 3.31
-set logic_clk_period 3 
+set logic_clk_period 6 
 
 set clk_name I_PCLK
 set clk_name_fast I_CORE_CLK

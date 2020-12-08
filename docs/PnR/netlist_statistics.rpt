@@ -1,0 +1,45 @@
+*** Statistics for net list mips ***
+Number of cells      = 1520
+Number of nets       = 1402
+Number of tri-nets   = 0
+Number of degen nets = 4
+Number of pins       = 4050
+Number of i/os       = 28
+
+Number of nets with    0 terms = 4 (0.3%)
+Number of nets with    2 terms = 946 (67.5%)
+Number of nets with    3 terms = 233 (16.6%)
+Number of nets with    4 terms = 90 (6.4%)
+Number of nets with    5 terms = 36 (2.6%)
+Number of nets with    6 terms = 16 (1.1%)
+Number of nets with    7 terms = 8 (0.6%)
+Number of nets with    8 terms = 9 (0.6%)
+Number of nets with    9 terms = 27 (1.9%)
+Number of nets with >=10 terms = 33 (2.4%)
+
+*** 24 Primitives used:
+Primitive rf2hsm1wm1 (1 insts)
+Primitive XOR2X1 (81 insts)
+Primitive TIE1 (1 insts)
+Primitive TIE0 (4 insts)
+Primitive OR2X1 (31 insts)
+Primitive NOR2X1 (96 insts)
+Primitive NAND3X1 (118 insts)
+Primitive NAND2X1 (578 insts)
+Primitive MUX2X1 (34 insts)
+Primitive INVX8 (19 insts)
+Primitive INVX4 (27 insts)
+Primitive INVX32 (11 insts)
+Primitive INVX2 (147 insts)
+Primitive INVX16 (6 insts)
+Primitive INVX1 (27 insts)
+Primitive FILL8 (5 insts)
+Primitive FILL4 (26 insts)
+Primitive FILL2 (44 insts)
+Primitive FILL16 (1 insts)
+Primitive FILL1 (67 insts)
+Primitive DFFQX1 (60 insts)
+Primitive DFFQQBX1 (4 insts)
+Primitive BUFX1 (49 insts)
+Primitive AND2X1 (83 insts)
+************
