@@ -13,7 +13,7 @@ set gnd_net 				VSS
 set design Edge_Detection
 
 #To enable multi threading. Not sure if the CADE machines can allow more cores than this.
-set cpu_number 				2
+set cpu_number 				6
 #Uniquify the design, otherwise, might get error during CTS
 set init_design_uniquify    1
 

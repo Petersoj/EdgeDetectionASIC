@@ -38,8 +38,6 @@ module video_timing_gen
     output  wire        O_DE,       // Output Data Enable
     output  wire        O_HS,       // Output Horizontal Sync
     output  wire        O_VS,       // Output Vertical Sync
-    output  wire [11:0] O_HCNT,     // Output Horizontal Pixel Counter
-    output  wire [11:0] O_VCNT,     // Output Vertical Line Counter
     output  wire [23:0] O_PIX_DATA  // Output Pixel Data
   );
 
@@ -113,8 +111,8 @@ module video_timing_gen
   assign O_HS        = q_hsDly[3];
   assign O_VS        = q_vsync;
   assign O_PIX_DATA  = (I_TP_EN) ? (q_tstpat) : (q_pix_data);
-  assign O_HCNT      = q_hctr - I_HBP_END; // may need to be delayed to line up with DE
-  assign O_VCNT      = q_vctr - I_VBP_END;
+  // assign O_HCNT      = q_hctr - I_HBP_END; // may need to be delayed to line up with DE
+  // assign O_VCNT      = q_vctr - I_VBP_END;
 
   // RTL Logic
 
@@ -137,9 +135,9 @@ module video_timing_gen
   assign n_de         = q_hde & q_vde;  // Data Enable
   assign n_hsDly      = {q_hsDly[2:0], n_hsync};  // Delay pipe for hsync
   assign n_deDly      = {q_deDly[2:0], n_de};     // Delay pipe for de
-  assign n_tstpat     = (q_deDly[1] == 1'b1) ? {O_VCNT[7:0], // Pixel color depends on vertical
+  assign n_tstpat     = /*(q_deDly[1] == 1'b1) ? {O_VCNT[7:0], // Pixel color depends on vertical
                                                 O_HCNT[7:0], // counter and horizontal counter
-                                                O_HCNT[7:0]} : 
+                                                O_HCNT[7:0]} : */
                         24'h0;
   assign n_pix_data   = (q_deDly[1] == 1'b1) ? I_PIX_DATA : // Incoming pixel data (will need to be modifed)
                         24'h0;                              // Async fifo output?

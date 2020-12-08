@@ -88,8 +88,7 @@ module edge_detection_top
       .clk(I_CORE_CLK),
       .start(colorspace_converter_pixel_matrix_ready), 
       .out(out),
-      .reset(rst_cclk),
-      .done() // TODO remove?
+      .reset(rst_cclk)
       );
 
   // Video Sync and Timing Gen
@@ -135,8 +134,6 @@ module edge_detection_top
       .O_DE       (O_DE),
       .O_HS       (O_HSYNC),
       .O_VS       (O_VSYNC),
-      .O_HCNT     (),         //TODO remove?
-      .O_VCNT     (),         //TODO remove?
       .O_PIX_DATA (O_PIX_DATA)
     );
 
