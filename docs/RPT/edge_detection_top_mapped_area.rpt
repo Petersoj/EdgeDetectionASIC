@@ -3,28 +3,28 @@
 Report : area
 Design : edge_detection_top
 Version: K-2015.06-SP5-6
-Date   : Fri Dec  4 17:55:07 2020
+Date   : Mon Dec  7 20:52:21 2020
 ****************************************
 
 Library(s) Used:
 
     sclib_tsmc180_ss (File: /research/ece/lnis-teaching/Designkits/tsmc180nm/full_custom_lib/lib/sclib_tsmc180_ss_nldm.db)
 
-Number of ports:                         1086
-Number of nets:                        246790
-Number of cells:                       244574
-Number of combinational cells:         228866
-Number of sequential cells:             15682
+Number of ports:                         1057
+Number of nets:                        114605
+Number of cells:                       113109
+Number of combinational cells:         105137
+Number of sequential cells:              7946
 Number of macros/black boxes:               0
-Number of buf/inv:                      26029
-Number of references:                       6
+Number of buf/inv:                       6614
+Number of references:                       7
 
-Combinational area:            2928025.773998
-Buf/Inv area:                   237425.270748
-Noncombinational area:          793269.619423
+Combinational area:            1365422.127970
+Buf/Inv area:                    54780.354790
+Noncombinational area:          401645.627998
 Macro/Black Box area:                0.000000
 Net Interconnect area:      undefined  (No wire load specified)
 
-Total cell area:               3721295.393421
+Total cell area:               1767067.755968
 Total area:                 undefined
 1
