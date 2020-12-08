@@ -2,7 +2,7 @@
 #Change the design name as well as the required density
 #set design					topmodule_withpads
 #set design					mips
-set density					0.5
+set density					0.7
 set max_route_layer			5
 
 
@@ -158,10 +158,10 @@ proc floorplan_design {} {
    put_header [concat "Floorplanning " $design "..."]
 
    set ASPECT_RATIO   1.0     ;# rectangle with height = 1.0*width
-   set CORE_TO_LEFT   10     ;# micron
-   set CORE_TO_BOTTOM 10     ;# micron
-   set CORE_TO_RIGHT  10     ;# micron
-   set CORE_TO_TOP    10     ;# micron
+   set CORE_TO_LEFT   20     ;# micron
+   set CORE_TO_BOTTOM 20     ;# micron
+   set CORE_TO_RIGHT  20     ;# micron
+   set CORE_TO_TOP    20     ;# micron
 
    floorPlan -site core7T -r $ASPECT_RATIO $density $CORE_TO_LEFT $CORE_TO_BOTTOM $CORE_TO_RIGHT $CORE_TO_TOP
    fit
@@ -208,7 +208,7 @@ proc place_io_add_io_filler {} {
 	 deleteIoFiller
 
    put_header "Loading IO file..."
-   loadIoFile SCRIPTS/place_io.io
+   loadIoFile SCRIPTS/Edge_SCRIPTS/place_io.io
 
 
    set iofiller_cells "pad_fill_32 pad_fill_16 pad_fill_8 pad_fill_4 pad_fill_2 pad_fill_1 pad_fill_01 pad_fill_005"
