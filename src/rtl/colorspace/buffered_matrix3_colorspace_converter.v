@@ -140,6 +140,16 @@ module buffered_matrix3_colorspace_converter
     wire  [1:0]   n_rd_y_ctr;
     reg   [1:0]   q_rd_y_ctr;
 
+    reg         rst_pclk;
+    reg         rst_cclk;
+    
+    always @(posedge I_PIXEL_CLK) begin
+      rst_pclk <= I_RESET;
+    end
+    always @(posedge I_CLK) begin
+      rst_cclk <= I_RESET;
+    end
+
     // END registers and wires
 
     // START output mapping
@@ -150,11 +160,11 @@ module buffered_matrix3_colorspace_converter
     // END output mapping
 
     // START RTL logic
-    assign n_row_ctr = (I_RESET == 1'b1) ? 9'h0 :
+    assign n_row_ctr = (rst_pclk == 1'b1) ? 9'h0 :
                        (q_row_rst_pulse == 1'b1) ? 9'h0 :
                        (q_col_rst_pulse == 1'b1) ? q_row_ctr + 1 :
                        q_row_ctr;
-    assign n_col_ctr = (I_RESET == 1'b1) ? 10'h0 :
+    assign n_col_ctr = (rst_pclk == 1'b1) ? 10'h0 :
                        (I_DATA_VALID == 1'b0 || q_col_rst_pulse == 1'b1) ? 10'h0 :
                        q_col_ctr + 1;
     assign n_col_rst_pulse = (q_col_ctr == P_FRAME_COLUMNS) ? 1'b1 : 1'b0;
@@ -235,7 +245,7 @@ module buffered_matrix3_colorspace_converter
         iGrayscale
         (
         .I_CLK(I_CLK),
-        .I_RESET(I_RESET),
+        .I_RESET(rst_cclk),
         .I_PIXEL(I_PIXEL),
 
         .O_PIXEL(grayscaled_pixel)
@@ -250,7 +260,7 @@ module buffered_matrix3_colorspace_converter
         iGrayscaledFrameBufferMatrix3
         (
         .I_CLK(I_CLK),
-        .I_RESET(I_RESET),
+        .I_RESET(rst_cclk),
         .I_COLUMN(q_frame_buffer_column),
         .I_ROW(frame_buffer_row),
         .I_PIXEL(grayscaled_pixel[7:4]),
@@ -263,7 +273,7 @@ module buffered_matrix3_colorspace_converter
     
     // Clock block
     always @(posedge I_CLK) begin
-        if (I_RESET) begin
+        if (rst_cclk) begin
             q_i_pixel_clock_was_low <= 1'b0;
             q_i_pixel_clock_posedge_pulse <= 1'b0;
 
@@ -314,7 +324,7 @@ module buffered_matrix3_colorspace_converter
 
     // Pixel clock block
     always @(posedge I_PIXEL_CLK) begin
-        if (I_RESET) begin
+        if (rst_pclk) begin
             // q_frame_reset <= 1'b0;
             // q_frame_column <= {P_FRAME_COLUMN_BITS{1'b0}};
             // q_frame_row <= {P_FRAME_ROW_BITS{1'b0}};

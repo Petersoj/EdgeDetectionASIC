@@ -29,17 +29,24 @@ module edge_detection_top
 
   reg         pix_vsync_dly;
   wire        vsync_rising_edge_pulse;
-
+  reg         rst_pclk;
+  reg         rst_cclk;
   // output mapping
-  assign O_PCLK     = I_PCLK; // May need a clock buffer
+  assign O_PCLK     = I_PCLK;
 
-  always @(posedge O_PCLK) begin
+  always @(posedge I_PCLK) begin
     if(I_RST == 1'b1) begin
       pix_vsync_dly <= 1'b0;
     end
     else begin
-      pix_vsync_dly <= I_VSYNC;    // Will be changed later
+      pix_vsync_dly <= I_VSYNC;
     end
+  end
+  always @(posedge I_PCLK) begin
+      rst_pclk <= I_RST;
+  end
+  always @(posedge I_CORE_CLK) begin
+      rst_cclk <= I_RST;
   end
 
   parameter [11:0] VGA_HACT   = 640; // Horizontal Active (pixels)
@@ -81,7 +88,7 @@ module edge_detection_top
       .clk(I_CORE_CLK),
       .start(colorspace_converter_pixel_matrix_ready), 
       .out(out),
-      .reset(I_RST),
+      .reset(rst_cclk),
       .done() // TODO remove?
       );
 
@@ -121,7 +128,7 @@ module edge_detection_top
     )
     iVidGen
     (
-      .I_RST      (I_RST),
+      .I_RST      (rst_pclk),
       .I_PCLK     (I_PCLK),
       .I_PIX_DATA ({out, out, out}),
       .I_VRST     (vsync_rising_edge_pulse), // Will need to be delayed to line up with incoming data

@@ -34,16 +34,16 @@ module edge_detection_top_tb();
   initial clk_333 = 1'b1;
   always
   begin
-    #1500 clk_333 = 1'b0;
-    #1500 clk_333 = 1'b1;
+    #5000 clk_333 = 1'b0;
+    #5000 clk_333 = 1'b1;
   end
   assign #300 istrb_clk_333 = clk_333;
 
   initial clk_pix = 1'b1; // 25.175 MHz Pixel Clock
   always
   begin
-    #19861 clk_pix = 1'b0;
-    #19861 clk_pix = 1'b1;
+    #39722 clk_pix = 1'b0;
+    #39722 clk_pix = 1'b1;
   end
   assign #300 istrb_clk_pix = clk_pix;
 
