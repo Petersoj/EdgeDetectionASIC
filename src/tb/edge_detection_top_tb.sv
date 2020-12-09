@@ -28,7 +28,8 @@ module edge_detection_top_tb();
   logic           clk_333, clk_pix, o_clk_pix;
   logic           istrb_clk_333, istrb_clk_pix;
   logic           i_de, i_vs, i_hs, o_de, o_vs, o_hs;
-  logic [23:0]    i_pix_data, o_pix_data, g_pix_data;
+  logic [23:0]    i_pix_data, g_pix_data;
+  logic [11:0]    o_pix_data;
 
   // generate clock
   initial clk_333 = 1'b1;
@@ -86,8 +87,6 @@ module edge_detection_top_tb();
       .O_DE       (i_de),
       .O_HS       (i_hs),
       .O_VS       (i_vs),
-      .O_HCNT     (),
-      .O_VCNT     (),
       .O_PIX_DATA ()
     );
 
@@ -103,9 +102,11 @@ module edge_detection_top_tb();
       .O_PIX_DATA     (o_pix_data),     // Output RGB Pixel Data
       .O_VSYNC        (o_vs),     // Output Vertical Sync
       .O_HSYNC        (o_hs),     // Output Horizontal Sync
-      .O_DE           (o_de),     // Output Data Enable (Data Valid)
-      .O_PCLK         (o_clk_pix)      // Output Pixel Clock (25.175 MHz)
+      .O_DE           (o_de)     // Output Data Enable (Data Valid)
+      // .O_PCLK         (o_clk_pix)      // Output Pixel Clock (25.175 MHz)
     );
+
+    assign o_clk_pix = clk_pix;
 
   assign g_pix_data = {3{DUT.iBMCC.iGrayscale.O_PIXEL}};
 
@@ -134,7 +135,7 @@ module edge_detection_top_tb();
     begin
       read_ppm_file(in_vector_file_name, pixel_input_data);
       reset = 1'b1;
-      repeat(100) @(posedge clk_333);
+      repeat(200) @(posedge clk_333);
       reset = 1'b0;
       repeat(10) @(posedge clk_333);
     end
@@ -206,7 +207,9 @@ module edge_detection_top_tb();
         @(posedge istrb_clk_pix);
         if(o_de == 1'b1)
         begin
-          pixel_output_data[o_vid_y][o_vid_x] = o_pix_data;
+          pixel_output_data[o_vid_y][o_vid_x] = {o_pix_data[11:8], 4'b0, 
+                                                o_pix_data[7:4], 4'b0, 
+                                                o_pix_data[3:0], 4'b0};
           @(posedge clk_pix);
           if(o_vid_x < `H_PIXELS - 1)
             o_vid_x = o_vid_x + 1;
