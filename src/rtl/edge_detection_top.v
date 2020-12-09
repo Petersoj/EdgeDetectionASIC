@@ -126,17 +126,6 @@ module edge_detection_top
       .I_TP_EN    (TP_EN)
     )
     iVidGen
-      .I_HS_END   (VGA_HS_END),
-      .I_HBP_END  (VGA_HBP_END),
-      .I_HACT_END (VGA_HACT_END),
-      .I_HFP_END  (VGA_HFP_END),
-      .I_VS_END   (VGA_VS_END),
-      .I_VBP_END  (VGA_VBP_END),
-      .I_VACT_END (VGA_VACT_END),
-      .I_VFP_END  (VGA_VFP_END),
-      .I_TP_EN    (TP_EN)
-    )
-    iVidGen
     (
       .I_RST      (rst_pclk),
       .I_PCLK     (I_PCLK),
