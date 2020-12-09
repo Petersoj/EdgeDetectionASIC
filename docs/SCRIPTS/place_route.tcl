@@ -525,9 +525,9 @@ proc export_design {} {
    put_header "Exporting design..."
 
    #To be used for importing into Virtuoso
-   saveNetlist -excludeLeafCell -includePowerGround "../HDL/PLACED/${design}_placed_virtuoso.v"
+   saveNetlist -excludeLeafCell -includePowerGround "../HDL/Edge_PLACED/${design}_placed_virtuoso.v"
    #To be used for modelsim verification (does not contain VDD/VSS ports)
-   saveNetlist -excludeLeafCell "../HDL/PLACED/${design}_placed_modelsim.v"
+   saveNetlist -excludeLeafCell "../HDL/Edge_PLACED/${design}_placed_modelsim.v"
 
 	exec mkdir -p SDF
 	#write_sdf ‐view wc SDF/${design}_placed.sdf

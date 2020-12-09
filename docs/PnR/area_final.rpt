@@ -1,10 +1,10 @@
 Depth  Name                                                   #Inst  Area (um^2) 
 ---------------------------------------------------------------------------------
-0      edge_detection_top_pads                                83685  2400666.9568
-1      dut                                                    83626  1175637.1648
-2      dut/iSobel                                             1108   16569.3696  
-2      dut/iBMCC                                              82122  1151373.6192
-2      dut/iVidGen                                            343    7007.0784   
+0      edge_detection_top_pads                                83660  2379415.5328
+1      dut                                                    83609  1175450.5728
+2      dut/iSobel                                             1107   16558.3936  
+2      dut/iBMCC                                              82096  1151088.2432
+2      dut/iVidGen                                            345    7029.0304   
 3      dut/iSobel/add_0_root_add_0_root_add_94_2              50     731.0016    
 3      dut/iSobel/sub_66_S2                                   63     902.2272    
 3      dut/iVidGen/add_129                                    27     443.4304    
@@ -22,7 +22,7 @@ Depth  Name                                                   #Inst  Area (um^2)
 3      dut/iBMCC/iGrayscale                                   217    3547.4432   
 3      dut/iSobel/add_69                                      42     564.1664    
 3      dut/iSobel/add_1_root_add_0_root_add_104_2             50     731.0016    
-3      dut/iBMCC/iGrayscaledFrameBufferMatrix3                81436  1138634.8736
+3      dut/iBMCC/iGrayscaledFrameBufferMatrix3                81404  1138283.6416
 4      dut/iBMCC/iGrayscale/add_3_root_add_1_root_add_76_9    42     625.632     
 4      dut/iBMCC/iGrayscale/add_0_root_add_1_root_add_76_9    43     649.7792    
 4      dut/iBMCC/iGrayscale/add_8_root_add_76_9               27     412.6976    

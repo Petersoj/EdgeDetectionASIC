@@ -1,29 +1,29 @@
 *** Statistics for net list edge_detection_top_pads ***
-Number of cells      = 206504
-Number of nets       = 84112
+Number of cells      = 206373
+Number of nets       = 84087
 Number of tri-nets   = 0
 Number of degen nets = 30
-Number of pins       = 254502
-Number of i/os       = 46
+Number of pins       = 254451
+Number of i/os       = 45
 
 Number of nets with    1 terms = 30 (0.0%)
-Number of nets with    2 terms = 64400 (76.6%)
-Number of nets with    3 terms = 2705 (3.2%)
-Number of nets with    4 terms = 5614 (6.7%)
-Number of nets with    5 terms = 7517 (8.9%)
-Number of nets with    6 terms = 221 (0.3%)
-Number of nets with    7 terms = 933 (1.1%)
-Number of nets with    8 terms = 404 (0.5%)
-Number of nets with    9 terms = 98 (0.1%)
-Number of nets with >=10 terms = 2190 (2.6%)
+Number of nets with    2 terms = 64366 (76.5%)
+Number of nets with    3 terms = 2695 (3.2%)
+Number of nets with    4 terms = 5625 (6.7%)
+Number of nets with    5 terms = 7532 (9.0%)
+Number of nets with    6 terms = 235 (0.3%)
+Number of nets with    7 terms = 911 (1.1%)
+Number of nets with    8 terms = 401 (0.5%)
+Number of nets with    9 terms = 106 (0.1%)
+Number of nets with >=10 terms = 2186 (2.6%)
 
-*** 34 Primitives used:
+*** 35 Primitives used:
 Primitive pad_in (30 insts)
-Primitive pad_out (16 insts)
+Primitive pad_out (15 insts)
 Primitive pad_vdd (1 insts)
 Primitive pad_gnd (1 insts)
 Primitive pad_corner (4 insts)
-Primitive pad_fill_8 (8 insts)
+Primitive pad_fill_8 (23 insts)
 Primitive XOR2X1 (321 insts)
 Primitive TIE1 (1 insts)
 Primitive TIE0 (5 insts)
@@ -32,24 +32,25 @@ Primitive NOR2X1 (12533 insts)
 Primitive NAND3X1 (9600 insts)
 Primitive NAND2X1 (46214 insts)
 Primitive MUX2X1 (7 insts)
-Primitive pad_fill_005 (452 insts)
-Primitive pad_fill_1 (46 insts)
-Primitive pad_fill_01 (295 insts)
-Primitive pad_fill_32 (16 insts)
-Primitive pad_fill_2 (12 insts)
-Primitive pad_fill_16 (38 insts)
+Primitive pad_fill_005 (492 insts)
+Primitive pad_fill_1 (33 insts)
+Primitive pad_fill_01 (263 insts)
+Primitive pad_fill_4 (20 insts)
+Primitive pad_fill_32 (9 insts)
+Primitive pad_fill_2 (21 insts)
+Primitive pad_fill_16 (45 insts)
 Primitive INVX4 (8 insts)
 Primitive INVX2 (4714 insts)
 Primitive INVX1 (74 insts)
-Primitive FILL8 (5134 insts)
-Primitive FILL4 (18599 insts)
-Primitive FILL32 (624 insts)
-Primitive FILL2 (54422 insts)
-Primitive FILL16 (1368 insts)
-Primitive FILL1 (41805 insts)
+Primitive FILL8 (5224 insts)
+Primitive FILL4 (17358 insts)
+Primitive FILL32 (630 insts)
+Primitive FILL2 (55734 insts)
+Primitive FILL16 (1492 insts)
+Primitive FILL1 (41369 insts)
 Primitive DFFQX1 (5597 insts)
 Primitive DFFQQBX1 (411 insts)
 Primitive DFFQBX1 (2 insts)
-Primitive BUFX1 (1707 insts)
+Primitive BUFX1 (1683 insts)
 Primitive AND2X1 (2287 insts)
 ************

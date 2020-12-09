@@ -23,8 +23,8 @@ module edge_detection_top
     output wire [11:0]  O_PIX_DATA,  // Output RGB Pixel Data
     output wire         O_VSYNC,     // Output Vertical Sync
     output wire         O_HSYNC,     // Output Horizontal Sync
-    output wire         O_DE,        // Output Data Enable (Data Valid)
-    output wire         O_PCLK       // Output Pixel Clock (25.175 MHz)
+    output wire         O_DE        // Output Data Enable (Data Valid)
+    // output wire         O_PCLK       // Output Pixel Clock (25.175 MHz)
   );
 
   reg         pix_vsync_dly;
@@ -33,7 +33,7 @@ module edge_detection_top
   reg         rst_pclk;
   reg         rst_cclk;
   // output mapping
-  assign O_PCLK     = I_PCLK;
+  // assign O_PCLK     = I_PCLK;
   assign O_PIX_DATA = {o_pixel_data_full_depth[23:20], 
                       o_pixel_data_full_depth[15:12], 
                       o_pixel_data_full_depth[8:4]};

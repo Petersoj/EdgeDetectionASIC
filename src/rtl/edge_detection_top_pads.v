@@ -14,9 +14,11 @@ module edge_detection_top_pads (
         output [11:0] O_PIX_DATA,
         output O_VSYNC,
         output O_HSYNC,
-        output O_DE,
-        output O_PCLK
+        output O_DE
+        // output O_PCLK
     );
+    pad_in pad_in24 (.pad(I_RST), .DataIn(I_RST_pad));
+    pad_in pad_in25 (.pad(I_CORE_CLK), .DataIn(I_CORE_CLK_pad));
 
     pad_in pad_in0  (.pad(I_PIX_DATA[0]),  .DataIn(I_PIX_DATA_pad_0));
     pad_in pad_in1  (.pad(I_PIX_DATA[1]),  .DataIn(I_PIX_DATA_pad_1));
@@ -43,8 +45,7 @@ module edge_detection_top_pads (
     pad_in pad_in22 (.pad(I_PIX_DATA[22]), .DataIn(I_PIX_DATA_pad_22));
     pad_in pad_in23 (.pad(I_PIX_DATA[23]), .DataIn(I_PIX_DATA_pad_23));
 
-    pad_in pad_in24 (.pad(I_RST), .DataIn(I_RST_pad));
-    pad_in pad_in25 (.pad(I_CORE_CLK), .DataIn(I_CORE_CLK_pad));
+    
     // pad_in pad_in25 (.pad(I_PIX_DATA), .DataIn(I_PIX_DATA_pad));
     pad_in pad_in26 (.pad(I_VSYNC), .DataIn(I_VSYNC_pad));
     pad_in pad_in27 (.pad(I_HSYNC), .DataIn(I_HSYNC_pad));
@@ -77,11 +78,10 @@ module edge_detection_top_pads (
     // pad_out pad_out23 (.pad(O_PIX_DATA[23]), .DataOut(O_PIX_DATA_pad_23));
     
 
-    // pad_out pad_out0 (.pad(O_PIX_DATA), .out(O_PIX_DATA_pad));
     pad_out pad_out24 (.pad(O_VSYNC), .DataOut(O_VSYNC_pad));
     pad_out pad_out25 (.pad(O_HSYNC), .DataOut(O_HSYNC_pad));
     pad_out pad_out26 (.pad(O_DE), .DataOut(O_DE_pad));
-    pad_out pad_out27 (.pad(O_PCLK), .DataOut(O_PCLK_pad));
+    // pad_out pad_out27 (.pad(O_PCLK), .DataOut(O_PCLK_pad));
 
     //VDD and GND pads
     pad_vdd pad_vdd0 ();
@@ -145,7 +145,7 @@ module edge_detection_top_pads (
         ),
         .O_VSYNC (O_VSYNC_pad),
         .O_HSYNC (O_HSYNC_pad),
-        .O_DE (O_DE_pad),
-        .O_PCLK (O_PCLK_pad)
+        .O_DE (O_DE_pad)
+        // .O_PCLK (O_PCLK_pad)
         );
 endmodule
