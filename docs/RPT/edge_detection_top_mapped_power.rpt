@@ -1,4 +1,3 @@
-Loading db file '/research/ece/lnis-teaching/Designkits/tsmc180nm/full_custom_lib/lib/sclib_tsmc180_ss_nldm.db'
 Information: Propagating switching activity (low effort zero delay simulation). (PWR-6)
 Warning: Design has unannotated primary inputs. (PWR-414)
 Warning: Design has unannotated sequential cell outputs. (PWR-415)
@@ -8,7 +7,7 @@ Report : power
         -analysis_effort low
 Design : edge_detection_top
 Version: K-2015.06-SP5-6
-Date   : Tue Dec  8 19:38:09 2020
+Date   : Tue Dec  8 21:47:18 2020
 ****************************************
 
 

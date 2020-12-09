@@ -6,7 +6,7 @@ Report : timing
         -max_paths 1
 Design : edge_detection_top
 Version: K-2015.06-SP5-6
-Date   : Tue Dec  8 19:38:05 2020
+Date   : Tue Dec  8 21:47:14 2020
 ****************************************
 
  # A fanout number of 1000 was used for high fanout net computations.

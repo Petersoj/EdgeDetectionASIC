@@ -63,18 +63,18 @@ module edge_detection_top_pads (
     pad_out pad_out9  (.pad(O_PIX_DATA[9]),  .DataOut(O_PIX_DATA_pad_9));
     pad_out pad_out10 (.pad(O_PIX_DATA[10]), .DataOut(O_PIX_DATA_pad_10));
     pad_out pad_out11 (.pad(O_PIX_DATA[11]), .DataOut(O_PIX_DATA_pad_11));
-    pad_out pad_out12 (.pad(O_PIX_DATA[12]), .DataOut(O_PIX_DATA_pad_12));
-    pad_out pad_out13 (.pad(O_PIX_DATA[13]), .DataOut(O_PIX_DATA_pad_13));
-    pad_out pad_out14 (.pad(O_PIX_DATA[14]), .DataOut(O_PIX_DATA_pad_14));
-    pad_out pad_out15 (.pad(O_PIX_DATA[15]), .DataOut(O_PIX_DATA_pad_15));
-    pad_out pad_out16 (.pad(O_PIX_DATA[16]), .DataOut(O_PIX_DATA_pad_16));
-    pad_out pad_out17 (.pad(O_PIX_DATA[17]), .DataOut(O_PIX_DATA_pad_17));
-    pad_out pad_out18 (.pad(O_PIX_DATA[18]), .DataOut(O_PIX_DATA_pad_18));
-    pad_out pad_out19 (.pad(O_PIX_DATA[19]), .DataOut(O_PIX_DATA_pad_19));
-    pad_out pad_out20 (.pad(O_PIX_DATA[20]), .DataOut(O_PIX_DATA_pad_20));
-    pad_out pad_out21 (.pad(O_PIX_DATA[21]), .DataOut(O_PIX_DATA_pad_21));
-    pad_out pad_out22 (.pad(O_PIX_DATA[22]), .DataOut(O_PIX_DATA_pad_22));
-    pad_out pad_out23 (.pad(O_PIX_DATA[23]), .DataOut(O_PIX_DATA_pad_23));
+    // pad_out pad_out12 (.pad(O_PIX_DATA[12]), .DataOut(O_PIX_DATA_pad_12));
+    // pad_out pad_out13 (.pad(O_PIX_DATA[13]), .DataOut(O_PIX_DATA_pad_13));
+    // pad_out pad_out14 (.pad(O_PIX_DATA[14]), .DataOut(O_PIX_DATA_pad_14));
+    // pad_out pad_out15 (.pad(O_PIX_DATA[15]), .DataOut(O_PIX_DATA_pad_15));
+    // pad_out pad_out16 (.pad(O_PIX_DATA[16]), .DataOut(O_PIX_DATA_pad_16));
+    // pad_out pad_out17 (.pad(O_PIX_DATA[17]), .DataOut(O_PIX_DATA_pad_17));
+    // pad_out pad_out18 (.pad(O_PIX_DATA[18]), .DataOut(O_PIX_DATA_pad_18));
+    // pad_out pad_out19 (.pad(O_PIX_DATA[19]), .DataOut(O_PIX_DATA_pad_19));
+    // pad_out pad_out20 (.pad(O_PIX_DATA[20]), .DataOut(O_PIX_DATA_pad_20));
+    // pad_out pad_out21 (.pad(O_PIX_DATA[21]), .DataOut(O_PIX_DATA_pad_21));
+    // pad_out pad_out22 (.pad(O_PIX_DATA[22]), .DataOut(O_PIX_DATA_pad_22));
+    // pad_out pad_out23 (.pad(O_PIX_DATA[23]), .DataOut(O_PIX_DATA_pad_23));
     
 
     // pad_out pad_out0 (.pad(O_PIX_DATA), .out(O_PIX_DATA_pad));
@@ -129,18 +129,6 @@ module edge_detection_top_pads (
         .I_PCLK (I_PCLK_pad),
         .O_PIX_DATA (
             {
-                O_PIX_DATA_pad_23,
-                O_PIX_DATA_pad_22,
-                O_PIX_DATA_pad_21,
-                O_PIX_DATA_pad_20,
-                O_PIX_DATA_pad_19,
-                O_PIX_DATA_pad_18,
-                O_PIX_DATA_pad_17,
-                O_PIX_DATA_pad_16,
-                O_PIX_DATA_pad_15,
-                O_PIX_DATA_pad_14,
-                O_PIX_DATA_pad_13,
-                O_PIX_DATA_pad_12,
                 O_PIX_DATA_pad_11,
                 O_PIX_DATA_pad_10,
                 O_PIX_DATA_pad_9,
