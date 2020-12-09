@@ -254,7 +254,7 @@ module buffered_matrix3_colorspace_converter
     frame_buffer_matrix3 #(
         .P_COLUMNS(P_FRAME_COLUMNS),
         .P_ROWS(P_FRAME_BUFFER_ROWS),
-        .P_PIXEL_DEPTH(4),
+        .P_PIXEL_DEPTH(3),
         .P_MATRIX_PIXEL_DEPTH(8)
         )
         iGrayscaledFrameBufferMatrix3
@@ -263,7 +263,7 @@ module buffered_matrix3_colorspace_converter
         .I_RESET(rst_cclk),
         .I_COLUMN(q_frame_buffer_column),
         .I_ROW(frame_buffer_row),
-        .I_PIXEL(grayscaled_pixel[7:4]),
+        .I_PIXEL(grayscaled_pixel[7:5]),
         .I_WRITE_ENABLE(q_frame_buffer_write_enable),
         .I_READ_ENABLE(q_frame_buffer_read_enable),
 

@@ -75,14 +75,14 @@ module frame_buffer_matrix3
     assign previous_row_index = (I_ROW == 0) ? (P_ROWS - 1) : I_ROW - 1;
     assign next_row_index = (I_ROW == P_ROWS - 1) ? {P_ROWS_BITS{1'b0}} : I_ROW + 1;
 
-    assign top_pixel =          {buffer_registers[previous_row_index][I_COLUMN], 4'h0};
-    assign top_left_pixel =     {buffer_registers[previous_row_index][previous_column_index], 4'h0};
-    assign top_right_pixel =    {buffer_registers[previous_row_index][next_column_index], 4'h0};
-    assign middle_left_pixel =  {buffer_registers[I_ROW][previous_column_index], 4'h0};
-    assign middle_right_pixel = {buffer_registers[I_ROW][next_column_index], 4'h0};
-    assign bottom_left_pixel =  {buffer_registers[next_row_index][previous_column_index], 4'h0};
-    assign bottom_pixel =       {buffer_registers[next_row_index][I_COLUMN], 4'h0};
-    assign bottom_right_pixel = {buffer_registers[next_row_index][next_column_index], 4'h0};    
+    assign top_pixel =          {buffer_registers[previous_row_index][I_COLUMN], 5'h0};
+    assign top_left_pixel =     {buffer_registers[previous_row_index][previous_column_index], 5'h0};
+    assign top_right_pixel =    {buffer_registers[previous_row_index][next_column_index], 5'h0};
+    assign middle_left_pixel =  {buffer_registers[I_ROW][previous_column_index], 5'h0};
+    assign middle_right_pixel = {buffer_registers[I_ROW][next_column_index], 5'h0};
+    assign bottom_left_pixel =  {buffer_registers[next_row_index][previous_column_index], 5'h0};
+    assign bottom_pixel =       {buffer_registers[next_row_index][I_COLUMN], 5'h0};
+    assign bottom_right_pixel = {buffer_registers[next_row_index][next_column_index], 5'h0};    
     
 
     assign n_o_pixel_matrix = (I_READ_ENABLE == 1'b1 && I_WRITE_ENABLE == 1'b0) ?
