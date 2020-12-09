@@ -2,7 +2,7 @@
 #Change the design name as well as the required density
 #set design					topmodule_withpads
 #set design					mips
-set density					0.90
+set density					0.625
 set max_route_layer			5
 
 
@@ -157,7 +157,7 @@ proc floorplan_design {} {
    global density
    put_header [concat "Floorplanning " $design "..."]
 
-   set ASPECT_RATIO   1.06989     ;# rectangle with height = 1.0*width
+   set ASPECT_RATIO   1;#.06989     ;# rectangle with height = 1.0*width
    set CORE_TO_LEFT   20     ;# micron
    set CORE_TO_BOTTOM 20     ;# micron
    set CORE_TO_RIGHT  20     ;# micron
@@ -165,8 +165,8 @@ proc floorplan_design {} {
    set WIDTH_F        2015   ;#2015
    set HEIGHT_F       1885   ;#1885
 
-   # floorPlan -site core7T -r $ASPECT_RATIO $density $CORE_TO_LEFT $CORE_TO_BOTTOM $CORE_TO_RIGHT $CORE_TO_TOP
-   floorPlan -site core7T -d $WIDTH_F $HEIGHT_F $CORE_TO_LEFT $CORE_TO_BOTTOM $CORE_TO_RIGHT $CORE_TO_TOP
+   floorPlan -site core7T -r $ASPECT_RATIO $density $CORE_TO_LEFT $CORE_TO_BOTTOM $CORE_TO_RIGHT $CORE_TO_TOP
+   # floorPlan -site core7T -d $WIDTH_F $HEIGHT_F $CORE_TO_LEFT $CORE_TO_BOTTOM $CORE_TO_RIGHT $CORE_TO_TOP
    fit
 
    if {$design == "mips"} {

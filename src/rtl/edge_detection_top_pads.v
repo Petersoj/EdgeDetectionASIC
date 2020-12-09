@@ -11,7 +11,7 @@ module edge_detection_top_pads (
         input I_DE,
         input I_PCLK,
 
-        output [23:0] O_PIX_DATA,
+        output [11:0] O_PIX_DATA,
         output O_VSYNC,
         output O_HSYNC,
         output O_DE,
