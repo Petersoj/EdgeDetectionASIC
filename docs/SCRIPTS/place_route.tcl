@@ -2,7 +2,7 @@
 #Change the design name as well as the required density
 #set design					topmodule_withpads
 #set design					mips
-set density					0.625
+set density					0.75
 set max_route_layer			5
 
 
@@ -157,7 +157,7 @@ proc floorplan_design {} {
    global density
    put_header [concat "Floorplanning " $design "..."]
 
-   set ASPECT_RATIO   1;#.06989     ;# rectangle with height = 1.0*width
+   set ASPECT_RATIO   1.06989     ;# rectangle with height = 1.0*width
    set CORE_TO_LEFT   20     ;# micron
    set CORE_TO_BOTTOM 20     ;# micron
    set CORE_TO_RIGHT  20     ;# micron
